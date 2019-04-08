@@ -1,0 +1,34 @@
+language: node_js
+
+node_js: lts/*
+
+cache:
+  directories:
+    - node_modules
+
+branches:
+  only:
+    - source
+
+env:
+ global:
+   - GH_REF: github.com/blackyau/blog.git
+
+before_install:
+  - export TZ='Asia/Shanghai'  # ensure post datetime accurate
+
+install:
+  - npm install
+
+script:
+  - hexo clean
+  - hexo g
+
+after_script:
+  - cd ./public
+  - git init
+  - git config user.name "${GitHubUser}"
+  - git config user.email "${GitHubEMail}"
+  - git add .
+  - git commit -m "Site deployed by Travis CI"
+  - git push --force --quiet "https://${GitHubKEY}@${GH_REF}" master:master
