@@ -25,6 +25,7 @@ script:
   - hexo g
 
 after_script:
+  - ${first}
   - cd ./public
   - git init
   - git config user.name "${GitHubUser}"
