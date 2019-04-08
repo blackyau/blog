@@ -20,12 +20,14 @@ before_install:
 install:
   - npm install
 
+before_script:
+  - ${first}
+
 script:
   - hexo clean
   - hexo g
 
 after_script:
-  - ${first}
   - cd ./public
   - git init
   - git config user.name "${GitHubUser}"
