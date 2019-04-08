@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: 
+Disallow: /css
+Disallow: /lib
+Disallow: /images
+Disallow: /js
+Sitemap: https://blackyau.cc/sitemap.xml
