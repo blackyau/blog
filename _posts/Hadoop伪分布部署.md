@@ -143,7 +143,7 @@ reboot
 
 我选择了 `Linux x64 rpm 安装包`
 
-在下载目录的空白处按住 `Shift` 点击鼠标右键，然后点击 `在此处打开 PowerShell 窗口` 召唤出来 `PowerShell` ，因为本机有 Python 环境，所以就使用 `python -m http.server 80` 启动一个简易的 `http服务` 。然后用浏览器打开 `服务器IP的默认网关` 一般情况下与 服务器IP 的差别之有 `最后一位为1` 。这里我就选择打开 `192.168.66.1`。并复制 `Java JDK 链接`。
+在下载目录的空白处按住 `Shift` 点击鼠标右键，然后点击 `在此处打开 PowerShell 窗口` 召唤出来 `PowerShell` ，因为本机有 Python 环境，所以就使用 `python -m http.server 80` 启动一个简易的 `http服务` 。然后用浏览器打开 `服务器IP的默认网关` 一般情况下与 服务器IP 的差别只有 `最后一位为1` 。这里我就选择打开 `192.168.66.1`。并复制 `Java JDK 链接`。
 
 > 别忘了关闭 Windows 防火墙，python2(CentOS7 自带) 的http服务命令是 `python -m SimpleHTTPServer 80`
 
