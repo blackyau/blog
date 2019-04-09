@@ -405,6 +405,18 @@ start-dfs.sh # 启动 HDFS
 start-yarn.sh # 启动 YARN
 mr-jobhistory-daemon.sh start historyserver # 启动 MapReduce
 hdfs dfs -chmod -R 755 /tmp # 赋予目录权限(这个问题暂时先这样把,最好还是用两个用户把它分离开.不直接使用root用户)
+start-all.sh # 很有把握的时候才用这个
+```
+
+## 停止 Hadoop
+
+调整了配置后，一定要先停止再启动
+
+```shell
+stop-dfs.sh # 停止 HDFS
+stop-yarn.sh # 停止 YARN
+mr-jobhistory-daemon.sh stop historyserver # 停止 MapReduce
+stop-all.sh # 停止所有
 ```
 
 ## 测试
