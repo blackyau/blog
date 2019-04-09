@@ -130,12 +130,20 @@ SELINUXTYPE=targeted
 ### 修改 hostname
 
 ```shell
-hostnamectl set-hostname master
-echo "192.168.66.135 master" >> /etc/hosts # 将新 hostname 写进 hosts 注意IP改成你的本机IP
+hostnamectl set-hostname master # 修改 hostsname 为 master
+vi /etc/hosts # 打开 hosts 文件
+```
+
+由于 `HDFS` 钟爱于使用 `localhosts` 所以要将 `hosts` 里面有关的信息都注释掉，修改后 `hosts` 文件如下
+
+```conf
+# 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+# ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+192.168.66.135 master # 这里应该改成你自己的 IP
 ```
 
 ```shell
-reboot
+reboot # 重启生效
 ```
 
 ## 安装 Java
