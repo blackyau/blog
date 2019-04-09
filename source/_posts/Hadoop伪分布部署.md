@@ -2,7 +2,7 @@
 layout: post
 title: Hadoop 伪分布部署
 date: 2019-04-04 17:00:17
-updated: 2019-04-07 22:30:50
+updated: 2019-04-09 13:31:22
 categories: 教程
 tags: 
     - CentOS
@@ -131,6 +131,7 @@ SELINUXTYPE=targeted
 
 ```shell
 hostnamectl set-hostname master
+echo "192.168.66.135 master" >> /etc/hosts # 将新 hostname 写进 hosts 注意IP改成你的本机IP
 ```
 
 ```shell
@@ -395,7 +396,7 @@ hdfs namenode -format # 格式化 HDFS
 start-dfs.sh # 启动 HDFS
 start-yarn.sh # 启动 YARN
 mr-jobhistory-daemon.sh start historyserver # 启动 MapReduce
-./hdfs dfs -chmod -R 755 /tmp # 赋予目录权限(这个问题暂时先这样把,最好还是用两个用户把它分离开.不直接使用root用户)
+hdfs dfs -chmod -R 755 /tmp # 赋予目录权限(这个问题暂时先这样把,最好还是用两个用户把它分离开.不直接使用root用户)
 ```
 
 ## 测试
