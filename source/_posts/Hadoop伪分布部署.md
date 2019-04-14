@@ -421,7 +421,7 @@ stop-all.sh # 停止所有
 
 ## 测试
 
-http://192.168.66.135:50070 # namenode
+http://192.168.66.135:50070 # NameNode
 
 ![15](https://st.blackyau.net/blog/11/15.png)
 
