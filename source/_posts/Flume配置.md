@@ -282,7 +282,7 @@ HTTP Source
 
 [Flume 1.6.0 User Guide](http://flume.apache.org/releases/content/1.6.0/FlumeUserGuide.html)
 
-[StackOverFlow@prayagupd](https://stackoverflow.com/questions/26545524/)
+[StackOverFlow@prayagupd - There are 0 datanode(s) running and no node(s) are excluded in this operation](https://stackoverflow.com/questions/26545524/)
 
 [开源中国@海岸线的曙光 - Flume日志收集之Logger和HDFS数据传输方式](https://my.oschina.net/u/3747963/blog/1834981)
 
