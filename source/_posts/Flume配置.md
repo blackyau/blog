@@ -3,7 +3,7 @@ layout: post
 title: Flume 配置
 date: 2019-04-14 20:50:08
 updated: 2019-04-17 17:30:32
-categories: 教程
+categories: 大数据
 tags: 
     - CentOS
     - Linux

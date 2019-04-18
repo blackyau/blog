@@ -3,7 +3,7 @@ layout: post
 title: Hadoop 伪分布部署
 date: 2019-04-04 17:00:17
 updated: 2019-04-09 13:31:22
-categories: 教程
+categories: 大数据
 tags: 
     - CentOS
     - Linux
