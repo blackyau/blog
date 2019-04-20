@@ -2,7 +2,7 @@
 layout: post
 title: Hadoop 伪分布部署
 date: 2019-04-04 17:00:17
-updated: 2019-04-20 09:34:43
+updated: 2019-04-20 09:41:32
 categories: 大数据
 tags: 
     - CentOS
@@ -165,7 +165,7 @@ curl -O http://192.168.66.1/jdk-8u201-linux-x64.rpm #这里应该替换为你刚
 rpm -ivh jdk-8u201-linux-x64.rpm
 ```
 
-当你看到控制台输出类似信息说明你以安装成功
+当你看到控制台输出类似信息说明你已安装成功
 
 ```shell
 [root@master ~] curl -O http://192.168.66.1/jdk-8u201-linux-x64.rpm
