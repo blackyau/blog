@@ -140,18 +140,175 @@ OK
 Time taken: 0.062 seconds, Fetched: 51 row(s)
 ```
 
-## 插入 Json 数据
+## HIVE 参数设置
 
-```sql
-create table test2(
-  name string,
-  
-)
+以下列出的参数大概是有点用的
+
+```xml
+  <property>
+    <!--- HIVE 大部分操作都会触发一个 MapReduce 修改该参数后它会尝试使用本地模式 以降低资源消耗-->
+    <name>hive.exec.mode.local.auto</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <!--- 这是 HIVE 加载 JAR 的路径 -->
+    <name>hive.aux.jars.path</name>
+    <value>/root/apache-hive-1.1.0-bin/lib</value>
+  </property>
+
+  <property>
+    <!--- 如果启用了 LIMIT 优化，这个用来控制 LIMIT 的最小行取样量 -->
+    <name>hive.limit.row.max.size</name>
+    <value>100000</value>
+    <description>When trying a smaller subset of data for simple LIMIT, how much size we need to guarantee each row to have at least.</description>
+  </property>
+  <property>
+    <!--- 如果启用了 LIMIT 优化，这个用来控制 LIMIT 的最大文件数 -->
+    <name>hive.limit.optimize.limit.file</name>
+    <value>10</value>
+    <description>When trying a smaller subset of data for simple LIMIT, maximum number of files we can sample.</description>
+  </property>
+  <property>
+    <!--- 是否启用 LIMIT 优化，这是对元数据进行抽样统计，有可能输入有用的数据永远不会被处理到。毕竟是抽样 -->
+    <name>hive.limit.optimize.enable</name>
+    <value>true</value>
+    <description>Whether to enable to optimization to trying a smaller subset of data for simple LIMIT first.</description>
+  </property>
+
+  <property>
+    <!--- 并行执行，一个查询可能会有多个阶段而且这些阶段可能并非完全相互依赖，所以阶段越多job可能就更快完成。同时它会增加对集群的利用率 -->
+    <name>hive.exec.parallel</name>
+    <value>true</value>
+    <description>Whether to execute jobs in parallel</description>
+  </property>
+  <property>
+    <!--- 并行执行最大线程数 -->
+    <name>hive.exec.parallel.thread.number</name>
+    <value>8</value>
+    <description>How many jobs at most can be executed in parallel</description>
+  </property>
+
+  <property>
+    <!--- 严格模式,如果修改为 strict 那么会禁止3种类型的查询:1.不限制分区查询(不允许用户扫描所有分区,where必须有两个或以上) 2.order by必须要LIMIT 3.限制笛卡积尔查询,多表连接查询应该使用join
+    和on -->
+    <name>hive.mapred.mode</name>
+    <value>nonstrict</value>
+    <description>
+      The mode in which the Hive operations are being performed.
+      In strict mode, some risky queries are not allowed to run. They include:
+        Cartesian Product.
+        No partition being picked up for a query.
+        Comparing bigints and strings.
+        Comparing bigints and doubles.
+        Orderby without limit.
+    </description>
+  </property>
+
+  <property>
+    <!-- 因为Hive使用输入数据量的大小来确定reducer个数，修改这个数量就可以更改使用reducer的个数 -->
+    <name>hive.exec.reducers.bytes.per.reducer</name>
+    <value>256000000</value>
+    <description>size per reducer.The default is 256Mb, i.e if the input size is 1G, it will use 4 reducers.</description>
+  </property>
+  <property>
+    <!-- 设置一个查询最多可消耗的reducers的量-->
+    <name>hive.exec.reducers.max</name>
+    <value>1009</value>
+    <description>
+      max number of reducers will be used. If the one specified in the configuration parameter mapred.reduce.tasks is
+      negative, Hive will use this one as the max number of reducers when automatically determine number of reducers.
+    </description>
+  </property>
 ```
-## 未完待续
 
-- HIVE 参数设置
-- Sqoop 数据推送
+## Scala 数据推送
+
+先下载程序为配置做准备
+
+```shell
+curl -O https://mirrors.tuna.tsinghua.edu.cn/apache/sqoop/1.4.7/sqoop-1.4.7.bin__hadoop-2.6.0.tar.gz
+tar -xf sqoop-1.4.7.bin__hadoop-2.6.0.tar.gz
+```
+
+### 配置环境变量
+
+```shell
+vi /etc/profile
+```
+
+在文本下方写入以下配置
+
+```shell
+export SQOOP_HOME=/root/sqoop-1.4.7.bin__hadoop-2.6.0
+export PATH=$PATH:$SQOOP_HOME/bin
+```
+
+```shell
+sqoop help
+```
+
+当终端输出以下信息时说明你的配置成功了
+
+```shell
+Warning: /root/sqoop-1.4.7.bin__hadoop-2.6.0/../hbase does not exist! HBase imports will fail.
+Please set $HBASE_HOME to the root of your HBase installation.
+Warning: /root/sqoop-1.4.7.bin__hadoop-2.6.0/../hcatalog does not exist! HCatalog jobs will fail.
+Please set $HCAT_HOME to the root of your HCatalog installation.
+Warning: /root/sqoop-1.4.7.bin__hadoop-2.6.0/../accumulo does not exist! Accumulo imports will fail.
+Please set $ACCUMULO_HOME to the root of your Accumulo installation.
+Warning: /root/sqoop-1.4.7.bin__hadoop-2.6.0/../zookeeper does not exist! Accumulo imports will fail.
+Please set $ZOOKEEPER_HOME to the root of your Zookeeper installation.
+19/04/20 18:55:32 INFO sqoop.Sqoop: Running Sqoop version: 1.4.7
+usage: sqoop COMMAND [ARGS]
+
+Available commands:
+  codegen            Generate code to interact with database records
+  create-hive-table  Import a table definition into Hive
+  eval               Evaluate a SQL statement and display the results
+  export             Export an HDFS directory to a database table
+  help               List available commands
+  import             Import a table from a database to HDFS
+  import-all-tables  Import tables from a database to HDFS
+  import-mainframe   Import datasets from a mainframe server to HDFS
+  job                Work with saved jobs
+  list-databases     List available databases on a server
+  list-tables        List available tables in a database
+  merge              Merge results of incremental imports
+  metastore          Run a standalone Sqoop metastore
+  version            Display version information
+
+See 'sqoop help COMMAND' for information on a specific command.
+```
+
+如果你没有使用 `HBase、HCatalog、Accumulo、Zookeeper` 你可以忽略它的警告，但是如果你和我一样觉得烦。你可以通过注释相关代码以跳过检查。
+
+```shell
+## Moved to be a runtime check in sqoop.
+#if [ ! -d "${HBASE_HOME}" ]; then
+#  echo "Warning: $HBASE_HOME does not exist! HBase imports will fail."
+#  echo 'Please set $HBASE_HOME to the root of your HBase installation.'
+#fi
+
+## Moved to be a runtime check in sqoop.
+#if [ ! -d "${HCAT_HOME}" ]; then
+#  echo "Warning: $HCAT_HOME does not exist! HCatalog jobs will fail."
+#  echo 'Please set $HCAT_HOME to the root of your HCatalog installation.'
+#fi
+
+#if [ ! -d "${ACCUMULO_HOME}" ]; then
+#  echo "Warning: $ACCUMULO_HOME does not exist! Accumulo imports will fail."
+#  echo 'Please set $ACCUMULO_HOME to the root of your Accumulo installation.'
+#fi
+#if [ ! -d "${ZOOKEEPER_HOME}" ]; then
+#  echo "Warning: $ZOOKEEPER_HOME does not exist! Accumulo imports will fail."
+#  echo 'Please set $ZOOKEEPER_HOME to the root of your Zookeeper installation.'
+#fi
+```
+
+### 导出数据
+
+> 未完待续
 
 ## 参考
 
@@ -162,3 +319,5 @@ create table test2(
 [StackOverFlow@user1493140 - SLF4J: Class path contains multiple SLF4J bindings](https://stackoverflow.com/questions/14024756/)
 
 [Hadoop: The Definitive Guide@Tom White](https://item.jd.com/12109713.html)
+
+[三句话告诉你 mapreduce 中MAP进程的数量怎么控制？@junneyang](https://www.cnblogs.com/junneyang/p/5850440.html)
