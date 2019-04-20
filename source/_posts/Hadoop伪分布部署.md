@@ -2,7 +2,7 @@
 layout: post
 title: Hadoop 伪分布部署
 date: 2019-04-04 17:00:17
-updated: 2019-04-09 13:31:22
+updated: 2019-04-20 09:34:43
 categories: 大数据
 tags: 
     - CentOS
@@ -188,7 +188,7 @@ Unpacking JAR files...
 	localedata.jar...
 ```
 
-测试一下把
+测试一下
 
 ```shell
 java -version
@@ -213,7 +213,7 @@ curl -O http://192.168.66.1/hadoop-2.6.0.tar.gz # 这里应该改成你复制的
 tar -xvf hadoop-2.6.0.tar.gz # 解压 Hadoop
 ```
 
-接下来我们要为 JAVA 和 Hadoop 配置环境变量，首先打开配置文件 `vi /etc/profile` 按一下大写 `G` 转跳到文本底部，然后添加内容后文本底部如下。
+接下来我们要为 JAVA 和 Hadoop 配置环境变量，首先打开配置文件 `vi /etc/profile` 按一下大写 `G` 转跳到文本底部，添加内容后文本底部如下。
 
 ```shell
 for i in /etc/profile.d/*.sh /etc/profile.d/sh.local ; do
