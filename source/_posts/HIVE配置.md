@@ -306,7 +306,75 @@ See 'sqoop help COMMAND' for information on a specific command.
 #fi
 ```
 
-### 导出数据
+### 安装 mysql
+
+下载安装包
+
+```shell
+curl -O https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql57-community-el7/mysql-community-common-5.7.25-1.el7.x86_64.rpm
+curl -O https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql57-community-el7/mysql-community-libs-5.7.25-1.el7.x86_64.rpm
+curl -O https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql57-community-el7/mysql-community-client-5.7.25-1.el7.x86_64.rpm
+curl -O https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql57-community-el7/mysql-community-server-5.7.25-1.el7.x86_64.rpm
+```
+
+卸载自带的 MariaDB 或之前安装的 MySQL
+
+```shell
+
+```
+
+安装
+
+```shell
+rpm -ivh mysql-community-common-5.7.25-1.el7.x86_64.rpm
+rpm -ivh mysql-community-libs-5.7.25-1.el7.x86_64.rpm
+rpm -ivh mysql-community-client-5.7.25-1.el7.x86_64.rpm
+rpm -ivh mysql-community-server-5.7.25-1.el7.x86_64.rpm
+```
+
+配置
+
+```shell
+mysqld --initialize --user=mysql # 使用mysql用户运行MySQL
+cat /var/log/mysqld.log # 查看一下生成的临时密码
+```
+
+```shell
+2019-04-21T01:53:51.675008Z 0 [Warning] TIMESTAMP with implicit DEFAULT value is deprecated. Please use --explicit_defaults_for_timestamp server option (see documentation for more details).
+2019-04-21T01:53:52.388438Z 0 [Warning] InnoDB: New log files created, LSN=45790
+2019-04-21T01:53:52.484682Z 0 [Warning] InnoDB: Creating foreign key constraint system tables.
+2019-04-21T01:53:52.549955Z 0 [Warning] No existing UUID has been found, so we assume that this is the first time that this server has been started. Generating a new UUID: 5075e10a-63d8-11e9-9cd1-000c2937e0f0.
+2019-04-21T01:53:52.552680Z 0 [Warning] Gtid table is not ready to be used. Table 'mysql.gtid_executed' cannot be opened.
+2019-04-21T01:53:52.583134Z 1 [Note] A temporary password is generated for root@localhost: zeAxOg16AZ!7
+```
+
+如上: `zeAxOg16AZ!7` 就是密码
+
+接下来启动 MySQL
+
+```shell
+systemctl start mysqld # 启动
+systemctl status mysqld # 查看运行状态,看到active (running)就行了
+```
+
+```sql
+mysql -u root -p # 以root身份登录MySQL,密码就是上面的密码
+SET PASSWORD = PASSWORD('your_new_password'); # 修改一下密码
+select version();
+```
+
+输出以下信息说明配置成功
+
+```sql
++-----------+
+| version() |
++-----------+
+| 5.7.25    |
++-----------+
+1 row in set (0.00 sec)
+```
+
+### 导入数据
 
 > 未完待续
 
@@ -320,4 +388,6 @@ See 'sqoop help COMMAND' for information on a specific command.
 
 [Hadoop: The Definitive Guide@Tom White](https://item.jd.com/12109713.html)
 
-[三句话告诉你 mapreduce 中MAP进程的数量怎么控制？@junneyang](https://www.cnblogs.com/junneyang/p/5850440.html)
+[博客园@junneyang - 三句话告诉你 mapreduce 中MAP进程的数量怎么控制？](https://www.cnblogs.com/junneyang/p/5850440.html)
+
+[博客园@xiaodangshan - centos下RPM安装mysql5.7.13](https://www.cnblogs.com/xiaodangshan/p/7230111.html)
