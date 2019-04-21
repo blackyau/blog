@@ -2,7 +2,7 @@
 layout: post
 title: Hive 配置
 date: 2019-04-19 20:03:50
-updated: 2019-04-19 20:52:37
+updated: 2019-04-21 21:00:00
 categories: 大数据
 tags: 
     - CentOS
@@ -10,6 +10,7 @@ tags:
     - Hadoop
     - HDFS
     - HIVE
+    - MySQL
 urlname: 13
 comment: true
 ---
@@ -18,9 +19,16 @@ comment: true
 
 <!-- more -->
 
+## 目标
+
+- Hive 建表
+- Hive 数据加载
+- HQL 编写、数据查询统计
+- Sqoop 数据推送 MySQL
+
 ## 准备工作
 
-这里我选择版本较老的 HIVE 1.1.0 使用，因为它和我[之前安装的 Hadoop ](https://blackyau.cc/11.html)比较配
+这里我选择版本较老的 HIVE 1.1.0 使用，因为它和我 [之前安装的 Hadoop ](https://blackyau.cc/11.html)比较配
 
 因为版本太老了在 Mirror 里面都找不到，只有 Archive 里面才有
 
@@ -154,7 +162,7 @@ Time taken: 0.062 seconds, Fetched: 51 row(s)
   <property>
     <!--- 这是 HIVE 加载 JAR 的路径 -->
     <name>hive.aux.jars.path</name>
-    <value>/root/apache-hive-1.1.0-bin/lib</value>
+    <value/>
   </property>
 
   <property>
@@ -317,10 +325,11 @@ curl -O https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql57-community-el7/mys
 curl -O https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql57-community-el7/mysql-community-server-5.7.25-1.el7.x86_64.rpm
 ```
 
-卸载自带的 MariaDB 或之前安装的 MySQL
+卸载自带的 MariaDB 或之前安装的 MySQL ,如果执行下面的命令存在已安装的包。就用 `rpm -e mysql-community-xxxx` 之类的命令卸载就行了
 
 ```shell
-
+rpm -qa | grep mysql
+rpm -qa | grep mariadb
 ```
 
 安装
@@ -374,9 +383,291 @@ select version();
 1 row in set (0.00 sec)
 ```
 
-### 导入数据
+### 修改数据库编码以支持中文
 
-> 未完待续
+打开 MySQL 配置文件
+
+```shell
+vi /etc/my.cnf
+```
+
+在 `[mysqld]` 字段里加入 `character-set-server=utf8` 如下
+
+```conf
+[mysqld]
+character-set-server=utf8
+```
+
+在配置文件底部增加以下信息
+
+```conf
+[mysql]
+no-auto-rehash
+default-character-set=utf8
+
+[client]
+default-character-set=utf8
+```
+
+重启 MySQL
+
+```shell
+systemctl restart mysqld
+```
+
+登录 MySQL 查看是否修改成功
+
+```sql
+mysql -u root -p
+show variables like 'char%';
+```
+
+输出信息如下说明配置成功
+
+```sql
++--------------------------+----------------------------+
+| Variable_name            | Value                      |
++--------------------------+----------------------------+
+| character_set_client     | utf8                       |
+| character_set_connection | utf8                       |
+| character_set_database   | utf8                       |
+| character_set_filesystem | binary                     |
+| character_set_results    | utf8                       |
+| character_set_server     | utf8                       |
+| character_set_system     | utf8                       |
+| character_sets_dir       | /usr/share/mysql/charsets/ |
++--------------------------+----------------------------+
+8 rows in set (0.01 sec)
+```
+
+### 创建用于接收数据的数据库
+
+```sql
+create database target;
+use target;
+CREATE TABLE data (
+  name VARCHAR(1000), 
+  url VARCHAR(1000), 
+  tag VARCHAR(1000), 
+  location VARCHAR(1000), 
+  release_time VARCHAR(1000), 
+  quantity VARCHAR(1000), 
+  duties VARCHAR(1000), 
+  claim VARCHAR(1000));
+```
+
+### 导入测试数据
+
+下载测试数据并上传至 HDFS
+
+```shell
+curl -O https://st.blackyau.net/blog/13/testdata
+hdfs dfs -put ./testdata /testdata
+hive # 进入Hive
+```
+
+在Hive中创建数据库
+
+```sql
+create database testdata;
+```
+
+创建表
+
+```sql
+use testdata; -- 使用该数据库
+CREATE TABLE test1 (
+  `name` string, 
+  `url` string, 
+  `tag` string, 
+  `location` string, 
+  `release_time` string, 
+  `quantity` int, 
+  `duties` string, 
+  `claim` string)
+ROW FORMAT DELIMITED 
+  FIELDS TERMINATED BY '\t'; -- 设置分割符为制表符
+```
+
+载入数据
+
+```sql
+load data inpath '/testdata' into table test1;
+```
+
+输出以下信息时说明导入成功
+
+```sql
+Loading data to table testdata.test1
+Table testdata.test1 stats: [numFiles=1, totalSize=3401593]
+OK
+Time taken: 0.414 seconds
+```
+
+查询一下
+
+```sql
+select * from test1;
+select * from test1 limit 10;
+```
+
+输出以下信息说明正常
+
+```sql
+OK
+PCG10-浏览器功能前端开发工程师	https://hr.tencent.com/position_detail.php?id=49321&keywords=&tid=0&lid=0	技术类	深圳	2019-04-11	1	负责QQ浏览器移动端/PC端页面和小程序的功能开发和维护;负责浏览器功能的开发和持续优化；负责浏览器功能的web前端页面开发，维护和优化工作，包括前端JS、HTML5以及nodejs等，持续优化前端页面体验和访问速度;	"2年以上前端开发工作经验；  对浏览器兼容性、前端安全防范、响应式布局、网络协议优化有实践经验；具备良好的沟通能力和团队协作精神
+21227-创新手游产品—市场和平台渠道推广	
+.......
+完善现有运营安全流程及规范;4、持续完善安全组件的监控告警、故障排查5、负责安全平台的网站建设工作	1. 3年以上运维开发及运维平台建设经验；2. 有安全相关行业工作经验；3. 具备良好的沟通能力与项目管理能力；4. 熟悉linux下网络编程，熟悉HTML/JS以及HTTP原理，熟悉多种UI框架5. 精通Python、Shell或其他编程语言，有C、Java或PHP开发经验者优先6. 具备良好的合作精神和快速学习能力；7.有互联网安全运维工作经验者优先。
+Time taken: 0.073 seconds, Fetched: 10 row(s)
+```
+
+使用较复杂的命令（Hive会调用mapreduce）
+
+```sql
+select location,count(*) as temp_sum from test1 group by location order by temp_sum desc;
+```
+
+输出以下信息说明工作正常
+
+```sql
+Automatically selecting local only mode for query
+Query ID = root_20190421152828_c7eaeae7-4e76-48fb-9780-135262ef66e0
+Total jobs = 2
+Launching Job 1 out of 2
+Number of reduce tasks not specified. Estimated from input data size: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Job running in-process (local Hadoop)
+2019-04-21 15:28:21,976 Stage-1 map = 100%,  reduce = 100%
+Ended Job = job_local1573803716_0003
+Launching Job 2 out of 2
+Number of reduce tasks determined at compile time: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Job running in-process (local Hadoop)
+2019-04-21 15:28:23,199 Stage-2 map = 100%,  reduce = 100%
+Ended Job = job_local1403411610_0004
+MapReduce Jobs Launched: 
+Stage-Stage-1:  HDFS Read: 20435416 HDFS Write: 1483 SUCCESS
+Stage-Stage-2:  HDFS Read: 20436422 HDFS Write: 2021 SUCCESS
+Total MapReduce CPU Time Spent: 0 msec
+OK
+深圳	2128
+北京	610
+上海	209
+广州	123
+成都	40
+武汉	20
+杭州	20
+马来西亚	10
+香港	10
+韩国	10
+美国	10
+日本	10
+Time taken: 2.78 seconds, Fetched: 12 row(s)
+```
+
+### 使用 Sqoop 导出数据到 MySQL
+
+下载 [mysql-connector-java-6.0.3](https://st.blackyau.net/blog/13/mysql-connector-java-6.0.3.jar) 并放置在 `$SQOOP_HOME/lib/` 目录下，否则会出现以下报错。
+
+```shell
+ERROR sqoop.Sqoop: Got exception running Sqoop: java.lang.RuntimeException: Could not load db driver class: com.mysql.jdbc.Driver
+java.lang.RuntimeException: Could not load db driver class: com.mysql.jdbc.Driver
+```
+
+下载并保存到指定目录
+
+```shell
+curl -o $SQOOP_HOME/lib/mysql-connector-java-6.0.3.jar https://st.blackyau.net/blog/13/mysql-connector-java-6.0.3.jar
+```
+
+使用 Sqoop 导出数据到 MySQL 
+
+```shell
+sqoop export --connect jdbc:mysql://127.0.0.1/target --driver com.mysql.jdbc.Driver --username root --password SKKfgHfz2AgC --table data --export-dir /user/hive/warehouse/testdata.db/test1 --input-fields-terminated-by '\t'
+```
+
+参数解释
+
+`export` ：从HDFS目录导出到数据库表
+
+`--connect`：指定 JDBC 连接参数(在这里就是导出目的地 MySQL 的地址)
+
+`--driver`：指定 JDBC 驱动程序类(不指定的话无法导出到 MySQL ,之前下载的 jar 就是为这个用的)
+
+`--username`：验证用户名
+
+`--password`：验证密码
+
+`--table`：要写入的表名
+
+`--export-dir`：要导出 HDFS 数据的所在源路径(可在 Hive 中通过 `show create table test1` 的 `LOCATION` 看到)
+
+`--input-fields-terminated-by`：指定字段分隔符(我这里的源数据分隔符为'\t')
+
+查询是否导出成功
+
+```sql
+use target;
+select * from data limit 1;
+select name,location,tag from data limit 10;
+select location,count(*) as sum from data group by location order by sum desc;
+```
+
+输出以下内容说明成功
+
+
+
+|  name | location | tag |
+|  ---- | -------- | ----|
+| 26787-策略分析经理（深圳）                                      | 深圳     | 市场类    |
+| 25663-泛互联网售中架构师（北/上/深）                            | 上海     | 技术类    |
+| TEG06-Mac终端安全运营高级工程师（深圳）                         | 深圳     | 技术类    |
+| 15618-游戏客户端开发工程师（上海）                              | 上海     | 技术类    |
+| PCG04-腾讯视频移动终端测试开发工程师（深圳）                    | 深圳     | 技术类    |
+| 26787-游戏合作商务                                              | 深圳     | 市场类    |
+| TEG06-Mac终端安全运营高级工程师（深圳）                         | 深圳     | 技术类    |
+| 15618-游戏客户端开发工程师（上海）                              | 上海     | 技术类    |
+| PCG04-腾讯视频移动终端测试开发工程师（深圳）                    | 深圳     | 技术类    |
+| 26787-游戏合作商务                                              | 深圳     | 市场类    |
+
+10 rows in set (0.00 sec)
+
+
+| location | sum  |
+| -------- | ---- |
+| 深圳         | 2128 |
+| 北京         |  610 |
+| 上海         |  209 |
+| 广州         |  123 |
+| 成都         |   40 |
+| 武汉         |   20 |
+| 杭州         |   20 |
+| 日本         |   10 |
+| 香港         |   10 |
+| 美国         |   10 |
+| 马来西亚     |   10 |
+| 韩国         |   10 |
+
+12 rows in set (0.00 sec)
+
+
+## S/HQL 常用命令
+
+```sql
+DROP DATABASE test CASCADE; -- 删除 test 数据库并删除里面的数据
+show create table test1; -- 查看 test1 表的详细信息
+```
 
 ## 参考
 
@@ -391,3 +682,11 @@ select version();
 [博客园@junneyang - 三句话告诉你 mapreduce 中MAP进程的数量怎么控制？](https://www.cnblogs.com/junneyang/p/5850440.html)
 
 [博客园@xiaodangshan - centos下RPM安装mysql5.7.13](https://www.cnblogs.com/xiaodangshan/p/7230111.html)
+
+[Sqoop User Guide - Connecting to a Database Server](http://sqoop.apache.org/docs/1.4.0-incubating/SqoopUserGuide.html#id1763114)
+
+[StackOverFlow@malatesh - Sqoop: Could not load mysql driver exception](https://stackoverflow.com/questions/22741183/)
+
+[CSDN@一介那个书生 - CentOS下修改mysql数据库编码为UTF-8](https://blog.csdn.net/qq_32953079/article/details/54629245)
+
+[CSDN@爱笑的T_T - CentOS(Linux)中解决MySQL中文乱码](https://blog.csdn.net/u014695188/article/details/51087456)
