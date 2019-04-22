@@ -2,7 +2,7 @@
 layout: post
 title: Hive 配置
 date: 2019-04-19 20:03:50
-updated: 2019-04-22 16:16:43
+updated: 2019-04-22 18:51:10
 categories: 大数据
 tags: 
     - CentOS
@@ -74,7 +74,6 @@ vi /root/apache-hive-1.1.0-bin/conf/hive-site.xml
     <name>system:user.name</name>
     <value>root</value>
   </property>
-  <property>
 ```
 
 ## 启动
