@@ -2,7 +2,7 @@
 layout: post
 title: Hive 配置
 date: 2019-04-19 20:03:50
-updated: 2019-04-21 21:00:00
+updated: 2019-04-22 08:53:23
 categories: 大数据
 tags: 
     - CentOS
@@ -230,7 +230,7 @@ Time taken: 0.062 seconds, Fetched: 51 row(s)
   </property>
 ```
 
-## Scala 数据推送
+## Sqoop 数据推送
 
 先下载程序为配置做准备
 
@@ -383,7 +383,7 @@ select version();
 1 row in set (0.00 sec)
 ```
 
-### 修改数据库编码以支持中文
+#### 修改数据库编码以支持中文
 
 打开 MySQL 配置文件
 
@@ -440,7 +440,7 @@ show variables like 'char%';
 8 rows in set (0.01 sec)
 ```
 
-### 创建用于接收数据的数据库
+#### 创建用于接收数据的数据库
 
 ```sql
 create database target;
