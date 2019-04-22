@@ -2,7 +2,7 @@
 layout: post
 title: Hive 配置
 date: 2019-04-19 20:03:50
-updated: 2019-04-22 08:53:23
+updated: 2019-04-22 16:16:43
 categories: 大数据
 tags: 
     - CentOS
@@ -383,7 +383,12 @@ select version();
 1 row in set (0.00 sec)
 ```
 
-#### 修改数据库编码以支持中文
+```sql
+use mysql;
+update user set host = '%' where user = 'root'; -- 修改允许任何IP使用root身份登录
+```
+
+#### 修改 MySQL 配置
 
 打开 MySQL 配置文件
 
@@ -396,6 +401,7 @@ vi /etc/my.cnf
 ```conf
 [mysqld]
 character-set-server=utf8
+bind-address=0.0.0.0
 ```
 
 在配置文件底部增加以下信息
