@@ -2,7 +2,7 @@
 layout: post
 title: Hive 配置
 date: 2019-04-19 20:03:50
-updated: 2019-04-22 18:51:10
+updated: 2019-04-23 18:44:40
 categories: 大数据
 tags: 
     - CentOS
@@ -289,6 +289,8 @@ See 'sqoop help COMMAND' for information on a specific command.
 ```
 
 如果你没有使用 `HBase、HCatalog、Accumulo、Zookeeper` 你可以忽略它的警告，但是如果你和我一样觉得烦。你可以通过注释相关代码以跳过检查。
+
+`vi /root/sqoop-1.4.7.bin__hadoop-2.6.0/bin/configure-sqoop`
 
 ```shell
 ## Moved to be a runtime check in sqoop.
