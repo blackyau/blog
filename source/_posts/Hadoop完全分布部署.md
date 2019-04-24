@@ -2,7 +2,7 @@
 layout: post
 title: Hadoop 完全分布部署
 date: 2019-04-24 20:00:29
-updated: 2019-04-24 21:04:57
+updated: 2019-04-24 21:11:31
 categories: 大数据
 tags: 
     - CentOS
@@ -73,7 +73,7 @@ ssh-rsa AAAAB3N......PXvHKFTQ2b8Xt8ZAvB/dKy yarn@slave2
 <property>
  <!-- HDFS的默认副本数，其实这里的值默认就是3可以不用改 -->
     <name>dfs.replication</name>
-    <value>1</value>
+    <value>3</value>
 </property>
 
 </configuration>
