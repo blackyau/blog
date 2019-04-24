@@ -2,7 +2,7 @@
 layout: post
 title: Hadoop 完全分布部署
 date: 2019-04-24 20:00:29
-updated: 2019-04-24 20:50:57
+updated: 2019-04-24 21:04:57
 categories: 大数据
 tags: 
     - CentOS
@@ -113,6 +113,16 @@ ssh-rsa AAAAB3N......PXvHKFTQ2b8Xt8ZAvB/dKy yarn@slave2
 </property>
 
 </configuration>
+```
+
+### slaves
+
+这是一个和其他配置文件同一目录的纯文本，它里面定义了该集群中所有主机的 `hostname` 或 `ip` ，这里我使用的 `hostname`
+
+```
+master
+slave1
+slave2
 ```
 
 ## 运行
