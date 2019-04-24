@@ -86,8 +86,8 @@ localhost login:
 ### 关闭防火墙
 
 ```shell
-systemctl stop firewall # 关闭防火墙
-systemctl disable firewall # 关闭防火墙自启
+systemctl stop firewalld # 关闭防火墙
+systemctl disable firewalld # 关闭防火墙自启
 firewall-cmd --state # 检查防火墙状态
 ```
 
