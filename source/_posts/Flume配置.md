@@ -278,6 +278,16 @@ HTTP Source
 
 [http://flume.apache.org/releases/content/1.6.0/FlumeUserGuide.html#http-source](http://flume.apache.org/releases/content/1.6.0/FlumeUserGuide.html#http-source)
 
+## [大数据系列文章](https://blackyau.cc/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/)
+
+- Hadoop 伪分布部署: https://blackyau.cc/11.html
+
+- Flume 配置: https://blackyau.cc/12.html
+
+- Hive 配置: https://blackyau.cc/13.html
+
+- Hadoop 完全分布部署: https://blackyau.cc/14.html
+
 ## 参考
 
 [Flume 1.6.0 User Guide](http://flume.apache.org/releases/content/1.6.0/FlumeUserGuide.html)

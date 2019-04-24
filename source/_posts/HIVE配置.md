@@ -676,6 +676,16 @@ DROP DATABASE test CASCADE; -- 删除 test 数据库并删除里面的数据
 show create table test1; -- 查看 test1 表的详细信息
 ```
 
+## [大数据系列文章](https://blackyau.cc/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/)
+
+- Hadoop 伪分布部署: https://blackyau.cc/11.html
+
+- Flume 配置: https://blackyau.cc/12.html
+
+- Hive 配置: https://blackyau.cc/13.html
+
+- Hadoop 完全分布部署: https://blackyau.cc/14.html
+
 ## 参考
 
 [Programming Hive](https://book.douban.com/subject/25791255/)

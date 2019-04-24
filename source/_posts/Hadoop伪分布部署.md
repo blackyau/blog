@@ -419,6 +419,16 @@ mr-jobhistory-daemon.sh stop historyserver # 停止 MapReduce
 stop-all.sh # 停止所有
 ```
 
+## [大数据系列文章](https://blackyau.cc/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/)
+
+- Hadoop 伪分布部署: https://blackyau.cc/11.html
+
+- Flume 配置: https://blackyau.cc/12.html
+
+- Hive 配置: https://blackyau.cc/13.html
+
+- Hadoop 完全分布部署: https://blackyau.cc/14.html
+
 ## 测试
 
 http://192.168.66.135:50070 # NameNode
