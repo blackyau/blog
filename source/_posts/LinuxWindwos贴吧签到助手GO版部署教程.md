@@ -20,7 +20,7 @@ comment: true
 
 本人的部署环境：windows7 SP1 / CentOS 6.8
 
-# windows端配置
+## windows端配置
 
 首先到[贴吧签到助手GO版GitHub页](https://github.com/kookxiang/Tieba_Sign-Go/releases)下载最新版主程序，你可以通过右键 计算机-属性 来看到自己的系统是64位还是32位。Tieba_Sign-Go.x64.exe对应64位系统，Tieba_Sign-Go.x86.exe对应32位。
 
@@ -47,7 +47,7 @@ comment: true
 
 按同样的方法，你还可以在Cookies目录中添加更多帐号。同时完成更多的签到任务体验GO签到带来的迅猛速度。
 
-# Linux端配置
+## Linux端配置
 获取Cookie的方法我就不在赘述，直接就说说部署的方法了。
 
 首先使用[WinSCP](http://winscp.net/eng/docs/lang:chs)将对应版本的GO签到的主程序(一般都是Tieba_Sign-Go.linux.386.bin)放置于/ROOT/tb同时和windows端的操作一样，将你获取到的Cookies都放置于cookies文件夹中。

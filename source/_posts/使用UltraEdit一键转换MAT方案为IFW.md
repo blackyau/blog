@@ -15,11 +15,13 @@ tags:
 urlname: 8
 comment: true
 ---
+使用 Intent Firewall 可以让你优雅的做到类似 My Android Tools 禁用组件的效果
+
+<!-- more -->
+
 My Android Tools作为一位Android优化软件新秀，使用与其他优化软件单纯的杀后台抑制后台唤醒完全不同的方法，深受Android倒腾党的喜爱。但任何应用App都可以使用公开的接口[Android Developer](https://developer.android.com/reference/android/content/pm/PackageManager.html?hl=zh-cn#setComponentEnabledSetting)来重新激活自己的组件。My Android Tools作者也考虑到了这个问题，同时也推出了一个[Xposed模块](https://www.coolapk.com/apk/cn.wq.myandroidtoolsxposed)阻止这个api的调用。
 
 Xposed模块的滥用又会导致系统执行效率，详细原因可以查看该文[为什么安装 Xposed 以后会导致卡顿](https://blog.nfz.moe/archives/why-xposed-cause-unsmooth-exprience.html)。所以又有人挖掘除了新的方法，能够在仅ROOT的情况下阻止禁用后的Service/Receiver/Activity调用api重新激活自己的组件。绿色守护在V3.0时也在新推出的“处方”功能时，使用了该特性。**Intent Firewall**
-
-<!-- more -->
 
 ## Intent是什么？
 Activity、服务和广播接收器，是通过名为 Intent 的消息进行启动的。可以将 Intent 视为从其他组件请求操作的信使，无论组件属于这个应用还是其他应用。

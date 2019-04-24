@@ -13,11 +13,13 @@ tags:
 urlname: 9
 comment: true
 ---
+PGP 是用于信息加密，应用程序来源验证的加密协议，这里会介绍 PGP 在 Windows 平台下的使用方法
+
+<!-- more -->
+
 ## PGP/GPG/GnuPG/OpenPGP 关系和区别
 
 PGP 是 Phil Zimmermann 于1991年开发的商业应用程序，1997年7月，PGP Inc.与齐默尔曼同意 IETF 制定一项公开的互联网标准，称作 OpenPGP，任何支持这一标准的程序也被允许称作 OpenPGP。GnuPG 则是支持了这一标准的开源应用程序。提个小故事：
-
-<!-- more -->
 
 > 当年的 PGP 之父（Phil Zimmermann）因为发明了 PGP 这款文件/邮件加密工具，差点被美国政府抓去坐牢。当时（上世纪90年代初）的美国法律规定，“高强度加密技术”属于军用技术，不允许出口到海外。Phil Zimmermann 后来想了个妙计——通过 MIT 出版社出了一本书，把 PGP 的全部源代码放到书中，然后援引“美国宪法第一修正案”（出版物受“言论自由”的保护），才推翻了对他的指控。[<sup>来源</sup>](https://program-think.blogspot.com/2014/06/truecrypt-dead.html)
 

@@ -13,9 +13,11 @@ tags:
 urlname: 4
 comment: true
 ---
-Google全家桶一直是让Android玩家们又爱又恨的组件，一方面它能够带给我们完整的Google生态圈体验、一方面又被他频繁唤醒设备造成的高耗电和全家桶的臃肿所烦恼。而现在有另外一个“不完美”的解决方案，可以让我们用上Google play、让Google全家桶能够安静的不再频繁唤醒设备。那就是**[MicroG项目](https://microg.org)**，又得益于这个项目为开源所以使用MicroG也可以让我们摆脱Google对Android“可远观而不可亵玩”那种开放。
+轻量级 Google 全家桶，MicroG 安装与配置教程
 
 <!-- more -->
+
+Google全家桶一直是让Android玩家们又爱又恨的组件，一方面它能够带给我们完整的Google生态圈体验、一方面又被他频繁唤醒设备造成的高耗电和全家桶的臃肿所烦恼。而现在有另外一个“不完美”的解决方案，可以让我们用上Google play、让Google全家桶能够安静的不再频繁唤醒设备。那就是**[MicroG项目](https://microg.org)**，又得益于这个项目为开源所以使用MicroG也可以让我们摆脱Google对Android“可远观而不可亵玩”那种开放。
 
 安装须知
  - 需要完整的ROOT权限
