@@ -2,7 +2,7 @@
 layout: post
 title: Hadoop 完全分布部署
 date: 2019-04-24 20:00:29
-updated: 2019-04-24 21:11:31
+updated: 2019-04-25 11:44:22
 categories: 大数据
 tags: 
     - CentOS
