@@ -233,7 +233,7 @@ Time taken: 0.062 seconds, Fetched: 51 row(s)
 
 ### 默认参数导出
 
-这条命令是在 `shell` 中执行的，使用 HIVE 的 `-e` 参数，执行完该命令后就直接退出 HIVE，用重定向写进文档。导出的字段是用 是制表符 `\t` 分割的
+这条命令是在 `shell` 中执行的，使用 HIVE 的 `-e` 参数，执行完该命令后就直接退出 HIVE，用重定向写进文档。导出的字段是用制表符 `\t` 分割的
 
 ```shell
 hive -e 'use data;select * from tenxun' > /home/hadoop/out
