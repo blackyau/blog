@@ -136,4 +136,21 @@ slave2
 | `yarn` | `start-yarn.sh` |
 | `mapred` | `mr-jobhistory-daemon.sh start historyserver` |
 
+JobHistory WEB 端能够正常显示，但是它不显示 `job` 。查 `log` 发现还是权限的问题，需要给一下权限。`hdfs dfs -chown -R mapred /tmp/hadoop-yarn/staging/history`上面的不见效就直接 777 `hdfs dfs -chmod 777 /tmp/hadoop-yarn/staging/history` 。
+
 如果启动的时候失败了，数据没有成功同步到所有节点。就吧 `hadoop.tmp.dir` 和 `/tmp` 目录里面的东西全部删完，重新格式化就行了。而且注意不要格式化太多次，格式化太多次导致 `ID` 不一样也会是一个很头大的事情，[之前](https://blackyau.cc/12.html#%E6%8E%92%E9%94%99)因为这个问题我头疼了 1-2 天。
+
+## HIVE
+
+HIVE 启动的时候，还是要注意删一下和 `Hadoop` 冲突的 `jar` ,其中任选一个删除都可以
+
+```shell
+/usr/local/hadoop-2.6.0/share/hadoop/common/lib/slf4j-log4j12-1.7.5.jar
+/usr/local/hadoop-2.6.0/share/hadoop/yarn/lib/hive-jdbc-1.1.0-standalone.jar
+```
+
+也可以用环境变量，让他自己选择高版本的使用。但是这样设置的话，还是会有一串警告，看着挺不爽的。
+
+```shell
+export HADOOP_USER_CLASSPATH_FIRST=true
+```
