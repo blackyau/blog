@@ -2,7 +2,7 @@
 layout: post
 title: Hadoop 完全分布部署
 date: 2019-04-24 20:00:29
-updated: 2019-04-25 11:44:22
+updated: 2019-04-25 16:18:40
 categories: 大数据
 tags: 
     - CentOS
@@ -154,3 +154,7 @@ HIVE 启动的时候，还是要注意删一下和 `Hadoop` 冲突的 `jar` ,其
 ```shell
 export HADOOP_USER_CLASSPATH_FIRST=true
 ```
+
+## 参考
+
+[Hadoop: The Definitive Guide@Tom White](https://item.jd.com/12109713.html)
