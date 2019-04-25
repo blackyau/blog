@@ -2,7 +2,7 @@
 layout: post
 title: Hive 配置
 date: 2019-04-19 20:03:50
-updated: 2019-04-23 18:44:40
+updated: 2019-04-25 16:18:14
 categories: 大数据
 tags: 
     - CentOS
@@ -227,6 +227,39 @@ Time taken: 0.062 seconds, Fetched: 51 row(s)
       negative, Hive will use this one as the max number of reducers when automatically determine number of reducers.
     </description>
   </property>
+```
+
+## 使用 HIVE 导出数据
+
+### 默认参数导出
+
+这条命令是在 `shell` 中执行的，使用 HIVE 的 `-e` 参数，执行完该命令后就直接退出 HIVE，用重定向写进文档。导出的字段是用 是制表符 `\t` 分割的
+
+```shell
+hive -e 'use data;select * from tenxun' > /home/hadoop/out
+```
+
+下面这条是 `HQL` 命令，它将查询的结果写入到指定的 `local directory` 中去，导出格式和上面的格式相同。
+
+```sql
+nsert overwrite local directory '/home/hadoop/out2'
+select * from tenxun;
+```
+
+### 导出 csv 文件
+
+一开始都和上面一样，后面用 `sed` 将输出的 `\t` 全都都替换为 `,` 后面的 `g` 表示替换所有
+
+```shell
+hive -e 'use data;select * from tenxun' | sed 's/[\t]/,/g' > /home/hadoop/out5.csv
+```
+
+同时将字段之间的分割符改为 `,` 
+
+```sql
+insert overwrite local directory '/home/hadoop/out4'
+  row format delimited fields terminated by ','
+  select * from tenxun;
 ```
 
 ## Sqoop 数据推送
@@ -633,8 +666,6 @@ select location,count(*) as sum from data group by location order by sum desc;
 
 输出以下内容说明成功
 
-
-
 |  name | location | tag |
 |  ---- | -------- | ----|
 | 26787-策略分析经理（深圳）                                      | 深圳     | 市场类    |
@@ -707,3 +738,5 @@ show create table test1; -- 查看 test1 表的详细信息
 [CSDN@一介那个书生 - CentOS下修改mysql数据库编码为UTF-8](https://blog.csdn.net/qq_32953079/article/details/54629245)
 
 [CSDN@爱笑的T_T - CentOS(Linux)中解决MySQL中文乱码](https://blog.csdn.net/u014695188/article/details/51087456)
+
+[StackOverFlow@user1922900 - How to export a Hive table into a CSV file?](https://stackoverflow.com/questions/17086642/)
