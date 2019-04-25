@@ -2,7 +2,7 @@
 layout: post
 title: Hive 配置
 date: 2019-04-19 20:03:50
-updated: 2019-04-25 16:18:14
+updated: 2019-04-25 20:23:20
 categories: 大数据
 tags: 
     - CentOS
@@ -242,7 +242,7 @@ hive -e 'use data;select * from tenxun' > /home/hadoop/out
 下面这条是 `HQL` 命令，它将查询的结果写入到指定的 `local directory` 中去，导出格式和上面的格式相同。
 
 ```sql
-nsert overwrite local directory '/home/hadoop/out2'
+insert overwrite local directory '/home/hadoop/out2'
 select * from tenxun;
 ```
 
