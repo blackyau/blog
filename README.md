@@ -10,5 +10,5 @@
 </p>
 
 <p align="center">
-Powered by <a href="https://hexo.io/"><img src="https://simpleicons.org/icons/travisci.svg" width="20px" height="20px">Hexo</a>   <a href="https://github.com/theme-next/hexo-theme-next/"><img src="https://raw.githubusercontent.com/theme-next/hexo-theme-next/master/source/images/logo.svg?sanitize=true" width="20px" height="20px">NexT</a>  <a href="https://travis-ci.org/"><img src="https://simpleicons.org/icons/travisci.svg" width="20px" height="20px">Travis CI</a>
+Powered by <a href="https://hexo.io/"><img src="https://simpleicons.org/icons/hexo.svg" width="30px" height="30px">Hexo</a>   <a href="https://github.com/theme-next/hexo-theme-next/"><img src="https://raw.githubusercontent.com/theme-next/hexo-theme-next/master/source/images/logo.svg?sanitize=true" width="30px" height="30px">NexT</a>  <a href="https://travis-ci.org/"><img src="https://simpleicons.org/icons/travisci.svg" width="30px" height="30px">Travis CI</a>
 </p>
