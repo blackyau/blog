@@ -419,7 +419,7 @@ mr-jobhistory-daemon.sh stop historyserver # 停止 MapReduce
 stop-all.sh # 停止所有
 ```
 
-其他 大数据系列文章 请看 [这里]](https://blackyau.cc/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/)
+其他 大数据系列文章 请看 [这里](https://blackyau.cc/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/)
 
 ## 测试
 

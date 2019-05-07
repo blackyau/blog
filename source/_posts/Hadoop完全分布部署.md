@@ -155,7 +155,7 @@ HIVE 启动的时候，还是要注意删一下和 `Hadoop` 冲突的 `jar` ,其
 export HADOOP_USER_CLASSPATH_FIRST=true
 ```
 
-其他 大数据系列文章 请看 [这里]](https://blackyau.cc/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/)
+其他 大数据系列文章 请看 [这里](https://blackyau.cc/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/)
 
 ## 参考
 

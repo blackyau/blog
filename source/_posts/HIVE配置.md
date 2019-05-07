@@ -707,7 +707,7 @@ DROP DATABASE test CASCADE; -- 删除 test 数据库并删除里面的数据
 show create table test1; -- 查看 test1 表的详细信息
 ```
 
-其他 大数据系列文章 请看 [这里]](https://blackyau.cc/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/)
+其他 大数据系列文章 请看 [这里](https://blackyau.cc/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/)
 
 ## 参考
 

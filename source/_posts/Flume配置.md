@@ -278,7 +278,7 @@ HTTP Source
 
 [http://flume.apache.org/releases/content/1.6.0/FlumeUserGuide.html#http-source](http://flume.apache.org/releases/content/1.6.0/FlumeUserGuide.html#http-source)
 
-其他 大数据系列文章 请看 [这里]](https://blackyau.cc/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/)
+其他 大数据系列文章 请看 [这里](https://blackyau.cc/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/)
 
 ## 参考
 

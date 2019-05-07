@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Hadoop 委任和解除节点
+title: Hadoop 添加和删除节点
 date: 2019-05-07 16:55:43
 updated: 2019-05-07 23:38:02
 categories: 大数据
@@ -16,7 +16,7 @@ urlname: 15
 comment: true
 ---
 
-Hadoop 集群的委任和解除节点比较容易，这里也就做个记录。
+Hadoop 集群的添加和删除节点比较容易，这里也就做个记录。
 
 <!-- more -->
 
@@ -75,7 +75,7 @@ vi $HADOOP_HOME/etc/hadoop/hdfs-site.xml
 
  <property>
   <name>dfs.replication</name>
-  <!-- 因为这里要把拥有3个DataNode的集群解除一个节点,所以要把备份数调为2以免出错 -->
+  <!-- 因为这里要把拥有3个DataNode的集群删除一个节点,所以要把备份数调为2以免出错 -->
   <value>2</value>
  </property>
 
@@ -121,24 +121,24 @@ start-dfs.sh
 start-yarn.sh
 ```
 
-用 `hdfs dfs -ls /` 和 `get/put` 之类的试试 `HDFS` 工作正常不,然后也可以用 `hive select count(*)` 之类的语句一下 `MapReduce` 工作正常不，如果正常的话就可以走下一步了。
+用 `hdfs dfs -ls /` 和 `get/put` 之类的试试 `HDFS` 工作正常不,然后也可以用 `hive` 的 `select count(*)` 之类的语句一下 `MapReduce` 工作正常不，如果正常的话就可以走下一步了。
 
-## 解除节点
+## 删除节点
 
 判断一个节点能否连接到`资源管理器`非常简单。仅当节点出现在 `include` 文件且不出现在 `exclude` 文件中时，才能够连接到资源管理器。注意，如果未指定 `include` 文件或为空的话，则意味着所有节点都可以连接到`资源管理器`。
 
-对于 `HDFS` 来说，`include` 和 `exclude` 文件稍有不同，如果一个 `DataNode` 在 `include` 文件中出现同时也在 `exlude` 中那么说明该节点即将被解除委任。下表总结了 `DataNode` 的不同组合方式。
+对于 `HDFS` 来说，`include` 和 `exclude` 文件稍有不同，如果一个 `DataNode` 在 `include` 文件中出现同时也在 `exlude` 中那么说明该节点即将被删除添加。下表总结了 `DataNode` 的不同组合方式。
 
 | 是否在 include 中 | 是否在 exclude 中 | 状态 |
 | ---------------- | ----------------- | ---- |
 | 否 | 否 | 无法连接 |
 | 否 | 是 | 无法连接 |
 | 是 | 否 | 可连接 |
-| 是 | 是 | 可连接,将被解除 |
+| 是 | 是 | 可连接,将被删除 |
 
 > 需要注意的是 `dfs.hosts` 和 `yarn.resourcemanager.nodes.include-path` 属性指定的文件(`include` 和 `exclude`)不同于 `slaves` 文件，前者供 `NameNode` 和资源管理器使用，用于决定可以连接那些节点。Hadoop 控制脚本使用 `slaves` 文件执行面向整个集群范围的操作，例如重启集群等。Hadoop 守护进程从不使用 `slaves` 文件。
 
-进入 `exclude` 配置，写入即将解除的节点
+进入 `exclude` 配置，写入即将删除的节点
 
 ```shell
 vi $HADOOP_HOME/etc/hadoop/exclude
@@ -163,7 +163,7 @@ yarn rmadmin -refreshNodes
 
 > 如果在 `Decommission In Progress` 卡了很久，可能是你没有吧 `dfs.replication` 调低。我之前遇到了这个问题。
 
-> 同时我在解除了1个节点后 HDFS 会疯狂报错，一直找不到解决方案。但是它也不影响 HDFS 的正常运行就直接无视了 WARN org.apache.hadoop.hdfs.server.blockmanagement.BlockPlacementPolicy: Failed to place enough replicas, still in need of 1 to reach 3 (unavailableStorages=[DISK, ARCHIVE], storagePolicy=BlockStoragePolicy{HOT:7, storageTypes=[DISK], creationFallbacks=[], replicationFallbacks=[ARCHIVE]}, newBlock=false) All required storage types are unavailable:  unavailableStorages=[DISK, ARCHIVE], storagePolicy=BlockStoragePolicy{HOT:7, storageTypes=[DISK], creationFallbacks=[], replicationFallbacks=[ARCHIVE]}
+> 同时我在删除了1个节点后 HDFS 会疯狂报错，一直找不到解决方案。但是它也不影响 HDFS 的正常运行就直接无视了 WARN org.apache.hadoop.hdfs.server.blockmanagement.BlockPlacementPolicy: Failed to place enough replicas, still in need of 1 to reach 3 (unavailableStorages=[DISK, ARCHIVE], storagePolicy=BlockStoragePolicy{HOT:7, storageTypes=[DISK], creationFallbacks=[], replicationFallbacks=[ARCHIVE]}, newBlock=false) All required storage types are unavailable:  unavailableStorages=[DISK, ARCHIVE], storagePolicy=BlockStoragePolicy{HOT:7, storageTypes=[DISK], creationFallbacks=[], replicationFallbacks=[ARCHIVE]}
 
 资源管理器状态如下
 
@@ -185,16 +185,17 @@ hdfs dfsadmin -refreshNodes
 
 ![3](https://st.blackyau.net/blog/15/3.png)
 
-如图，节点已经被完全解除了
+如图，节点已经被完全删除了
 
-## 委任节点
+## 添加节点
 
-添加一个刚刚被解除的节点，会让它感到懵逼。所以这里我们先重启一下。
+添加一个刚刚被删除的节点，会让它感到懵逼。所以这里我们先重启一下。
 
 ```shell
 stop-yarn.sh
 stop-dfs.sh
-
+start-dfs.sh
+start-yarn.sh
 ```
 
 直接将节点信息添加进 `include` ,同时把它从 `exclude` 中删除
@@ -218,13 +219,13 @@ hdfs dfsadmin -refreshNodes
 yarn rmadmin -refreshNodes
 ```
 
-委任节点成功
+添加节点成功
 
 ![5](https://st.blackyau.net/blog/15/5.png)
 
 ![6](https://st.blackyau.net/blog/15/6.png)
 
-其他 大数据系列文章 请看 [这里]](https://blackyau.cc/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/)
+其他 大数据系列文章 请看 [这里](https://blackyau.cc/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/)
 
 ## 参考
 
