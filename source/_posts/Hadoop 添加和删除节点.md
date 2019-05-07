@@ -2,7 +2,7 @@
 layout: post
 title: Hadoop 添加和删除节点
 date: 2019-05-07 16:55:43
-updated: 2019-05-07 23:38:02
+updated: 2019-05-07 23:56:57
 categories: 大数据
 tags: 
     - CentOS
@@ -155,7 +155,7 @@ hdfs dfsadmin -refreshNodes
 yarn rmadmin -refreshNodes
 ```
 
-你可以在 WEB 段看到 `Datanode` 的 `Admin State` 变化如下 `In Service` > `Decommission In Progress` > `Decommissioned`
+你可以在 WEB 端看到 `Datanode` 的 `Admin State` 变化如下 `In Service` > `Decommission In Progress` > `Decommissioned`
 
 ![1](https://st.blackyau.net/blog/15/1.png)
 
