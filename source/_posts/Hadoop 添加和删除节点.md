@@ -2,7 +2,7 @@
 layout: post
 title: Hadoop 添加和删除节点
 date: 2019-05-07 16:55:43
-updated: 2019-05-07 23:56:57
+updated: 2019-05-28 16:21:45
 categories: 大数据
 tags: 
     - CentOS
@@ -24,11 +24,11 @@ Hadoop 集群的添加和删除节点比较容易，这里也就做个记录。
 
 目前我使用的虚拟机搭建，共有 1 个 `NameNode` 和 另外 2 个 `DataNode`
 
-```
-master NameNode/DataNode
-slave1 DataNode
-slave2 DataNode
-```
+| HostName | Function | ip |
+| --- | --- | --- | --- |
+| master | NameNode/DataNode | 192.168.66.128 |
+| slave1 | DataNode | 192.168.66.129 |
+| slave2 | DataNode | 192.168.66.130 |
 
 `hdfs-site.xml` 中的 `dfs.replication` 使用的默认值 `3`
 
