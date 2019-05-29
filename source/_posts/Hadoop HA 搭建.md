@@ -2,7 +2,7 @@
 layout: post
 title: Hadoop HA 搭建
 date: 2019-05-28 15:54:12
-updated: 2019-05-29 00:13:24
+updated: 2019-05-30 00:09:12
 categories: 大数据
 tags: 
     - CentOS
@@ -28,7 +28,7 @@ comment: true
 | HostName | Function | IP |
 | --- | --- | --- | --- |
 | master | DataNode/NameNode/ResourceManager | 192.168.66.128 |
-| slave1 | DataNode/NameNode | 192.168.66.129 |
+| slave1 | DataNode/NameNode/JobHistoryServer | 192.168.66.129 |
 | slave2 | DataNode/ResourceManager | 192.168.66.130 |
 
 软件版本如下：
@@ -405,8 +405,13 @@ scp -r /usr/local/hadoop-2.6.0/etc/hadoop slave2:/usr/local/hadoop-2.6.0/etc/
 ```
 
 ```shell
+# 每台机子都要执行一次
+zkServer.sh start
+```
+
+```shell
 # master 
-hadoop-daemons.sh start journalnode # 所有主机启动journalnode集群
+hadoop-daemons.sh start journalnode # 所有主机启动journalnode集群(带s可以一条命令启动集群)
 hdfs zkfc -formatZK # 格式化zkfc
 hadoop namenode -format # 格式化hdfs
 hadoop-daemon.sh start namenode # 本机启动NameNode
@@ -418,6 +423,7 @@ start-yarn.sh # 本机启动yarn
 # slave1
 hdfs namenode -bootstrapStandby # 启动数据同步
 hadoop-daemon.sh start namenode # 本机启动NameNode
+mr-jobhistory-daemon.sh start historyserver # 启动历史服务器
 ```
 
 ```shell
@@ -432,10 +438,52 @@ hadoop-daemons.sh start zkfc # 开启zkfc
 
 最后一步完成时，两个 `NameNode` 的其中一个就会变为 `active`
 
-## TODO
-> mr-jobhistory-daemon.sh start historyserver
+## 测试
 
-> yarn-daemon.sh start historyserver
+http://master:50070
+
+http://master:8088
+
+http://slave1:50070
+
+http://slave1:19888
+
+http://slave2:8088
+
+```shell
+[root@master ~]# jps
+10003 DataNode
+10852 QuorumPeerMain
+10948 DFSZKFailoverController
+9797 JournalNode
+13050 Jps
+13004 ResourceManager
+9870 NameNode
+11150 NodeManager
+```
+
+```shell
+[root@slave1 ~]# jps
+7379 DataNode
+7301 JournalNode
+8070 NodeManager
+7975 DFSZKFailoverController
+8218 JobHistoryServer
+8778 Jps
+7902 QuorumPeerMain
+7615 NameNode
+```
+
+```shell
+[root@slave2 ~]# jps
+7317 JournalNode
+7765 QuorumPeerMain
+7989 ResourceManager
+7880 NodeManager
+7385 DataNode
+9839 Jps
+```
+
 ## 参考
 
 [Hadoop: The Definitive Guide@Tom White](https://item.jd.com/12109713.html)
@@ -444,3 +492,8 @@ hadoop-daemons.sh start zkfc # 开启zkfc
 
 [51CTO博客@maisr25 - hadoop2.0 QJM方式的HA的配置](https://blog.51cto.com/sstudent/1381674)
 
+[博客园@learn21cn - zookeeper集群的搭建以及hadoop ha的相关配置](https://www.cnblogs.com/learn21cn/p/6184490.html)
+
+[博客园@黄石公园 - 大数据系列（hadoop） Hadoop+Zookeeper 3节点高可用集群搭建](https://www.cnblogs.com/YellowstonePark/p/7750213.html)
+
+[博客园@一蓑烟雨任平生 - hadoop集群搭建（伪分布式）+使用自带jar包计算pi圆周率](https://www.cnblogs.com/jingpeng77/p/9652380.html)
