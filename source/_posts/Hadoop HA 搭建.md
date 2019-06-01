@@ -13,6 +13,7 @@ tags:
     - Hadoop 集群管理
     - Hadoop HA
     - Hadoop 高可用
+    - ZooKeeper
 urlname: 16
 comment: true
 ---
@@ -38,11 +39,11 @@ comment: true
 | System | CentOS-7-x86_64-Minimal-1810 | [TUNA Mirrors](https://mirrors.tuna.tsinghua.edu.cn/centos/7.6.1810/isos/x86_64/) |
 | JAVA | jdk-8u211-linux-x64.tar.gz | [Oracle](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) |
 | Hadoop | hadoop-2.6.0.tar.gz | [Apache Archive](http://archive.apache.org/dist/hadoop/common/hadoop-2.6.0/) |
-| ZooKeeper | zookeeper-3.4.5.tar.gz | [Apache Archive](http://archive.apache.org/dist/zookeeper/zookeeper-3.4.5/)
+| ZooKeeper | zookeeper-3.4.5.tar.gz | [Apache Archive](http://archive.apache.org/dist/zookeeper/zookeeper-3.4.5/) |
 
 本文不会介绍理论性的东西，更多关于 `ZooKeeper` 和 `Hadoop HA` 定义相关的信息可以参考这个文章 [SegmentFault@Snailclimb - 可能是全网把 ZooKeeper 概念讲的最清楚的一篇文章](https://segmentfault.com/a/1190000016349824)
 
-## 基础配置环境
+## 基础环境配置
 
 参考 [Hadoop 伪分布部署](https://blackyau.cc/11.html) 和 [Hadoop 完全分布部署](https://blackyau.cc/14.html) 吧，这里不再多说。在开始配置之前吧所有相关服务都停止了再继续。
 
