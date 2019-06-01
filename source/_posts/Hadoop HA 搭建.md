@@ -404,6 +404,8 @@ scp -r /usr/local/hadoop-2.6.0/etc/hadoop slave1:/usr/local/hadoop-2.6.0/etc/
 scp -r /usr/local/hadoop-2.6.0/etc/hadoop slave2:/usr/local/hadoop-2.6.0/etc/
 ```
 
+## 启动
+
 ```shell
 # 每台机子都要执行一次
 zkServer.sh start
