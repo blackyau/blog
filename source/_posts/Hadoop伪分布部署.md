@@ -2,7 +2,7 @@
 layout: post
 title: Hadoop 伪分布部署
 date: 2019-04-04 17:00:17
-updated: 2019-04-20 09:41:32
+updated: 2019-06-02 15:47:45
 categories: 大数据
 tags: 
     - CentOS
@@ -403,7 +403,7 @@ export JAVA_HOME=/usr/java/jdk1.8.0_201-amd64
 hdfs namenode -format # 格式化 HDFS
 start-dfs.sh # 启动 HDFS
 start-yarn.sh # 启动 YARN
-mr-jobhistory-daemon.sh start historyserver # 启动 MapReduce
+mr-jobhistory-daemon.sh start historyserver # 启动 历史服务器
 hdfs dfs -chmod -R 755 /tmp # 赋予目录权限(这个问题暂时先这样把,最好还是用两个用户把它分离开.不直接使用root用户)
 start-all.sh # 很有把握的时候才用这个
 ```
@@ -427,11 +427,11 @@ http://192.168.66.135:50070 # NameNode
 
 ![15](https://st.blackyau.net/blog/11/15.png)
 
-http://192.168.66.135:19888 # 资源管理器
+http://192.168.66.135:19888 # 历史服务器
 
 ![16](https://st.blackyau.net/blog/11/16.png)
 
-http://192.168.66.135:8088 # 历史服务器
+http://192.168.66.135:8088 # 资源管理器
 
 ![17](https://st.blackyau.net/blog/11/17.png)
 
