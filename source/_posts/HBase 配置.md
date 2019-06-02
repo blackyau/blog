@@ -2,7 +2,7 @@
 layout: post
 title: HBase 配置
 date: 2019-06-01 18:09:22
-updated: 2019-06-02 17:08:10
+updated: 2019-06-02 17:36:14
 categories: 大数据
 tags: 
     - CentOS
@@ -306,29 +306,29 @@ SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
 <escape>
 <table>
   <tr>
-    <th rowspan="2">Row Key</th>
-    <th colspan="2">inside</th>
-    <th colspan="2">outside</th>
+    <th rowspan="2" align="center">Row Key</th>
+    <th colspan="2" align="center">inside</th>
+    <th colspan="2" align="center">outside</th>
   </tr>
   <tr>
-    <td>name</td>
-    <td>age</td>
-    <td>slang</td>
-    <td>zh</td>
+    <td align="center">name</td>
+    <td align="center">age</td>
+    <td align="center">slang</td>
+    <td align="center">zh</td>
   </tr>
   <tr>
-    <td>1</td>
-    <td>tom</td>
-    <td>3</td>
-    <td>cat</td>
-    <td>mao</td>
+    <td align="center">1</td>
+    <td align="center">tom</td>
+    <td align="center">3</td>
+    <td align="center">cat</td>
+    <td align="center">mao</td>
   </tr>
   <tr>
-    <td>2</td>
-    <td>jerry</td>
-    <td>2</td>
-    <td>rat</td>
-    <td>laoshu</td>
+    <td align="center">2</td>
+    <td align="center">jerry</td>
+    <td align="center">2</td>
+    <td align="center">rat</td>
+    <td align="center">laoshu</td>
   </tr>
 </table>
 </escape>
