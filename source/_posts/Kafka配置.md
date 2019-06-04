@@ -2,7 +2,7 @@
 layout: post
 title: Kafka 配置
 date: 2019-06-04 18:00:00
-updated: 2019-06-04 19:46:00
+updated: 2019-06-04 19:51:20
 categories: 大数据
 tags: 
     - CentOS
@@ -158,8 +158,10 @@ zookeeper.connect=master:2181,slave1:2181,slave2:2181
 
 将程序和配置分发到所有主机上
 
+```shell
 scp /usr/local/src/kafka slave1:/usr/local/src/
 scp /usr/local/src/kafka slave2:/usr/local/src/
+```
 
 ### 设置环境变量
 
