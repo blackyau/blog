@@ -2,7 +2,7 @@
 layout: post
 title: Hive 配置
 date: 2019-04-19 20:03:50
-updated: 2019-04-25 20:23:20
+updated: 2019-06-10 00:46:10
 categories: 大数据
 tags: 
     - CentOS
@@ -96,10 +96,38 @@ hive>
 SLF4J: Class path contains multiple SLF4J bindings.
 ```
 
-可以执行以下指令，删除冲突的 jar 包
+可以执行以下指令，移动冲突的 `jar` 包到用户目录(也可以删除或加 `.bak`)
 
 ```shell
-rm /root/apache-hive-1.1.0-bin/lib/hive-jdbc-1.1.0-standalone.jar
+mv /root/apache-hive-1.1.0-bin/lib/hive-jdbc-1.1.0-standalone.jar ~
+```
+
+如果你遇到了这个错误
+
+```shell
+[ERROR] Terminal initialization failed; falling back to unsupported
+java.lang.IncompatibleClassChangeError: Found class jline.Terminal, but interface was expected
+	at jline.TerminalFactory.create(TerminalFactory.java:101)
+	at jline.TerminalFactory.get(TerminalFactory.java:158)
+	at jline.console.ConsoleReader.<init>(ConsoleReader.java:229)
+	at jline.console.ConsoleReader.<init>(ConsoleReader.java:221)
+	at jline.console.ConsoleReader.<init>(ConsoleReader.java:209)
+	at org.apache.hadoop.hive.cli.CliDriver.getConsoleReader(CliDriver.java:773)
+	at org.apache.hadoop.hive.cli.CliDriver.executeDriver(CliDriver.java:715)
+	at org.apache.hadoop.hive.cli.CliDriver.run(CliDriver.java:675)
+	at org.apache.hadoop.hive.cli.CliDriver.main(CliDriver.java:615)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.hadoop.util.RunJar.run(RunJar.java:221)
+	at org.apache.hadoop.util.RunJar.main(RunJar.java:136)
+```
+
+可以执行一下命令，移动冲突的 `jar` 包到用户目录(也可以删除或加 `.bak`)
+
+```shell
+mv /usr/local/hadoop-2.6.0/share/hadoop/yarn/lib/jline-0.9.94.jar ~
 ```
 
 ## 建表
@@ -359,7 +387,9 @@ curl -O https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql57-community-el7/mys
 curl -O https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql57-community-el7/mysql-community-server-5.7.25-1.el7.x86_64.rpm
 ```
 
-卸载自带的 MariaDB 或之前安装的 MySQL ,如果执行下面的命令存在已安装的包。就用 `rpm -e mysql-community-xxxx` 之类的命令卸载就行了
+卸载自带的 MariaDB 或之前安装的 MySQL ,如果执行下面的命令存在已安装的包。
+
+就用 `rpm -e mysql-community-xxxx` 之类的命令卸载就行了,Centos 还需要卸载 `mariadb` 可以使用命令 `yum -y remove maria*`
 
 ```shell
 rpm -qa | grep mysql
@@ -367,6 +397,8 @@ rpm -qa | grep mariadb
 ```
 
 安装
+
+> mysql 的依赖太多了，推荐用 `yum install -y mysql` 安装一下，解决依赖问题
 
 ```shell
 rpm -ivh mysql-community-common-5.7.25-1.el7.x86_64.rpm
@@ -618,7 +650,7 @@ Time taken: 2.78 seconds, Fetched: 12 row(s)
 
 ### 使用 Sqoop 导出数据到 MySQL
 
-下载 [mysql-connector-java-6.0.3](https://st.blackyau.net/blog/13/mysql-connector-java-6.0.3.jar) 并放置在 `$SQOOP_HOME/lib/` 目录下，否则会出现以下报错。
+下载 [mysql-connector-java-5.1.47.jar](https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.47.tar.gz) 并放置在 `$SQOOP_HOME/lib/` 目录下，否则会出现以下报错。
 
 ```shell
 ERROR sqoop.Sqoop: Got exception running Sqoop: java.lang.RuntimeException: Could not load db driver class: com.mysql.jdbc.Driver
@@ -699,6 +731,54 @@ select location,count(*) as sum from data group by location order by sum desc;
 
 12 rows in set (0.00 sec)
 
+## 修改元数据存储数据库为mysql
+
+首先修改配置
+
+```shell
+vi $HIVE_HOME/conf/hive-site.xml
+```
+
+修改下面的配置
+
+```xml
+<property>
+  <name>javax.jdo.option.ConnectionPassword</name>
+  <value>your_password</value>
+  <description>password to use against metastore database</description>
+</property>
+
+<property>
+  <name>javax.jdo.option.ConnectionURL</name>
+  <value>jdbc:mysql://localhost:3306/hive?useSSL=true</value>
+  <description>JDBC connect string for a JDBC metastore</description>
+</property>
+
+<property>
+  <name>javax.jdo.option.ConnectionDriverName</name>
+  <value>com.mysql.jdbc.Driver</value>
+  <description>Driver class name for a JDBC metastore</description>
+</property>
+
+<property>
+  <name>javax.jdo.option.ConnectionUserName</name>
+  <value>root</value>
+  <description>Username to use against metastore database</description>
+</property>
+```
+
+下载 [mysql-connector-java-5.1.47.jar](https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.47.tar.gz) 并放置在 `$SQOOP_HOME/lib/` 目录下，否则可能会出现以下报错。
+
+```shell
+Column name pattern can not be NULL or empty
+```
+
+启动 `hive` 再 `show databases` 一下是否正常
+
+```shell
+hive
+show databases;
+```
 
 ## S/HQL 常用命令
 
@@ -732,3 +812,9 @@ show create table test1; -- 查看 test1 表的详细信息
 [CSDN@爱笑的T_T - CentOS(Linux)中解决MySQL中文乱码](https://blog.csdn.net/u014695188/article/details/51087456)
 
 [StackOverFlow@user1922900 - How to export a Hive table into a CSV file?](https://stackoverflow.com/questions/17086642/)
+
+[CSDN@iXiongYu - Column name pattern can not be NULL or empty](https://blog.csdn.net/u012527870/article/details/71633915)
+
+[CSDN@鞋带散了的木木 - Hive提示警告SSL](https://blog.csdn.net/u012922838/article/details/73291524)
+
+[CSDN@shawn_zhu1 - hive修改默认元数据存储数据库derby改为mysql](https://blog.csdn.net/qq_26479655/article/details/52252335)
