@@ -278,7 +278,7 @@ tmpfs                    172M     0  172M   0% /run/user/1000
 
 `/home` 空间变大了0.4T,扩容成功
 
-## 参考:
+## 参考
 
 https://blog.csdn.net/yaofengyaofeng/article/details/82353282
 
