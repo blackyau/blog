@@ -2,7 +2,7 @@
 layout: post
 title: IPTV 与互联网融合
 date: 2020-01-15 17:10
-updated: 2020-01-27 19:18
+updated: 2020-01-27 20:03
 categories: 教程
 tags: 
     - IPTV
@@ -202,7 +202,7 @@ igmp://
 
 ![Wireshark 2](https://st.blackyau.net/blog/23/15.jpg)
 
-单击连接，主窗口就会自动定位到该请求。
+单击链接，主窗口就会自动定位到该请求。
 
 ![Wireshark 3](https://st.blackyau.net/blog/23/16.jpg)
 
@@ -214,7 +214,7 @@ igmp://
 
 ![Wireshark 5](https://st.blackyau.net/blog/23/18.jpg)
 
-用 notepad++ 打开，查看是否显示正常(前几行都是回车，会一片空白往后滑一点)。
+用 notepad++ 打开，查看是否显示正常(前几行都是回车，会一片空白，往后滑一点就能看到了)。
 
 ![Wireshark 6](https://st.blackyau.net/blog/23/19.jpg)
 
@@ -290,7 +290,7 @@ http
 
 替换为空白
 
-全选改文本所有内容后复制，在顶部 编码 - 编码字符集 - 中文 - GB2312，确认切换到该字符集。然后删除文本所有内容，并粘贴。最后将文件保存为 txt 即可。
+全选该文本所有内容后复制，在顶部 编码 - 编码字符集 - 中文 - GB2312，确认切换到该字符集。然后删除文本所有内容，并粘贴。最后将文件保存为 txt 即可。
 
 > 超级直播中文本编码格式必须为 GB2312 否则中文会乱码
 
@@ -302,7 +302,7 @@ http
 
 ## 获取 IPTV 内网地址
 
-四川电信是 DHCP 获取，我在网上看很多地方都是 PPPOE 所以用户名和密码你们就需要自己翻翻 IPTV 的设置拉~
+四川电信是 DHCP 获取，我在网上看很多地方都是 PPPOE 所以用户名和密码你们就需要自己翻翻 IPTV 盒子的设置拉~
 
 这边也会使用到抓包的数据，应该就是前几个了，找到 `Dynamic Host Configuration Protocol (Request)` 请求，展开 `Option: (60) Vendor class identifier` 和`Option: (12) Host Name` 以及 `Client MAC address` 。都需要右键 - 复制 - 值 。
 
