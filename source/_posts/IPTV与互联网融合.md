@@ -2,7 +2,7 @@
 layout: post
 title: IPTV 与互联网融合
 date: 2020-01-15 17:10
-updated: 2020-01-27 20:03
+updated: 2020-01-28 12:51
 categories: 教程
 tags: 
     - IPTV
@@ -125,7 +125,7 @@ IPTV与互联网融合，的主要设备也就是路由器了。一款合适的�
 
 ### 抓包工具
 
-通过抓包获取 IPTV 的[组播地址](https://blackyau.cc/23.html#iGMP%E4%B8%8ERTSP)也是必不可少的一步。如果你的路由器没有 `交换机端口镜像` 的功能，你就需要淘宝单独购买一个 网络抓包工具，下图为 Amazon 搜索 `Throwing Star LAN Tap` 的外观图。
+通过抓包获取 IPTV 的[组播地址](https://blackyau.cc/23.html#iGMP-%E4%B8%8E-RTSP)也是必不可少的一步。如果你的路由器没有 `交换机端口镜像` 的功能，你就需要淘宝单独购买一个 网络抓包工具，下图为 Amazon 搜索 `Throwing Star LAN Tap` 的外观图。
 
 ![Throwing Star LAN Tap](https://st.blackyau.net/blog/23/11.jpg)
 
@@ -346,7 +346,7 @@ http
 
 新建连接，名称随意，主机填上路由器的 IP。点击左侧连接中的用户身份验证，将方法设置为 Password 用户名为 root 密码则为登录 Web 端后台时的密码，我提供的固件默认是 `password`。
 
-![30](https://st.blackyau.net/blog/23/30.jpg)
+![Xshell](https://st.blackyau.net/blog/23/30.jpg)
 
 ### 安装 igmpproxy 和 udpxy
 
