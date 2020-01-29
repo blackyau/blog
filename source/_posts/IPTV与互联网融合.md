@@ -446,7 +446,7 @@ config rule
 
 你的互联网播放地址则为 `http://125.60.90.40:8888/udp/239.93.22.6:6666`
 
-因为公网 IP 都在变，你可以使用 DDNS 也就是 动态 DNS 使用域名来防火，你可以使用路由器内自带的服务商。如果你和我一样将域名放置于 DNSPod 管理，也可以使用我制作的 [DdnsWithDnspod](https://github.com/blackyau/DdnsWithDnspod) 使用一个子域名来专供 IPTV 的播放。
+因为公网 IP 都在变，你可以使用 DDNS 也就是 动态 DNS 使用域名来访问，你可以使用路由器内自带的服务商。如果你和我一样将域名放置于 DNSPod 管理，也可以使用我制作的 [DdnsWithDnspod](https://github.com/blackyau/DdnsWithDnspod) 使用一个子域名来专供 IPTV 的播放。
 
 ## 结语
 
