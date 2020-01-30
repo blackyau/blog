@@ -2,7 +2,7 @@
 layout: post
 title: IPTV 与互联网融合
 date: 2020-01-15 17:10
-updated: 2020-01-29 17:49
+updated: 2020-01-30 21:56
 categories: 教程
 tags: 
     - IPTV
@@ -186,6 +186,12 @@ IPTV与互联网融合，的主要设备也就是路由器了。一款合适的�
 
 ```
 http.request.uri contains "frameset_builder.jsp"
+```
+
+四川成都电信可以尝试
+
+```
+http.request.uri contains "AuthenticationURL"
 ```
 
 右键第一个请求，追踪流 - HTTP 流
