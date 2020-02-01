@@ -141,7 +141,6 @@ IPTV与互联网融合，的主要设备也就是路由器了。一款合适的�
 | -- | -- | -- | -- |
 | PC | Wireshark | Portable 3.2.0 | [Wireshark 官网](https://www.wireshark.org/index.html#download) |
 | PC | Notepad++ | 7.8.2 | [Notepad++ 官网](https://notepad-plus-plus.org/downloads/) |
-| PC | Excel | Mondo 2016 x86 | [Office Tool Plus](https://otp.landian.vip/zh-cn/) |
 | PC | Xshell | 6.0.0032 | [Netsarang 家庭/学校版](https://www.netsarang.com/zh/free-for-home-school/) |
 | 路由器 | OpenWRT | R9.6.1 | [橙子的个人博客](https://www.maxlicheng.com/openwrt/225.html)/[蓝奏云](https://www.lanzous.com/b04s4nqri) |
 | 路由器 | igmpproxy | 0.2.1-4 | 固件自带 |
@@ -154,13 +153,12 @@ IPTV与互联网融合，的主要设备也就是路由器了。一款合适的�
 | -- | -- |
 | Wireshark | 抓包获取 IPTV 播放地址 |
 | Notepad++ | 抓包后数据整理 |
-| Excel | 抓包后数据整理 |
 | Xshell | SSH连接路由器 |
 | OpenWRT | 路由器固件 |
 | igmpproxy | 转发IGMP流量到指定端口 |
 | udpxy | IGMP流量转HTTP |
 
-使用基于 [Lean's OpenWrt](https://github.com/coolsnowwolf/lede) 编译了一个 WR1200JS 自带 udpxy 和 igmpproxy 的固件，除了这两个之外只有 DDns、samba 和 网络带宽监视器。 [openwrt-ramips-mt7621-youhua_wr1200js-squashfs-sysupgrade.bin](https://st.blackyau.net/blog/23/openwrt-ramips-mt7621-youhua_wr1200js-squashfs-sysupgrade.bin) 无线模块也没有添加，在弱电箱里不用无线功能。
+使用基于 [Lean's OpenWrt](https://github.com/coolsnowwolf/lede) 编译了一个 WR1200JS 可用的自带 udpxy 和 igmpproxy 的固件，除了这两个之外只有 DDns、samba 和 网络带宽监视器。 [openwrt-ramips-mt7621-youhua_wr1200js-squashfs-sysupgrade.bin](https://st.blackyau.net/blog/23/openwrt-ramips-mt7621-youhua_wr1200js-squashfs-sysupgrade.bin) 无线模块也没有添加，在弱电箱里不用无线功能。
 
 ## 抓包
 
