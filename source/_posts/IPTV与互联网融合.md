@@ -2,7 +2,7 @@
 layout: post
 title: IPTV 与互联网融合
 date: 2020-01-15 17:10
-updated: 2020-01-30 21:56
+updated: 2020-02-01 16:19
 categories: 教程
 tags: 
     - IPTV
@@ -159,6 +159,8 @@ IPTV与互联网融合，的主要设备也就是路由器了。一款合适的�
 | OpenWRT | 路由器固件 |
 | igmpproxy | 转发IGMP流量到指定端口 |
 | udpxy | IGMP流量转HTTP |
+
+使用基于 [Lean's OpenWrt](https://github.com/coolsnowwolf/lede) 编译了一个 WR1200JS 自带 udpxy 和 igmpproxy 的固件，除了这两个之外只有 DDns、samba 和 网络带宽监视器。 [openwrt-ramips-mt7621-youhua_wr1200js-squashfs-sysupgrade.bin](https://st.blackyau.net/blog/23/openwrt-ramips-mt7621-youhua_wr1200js-squashfs-sysupgrade.bin) 无线模块也没有添加，在弱电箱里不用无线功能。
 
 ## 抓包
 
