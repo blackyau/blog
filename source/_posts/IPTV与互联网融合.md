@@ -2,7 +2,7 @@
 layout: post
 title: IPTV 与互联网融合
 date: 2020-01-15 17:10
-updated: 2020-02-01 16:19
+updated: 2020-02-02 22:11
 categories: 教程
 tags: 
     - IPTV
@@ -460,6 +460,8 @@ config rule
 
 ## 参考
 
+[GitHub@coolsnowwolf - Lean's OpenWrt source](https://github.com/coolsnowwolf/lede)
+
 [恩山无线论坛@鲲翔 - IPTV融合进普通网络一般步骤](https://www.right.com.cn/forum/thread-248400-1-1.html)
 
 [恩山无线论坛@footlog - K2P/K2 padavan双线接入，宽带+IPTV，udpxy+xupnpd详细设置](https://www.right.com.cn/forum/thread-341748-1-1.html)
@@ -477,3 +479,7 @@ config rule
 [恩山无线论坛@wengmingao - 简单的的IPTV 0成本抓包！](https://www.right.com.cn/FORUM/thread-329888-1-1.html)
 
 [恩山无线论坛@莫问归期 - 在openwrt里安装udpxy后主题界面就会乱](https://www.right.com.cn/forum/thread-2304980-1-1.html)
+
+[恩山无线论坛@xtwz - OpenWrt 编译 LuCI -> Applications 添加插件应用说明-L大](https://www.right.com.cn/forum/thread-344825-1-1.html)
+
+[恩山无线论坛@happyzhang - OpenWrt入门编译 make menuconfig配置参考说明与自动生成脚本](https://www.right.com.cn/forum/thread-1237348-1-1.html)
