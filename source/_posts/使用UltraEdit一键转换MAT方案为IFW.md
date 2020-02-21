@@ -70,7 +70,7 @@ Activity、服务和广播接收器，是通过名为 Intent 的消息进行启�
 [UltraEditv 8.20 简体中文汉化经典版单文件](https://st.blackyau.net/dl/UltraEdit/UltraEdit.exe)
 [https://www.lanzous.com/b275916](https://www.lanzous.com/b275916) 密码:hg3y
 
-然后下载[MAT转IFW.mac](https://dl.blackyau.cc/?dir=%E7%A6%81%E7%94%A8%E6%96%B9%E6%A1%88)
+然后下载[MAT转IFW.mac](https://st.blackyau.net/blog/8/MAT%E8%BD%ACIFW-V2.0.mac)
 ![1](https://st.blackyau.net/blog/8/1.png)
 
 **在转换时不建议使用键盘或鼠标进行任何操作，在转换量较大时应用会未响应属正常现象。等待即可。**
