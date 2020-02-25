@@ -2,7 +2,7 @@
 layout: post
 title: IPTV 与互联网融合
 date: 2020-01-15 17:10
-updated: 2020-02-02 22:11
+updated: 2020-02-25 22:46
 categories: 教程
 tags: 
     - IPTV
@@ -142,7 +142,7 @@ IPTV与互联网融合，的主要设备也就是路由器了。一款合适的�
 | PC | Wireshark | Portable 3.2.0 | [Wireshark 官网](https://www.wireshark.org/index.html#download) |
 | PC | Notepad++ | 7.8.2 | [Notepad++ 官网](https://notepad-plus-plus.org/downloads/) |
 | PC | Xshell | 6.0.0032 | [Netsarang 家庭/学校版](https://www.netsarang.com/zh/free-for-home-school/) |
-| 路由器 | OpenWRT | R9.6.1 | [橙子的个人博客](https://www.maxlicheng.com/openwrt/225.html)/[蓝奏云](https://www.lanzous.com/b04s4nqri) |
+| 路由器 | OpenWRT | R20.2.15 | [newifi-d2.zip](https://st.blackyau.net/blog/23/newifi-d2.zip) |
 | 路由器 | igmpproxy | 0.2.1-4 | 固件自带 |
 | 路由器 | udpxy | 2016-09-18-53e4672a75..4-1 | 固件自带 |
 | 路由器 | luci-app-udpxy | git-19.146.62144-fd6fdb2-1 | 固件自带 |
@@ -158,7 +158,7 @@ IPTV与互联网融合，的主要设备也就是路由器了。一款合适的�
 | igmpproxy | 转发IGMP流量到指定端口 |
 | udpxy | IGMP流量转HTTP |
 
-使用基于 [Lean's OpenWrt](https://github.com/coolsnowwolf/lede) 编译了一个 WR1200JS 可用的自带 udpxy 和 igmpproxy 的固件，除了这两个之外只有 DDns、samba 和 网络带宽监视器。 [openwrt-ramips-mt7621-youhua_wr1200js-squashfs-sysupgrade.bin](https://st.blackyau.net/blog/23/openwrt-ramips-mt7621-youhua_wr1200js-squashfs-sysupgrade.bin) 无线模块也没有添加，在弱电箱里不用无线功能。
+这里还有个友华 WR1200JS 可用的固件：[youhua_wr1200js.zip](https://st.blackyau.net/blog/23/youhua_wr1200js.zip)
 
 ## 抓包
 
@@ -166,7 +166,7 @@ IPTV与互联网融合，的主要设备也就是路由器了。一款合适的�
 
 ![抓包连线](https://st.blackyau.net/blog/23/12.png)
 
-随后配置路由器的流量镜像功能，将接有 IPTV 盒子的 LAN 3 口设置为 数据包镜像源端口，将接有电脑的 LAN 1 口设置为 数据包镜像监听端口。其他 VLAN 设置无需改动。
+随后配置路由器的流量镜像功能（我提供的固件中路由器 IP 为 192.168.1.1），将接有 IPTV 盒子的 LAN 3 口设置为 数据包镜像源端口，将接有电脑的 LAN 1 口设置为 数据包镜像监听端口。其他 VLAN 设置无需改动。
 
 ![数据镜像设置](https://st.blackyau.net/blog/23/13.jpg)
 
@@ -372,7 +372,7 @@ opkg update && opkg install igmpproxy udpxy luci-app-udpxy
 
 ### 配置 igmpproxy
 
-关于 igmpproxy 它主要是将所有来自 lan 的 IGMP 数据都传到 IPTV 接口去，为了防止组播的 udp 数据在 lan 里面乱串，影响网络效率。但是我这里在 lan 里面是无法播放 `igmp://` 地址的数据的，我也不清楚是什么情况。而且据恩山网友测试，OpenWrt 的 igmpproxy 是失效的，如果有人在 lan 里面观看组播地址视频或者是使用 IPTV 盒子，都会导致局域网内的组播风暴，会导致网络堵塞。所以主要是后面的 udpxy 在起作用。
+关于 igmpproxy 它主要是将所有来自 lan 的 IGMP 数据都传到 IPTV 接口去，为了防止组播的 udp 数据在 lan 里面乱串，影响网络效率。但是我这里在 lan 里面是无法播放 `igmp://` 地址的数据的，我也不清楚是什么情况。而且从 [lede issues](https://github.com/coolsnowwolf/lede/issues/2841) 可知 lede 的 igmpproxy 是失效的，如果有人在 lan 里面观看组播地址视频或者是使用 IPTV 盒子，都会导致局域网内的组播风暴，会导致网络堵塞。所以主要是后面的 udpxy 在起作用，**你完全可以不配置 igmpproxy 使用 http 地址播放依然是可行的**。
 
 执行以下命令，一定要复制全一起粘贴进去然后再回车执行。
 
