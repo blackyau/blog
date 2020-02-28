@@ -2,7 +2,7 @@
 layout: post
 title: IPTV 与互联网融合
 date: 2020-01-15 17:10
-updated: 2020-02-25 22:46
+updated: 2020-02-28 22:18
 categories: 教程
 tags: 
     - IPTV
@@ -483,3 +483,15 @@ config rule
 [恩山无线论坛@xtwz - OpenWrt 编译 LuCI -> Applications 添加插件应用说明-L大](https://www.right.com.cn/forum/thread-344825-1-1.html)
 
 [恩山无线论坛@happyzhang - OpenWrt入门编译 make menuconfig配置参考说明与自动生成脚本](https://www.right.com.cn/forum/thread-1237348-1-1.html)
+
+[Github@MitchellJo - DdnsWithDnspod](https://github.com/MitchellJo/DdnsWithDnspod)
+
+[恩山无线论坛@hayate - ppp拨号后自动运行脚本的问题](https://www.right.com.cn/forum/thread-52052-1-1.html)
+
+[Demon's Blog@Demon - OpenWrt中的Hotplug脚本](http://demon.tw/hardware/openwrt-hotplug.html)
+
+[痞客邦@Kai-Cho - [OpenWRT] hotplug](https://kevin0304.pixnet.net/blog/post/227990189)
+
+[恩山无线论坛@ghostry - hotplug的iface脚本不执行怎么办?](https://www.right.com.cn/forum/thread-107357-1-1.html)
+
+[OpenWrt Documentation - Hotplug](https://openwrt.org/docs/guide-user/base-system/hotplug)
