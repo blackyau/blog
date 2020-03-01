@@ -2,7 +2,7 @@
 layout: post
 title: IPTV 与互联网融合
 date: 2020-01-15 17:10
-updated: 2020-02-28 22:18
+updated: 2020-03-01 14:00
 categories: 教程
 tags: 
     - IPTV
@@ -393,9 +393,46 @@ config phyint
 
 ### 配置 udpxy
 
-在路由器 Web 端设置 - 服务 - udpxy 中，勾选启动、Respawn、状态。将端口设置为 `8888`，将 Source IP/Interface 设置为 IPTV 接口的 ifname，也就是在路由器 Web 端设置 - 网络 - 接口 中 IPTV 接口图标下方的小字。在我这里为 `eth0.3`
+在路由器 Web 端设置 - 服务 - udpxy 中，勾选启动、Respawn、状态。将端口设置为 `8888`，将 Source IP/Interface 设置为 IPTV 接口的 ifname，也就是在路由器 Web 端设置 - 网络 - 接口 中 IPTV 接口图标下方的小字。在我这里为 `eth0.3` 。
 
 ![udpxy](https://st.blackyau.net/blog/23/31.jpg)
+
+如果你有多设备同时播放的需求，那么请根据情况设置 `Max clients` 选项的值，它可以控制同时播放的终端数，该值默认为 3 ，最大可为 5000 。
+
+> 感谢 [@xujuntc](https://www.right.com.cn/forum/thread-2921260-2-1.html) 的提醒。
+
+udpxy 配置项介绍
+
+| 配置项 | 配置文件 | 中文 | 说明 | 默认 |
+| -- | -- | -- | -- | -- |
+| disabled | 无 | 启动 | 启动 udpxy | 关闭 |
+| Respawn | respawn | 重启 | 允许在 status 中重启 udpxy | 关闭 |
+| verbose | verbose | 详细 | 启用详细日志输出 | 关闭 | 关闭 |
+| status | status | 状态 | 启用 Web 端统计信息 | 关闭 |
+| Bind IP/Interface | source | 监听地址/接口 | 要监听的地址或接口 | 0.0.0.0 |
+| Port | port | 端口 | 监听端口 | 必填 |
+| Source IP/Interface | source | 源 IP/端口 | 组播数据源的 IP 或端口 | 0.0.0.0 |
+| Max clients | max_clients | 最大客户端数 | 同时播放的终端数 | 3(最大可设为5000) |
+| Log file | log_file | 日志目录 | 日志输出的目录 | stderr(即打印在终端) |
+| Buffer size | buffer_size | 缓冲大小 | 组播数据入站的缓冲区大小 | 2048 bytes(可选 `65536`, `32Kb`, `1Mb`) |
+| Buffer messages | buffer_messages | 缓冲信息 | 向组播组请求多少数据并储存起来(单位:秒) | 1 |
+| Buffer time | buffer_time | 缓存保存时间 | 数据可在缓冲区内保存的最长时间 | 1 |
+| Nice increment | nice_increment | 未知 | 未知 | 0 |
+| Multicast subscription renew | mcsub_renew | 定期重新加入组播组 | 每隔一段时间重新加入组播组,防止网络波动导致丢失组播连接(单位:秒) | 0 |
+
+> 在路由器设置的 Web 端不知为什么后面 4 个选项，保存时都说值有误。如果有需要修改的朋友，只有手动修改 `/etc/config/udpxy` 配置文件了。下面是我的配置，可供参考。
+
+```config
+config udpxy
+        option respawn '1'
+        option verbose '0'
+        option status '1'
+        option disabled '0'
+        option port '8888'
+        option source 'eth0.3'
+        option buffer_size '2097152'
+
+```
 
 保存并应用后，打开 http://路由器IP:8888/status 查看 udpxy 运行是否正常。当你在播放视频的时候，这个页面也会显示正在播放客户端的 IP 与它的实时流量。
 
@@ -439,6 +476,8 @@ config rule
 ## 如何在外播放家中 IPTV 源
 
 首先需要公网 IP，你可以在 在路由器 Web 端设置 - 网络 - 接口中，查看 WAN 获得的 IP 是否与你在 https://ip.sb/ 看到的 IP 一致。如果不一致的话，可以向电信人工客服反映「我需要公网 IP」即可。
+
+首先你需要在 udpxy 配置中将 `Bind IP/Interface` 配置为 `0.0.0.0` 。
 
 在路由器 Web 端设置 - 网络 - 防火墙 - 端口转发 中，添加协议为 tcp，外部区域为 wan，外部端口为 8888，内部 IP 地址为 192.168.10.1，内部端口为 8888 的规则即可。
 
@@ -495,3 +534,11 @@ config rule
 [恩山无线论坛@ghostry - hotplug的iface脚本不执行怎么办?](https://www.right.com.cn/forum/thread-107357-1-1.html)
 
 [OpenWrt Documentation - Hotplug](https://openwrt.org/docs/guide-user/base-system/hotplug)
+
+[OpenWrt Documentation - udpxy](https://openwrt.org/docs/guide-user/services/proxy/udpxy)
+
+[3mile博客 - 编译UDPXY新版本](https://3mile.github.io/archives/2019/1106111732/)
+
+[Github@xingsiyue - udpxy无法保存缓存大小等参数](https://github.com/coolsnowwolf/lede/issues/1075)
+
+[Github@jow- - luci-app-udpxy bug](https://github.com/openwrt/luci/issues/1494)
