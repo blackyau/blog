@@ -2,7 +2,7 @@
 layout: post
 title: IPTV 与互联网融合
 date: 2020-01-15 17:10
-updated: 2020-03-01 14:00
+updated: 2020-03-24 21:20
 categories: 教程
 tags: 
     - IPTV
@@ -320,7 +320,7 @@ http
 
 接下来就开始路由器的设置了。
 
-首先进入路由器设置 - 网络 - 交换机，将之前用于抓包的 数据包镜像 功能关掉。随后将插有 ITV 口的 LAN 4 在 VLAN 1 中设置为 `untagged` 。添加一个 VLAN 3 ，将 CPU (eth0) 设置为 `tagged` ，然后将 VLAN 3 的 LAN 4 设置为 `untagged` 。设置完毕后，效果如下图。
+首先进入路由器设置 - 网络 - 交换机，将之前用于抓包的 数据包镜像 功能关掉。随后将插有 ITV 口的 LAN 4 在 VLAN 1 中设置为 `关` 。添加一个 VLAN 3 ，将 CPU (eth0) 设置为 `tagged` ，然后将 VLAN 3 的 LAN 4 设置为 `untagged` 。设置完毕后，效果如下图。
 
 ![VLAN](https://st.blackyau.net/blog/23/26.jpg)
 
