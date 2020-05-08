@@ -40,7 +40,7 @@ comment: true
 
 ![7](https://st.blackyau.net/blog/11/7.png)
 
-首先为了查 `Log` 方便，进入 `DATE & TIME` 把时区了时间调到和本机一样。
+首先为了查 `Log` 方便，进入 `DATE & TIME` 把时区和时间调到和本机一样。
 
 点进 `NETWORK & HOST NAME` 把网络连接打开
 
