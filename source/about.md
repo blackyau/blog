@@ -15,8 +15,8 @@ Android/Linux/Windows/Web前端
 
 联系方式
 
- 1. Gmail:blackyau426@gmail.com
- 2. Telegram:@Black_Yau
+ 1. Gmail: blackyau426@gmail.com
+ 2. Telegram: @Black_Yau
 
 说明
 1 基于 Gmail ，安全性较强。
