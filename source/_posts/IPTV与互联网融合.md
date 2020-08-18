@@ -2,7 +2,7 @@
 layout: post
 title: IPTV 与互联网融合
 date: 2020-01-15 17:10
-updated: 2020-06-01 23:35
+updated: 2020-08-18 23:14
 categories: 教程
 tags: 
     - IPTV
@@ -491,6 +491,34 @@ config rule
         option dest 'lan'
         option dest_ip '224.0.0.0/4'
 ```
+
+最后，为了防止路由器断电后 udpxy 没有自动启动，还需要使用 hotplug 功能，在 IPTV 接口拨号成功后都检测 udpxy 是否正常工作，如果没有就启动一下 udpxy
+
+在 Xshell 中使用 SSH 连接到路由器，新建脚本文件
+
+```shell
+vim /etc/hotplug.d/iface/100-udpxy
+```
+
+将以下内容全文粘贴进去
+
+```shell
+#!/bin/sh
+
+if [ "${INTERFACE}" = "IPTV" ]; then # IPTV status change
+        if [ "${ACTION}" = "ifup" ]; then # Interface up
+                flag=$(ps | grep udpxy | grep -v "grep" | wc -l)
+                if [ $flag = "1"]; then
+                        logger -t udpxy -s "udpxy Running"
+                else
+                        /etc/init.d/udpxy start
+                fi
+        fi
+fi
+
+```
+
+然后使用 `:wq` 保存文件即可
 
 ## 如何在外播放家中 IPTV 源
 
