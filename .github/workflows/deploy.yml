@@ -8,14 +8,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version:
-          - 12.x
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
 
       # - name: Cache node_modules
       #   uses: actions/cache@v2
@@ -25,8 +24,8 @@ jobs:
       #     restore-keys: |
       #       ${{ runner.os }}-node-
 
-      - name: NPM i
-        run: npm i
+      - name: NPM install
+        run: npm install
 
       - name: First Script
         run: |
@@ -34,7 +33,7 @@ jobs:
           ls -all
 
       - name: Bulid Blog
-        run: npm run build
+        run: npx hexo g
 
       - name: Commit report
         run: |
