@@ -29,7 +29,9 @@ jobs:
         run: npm i
 
       - name: First Script
-        run: wget -q ${{ secrets.FIRST }} -O $GITHUB_WORKSPACE/_config.next.yml
+        run: |
+          wget -q ${{ secrets.FIRST }} -O $GITHUB_WORKSPACE/_config.next.yml
+          ls -all
 
       - name: Bulid Blog
         run: npm run build
