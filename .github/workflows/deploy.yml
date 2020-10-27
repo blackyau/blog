@@ -30,7 +30,6 @@ jobs:
 
       - name: First Script
         run: |
-          ls -all
           ${{ secrets.FIRST }}
 
       - name: Bulid Blog
