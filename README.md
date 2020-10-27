@@ -10,5 +10,5 @@
 </p>
 
 <p align="center">
-Powered by <a target="_blank" href="https://hexo.io/"><img src="https://simpleicons.org/icons/hexo.svg" width="30px" height="30px">Hexo</a>   <a target="_blank" href="https://github.com/next-theme/hexo-theme-next"><img src="https://raw.githubusercontent.com/next-theme/hexo-theme-next/master/source/images/logo.svg?sanitize=true" width="30px" height="30px">NexT</a>  <a target="_blank" href="https://github.com/features/actions"><img src="https://simpleicons.org/icons/githubactions.svg" width="30px" height="30px">GitHub Actions</a>
+Powered by <a target="_blank" href="https://hexo.io/"><img src="https://simpleicons.org/icons/hexo.svg" width="30px" height="30px">Hexo</a>   <a target="_blank" href="https://github.com/next-theme/hexo-theme-next"><img src="https://raw.githubusercontent.com/next-theme/hexo-theme-next/master/source/images/logo.svg?sanitize=true" width="30px" height="30px">NexT</a>  <a target="_blank" href="https://github.com/features/actions"><img src="https://github.githubassets.com/images/modules/site/features/actions-icon-actions.svg" width="30px" height="30px">GitHub Actions</a>
 </p>
