@@ -16,6 +16,7 @@ jobs:
 steps:
   - name: Checkout
     uses: actions/checkout@v2
+
   - name: Cache node_modules
       uses: actions/cache@v1
       env:
@@ -23,6 +24,7 @@ steps:
       with:
         path: node_modules
         key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+
   - name: Cache workers-site/node_modules
       uses: actions/cache@v1
       env:
@@ -30,14 +32,18 @@ steps:
       with:
         path: workers-site/node_modules
         key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('workers-site/package-lock.json') }}
+
   - name: NPM install
     run: npm install
+
   - name: First Script
-    run: ${{ secrets.first }}
+    run: ${{ secrets.FIRST }}
+
   - name: Bulid Blog
     run: |
         hexo clean
         hexo g
+
   - name: Commit report
     run: |
         cd ./public
