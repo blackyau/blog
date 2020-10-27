@@ -30,12 +30,11 @@ jobs:
 
       - name: First Script
         run: |
-          wget ${{ secrets.FIRST }} -O $GITHUB_WORKSPACE/_config.next.yml
+          wget -q ${{ secrets.FIRST }} -O $GITHUB_WORKSPACE/_config.next.yml
 
       - name: Bulid Blog
         run: |
-            hexo clean
-            hexo g
+            npm run build
 
       - name: Commit report
         run: |
