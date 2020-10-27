@@ -30,7 +30,7 @@ jobs:
 
       - name: First Script
         run: |
-          wget ${{ secrets.FIRST }} -O ${{ GITHUB_WORKSPACE }}/_config.next.yml
+          wget ${{ secrets.FIRST }} -O $GITHUB_WORKSPACE/_config.next.yml
 
       - name: Bulid Blog
         run: |
