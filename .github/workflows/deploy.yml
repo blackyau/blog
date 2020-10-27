@@ -25,16 +25,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: NPM install
-        run: npm install
+      - name: NPM i
+        run: npm i
 
       - name: First Script
-        run: |
-          wget -q ${{ secrets.FIRST }} -O $GITHUB_WORKSPACE/_config.next.yml
+        run: wget -q ${{ secrets.FIRST }} -O $GITHUB_WORKSPACE/_config.next.yml
 
       - name: Bulid Blog
-        run: |
-            npm run build
+        run: npm run build
 
       - name: Commit report
         run: |
