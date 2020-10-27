@@ -13,34 +13,34 @@ jobs:
         node-version:
           - 12.x
 
-steps:
-  - name: Checkout
-    uses: actions/checkout@v2
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-  - name: Cache node_modules
-    uses: actions/cache@v2
-    with:
-      path: node_modules
-      key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
-      restore-keys: |
-        ${{ runner.os }}-node-
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-  - name: NPM install
-    run: npm install
+      - name: NPM install
+        run: npm install
 
-  - name: First Script
-    run: ${{ secrets.FIRST }}
+      - name: First Script
+        run: ${{ secrets.FIRST }}
 
-  - name: Bulid Blog
-    run: |
-        hexo clean
-        hexo g
+      - name: Bulid Blog
+        run: |
+            hexo clean
+            hexo g
 
-  - name: Commit report
-    run: |
-        cd ./public
-        git config --global user.name 'GitHub Action'
-        git config --global user.email 'action@github.com'
-        git add .
-        git commit -m "Site deployed by GitHub Actions"
-        git push --force --quiet "https://${{ secrets.TOKEN }}@github.com/blackyau/blog" master:master
+      - name: Commit report
+        run: |
+            cd ./public
+            git config --global user.name 'GitHub Action'
+            git config --global user.email 'action@github.com'
+            git add .
+            git commit -m "Site deployed by GitHub Actions"
+            git push --force --quiet "https://${{ secrets.TOKEN }}@github.com/blackyau/blog" master:master
