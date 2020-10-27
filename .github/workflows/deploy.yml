@@ -18,20 +18,12 @@ steps:
     uses: actions/checkout@v2
 
   - name: Cache node_modules
-      uses: actions/cache@v1
-      env:
-        cache-name: hexo-node-modules
-      with:
-        path: node_modules
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
-
-  - name: Cache workers-site/node_modules
-      uses: actions/cache@v1
-      env:
-        cache-name: workers-site-node-modules
-      with:
-        path: workers-site/node_modules
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('workers-site/package-lock.json') }}
+    uses: actions/cache@v2
+    with:
+      path: node_modules
+      key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+      restore-keys: |
+        ${{ runner.os }}-node-
 
   - name: NPM install
     run: npm install
