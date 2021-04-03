@@ -2,7 +2,7 @@
 layout: post
 title: IPTV 与互联网融合
 date: 2020-01-15 17:10
-updated: 2020-08-18 23:14
+updated: 2021-04-03 14:24:28
 categories: 教程
 tags: 
     - IPTV
@@ -255,7 +255,7 @@ igmp://
 http
 ```
 
-进行检索，一条一条的看，里面总会有 `igmp://` 之类获取节目单的数据（我也是这样找出来的），如果找不到你也可以向我求助 Gmail:blackyau426@gmail.com
+进行检索，一条一条的看，里面总会有 `igmp://` 之类获取节目单的数据（我也是这样找出来的），如果找不到你也可以向我求助 blackyau426@gmail.com
 
 ### 格式化数据
 
