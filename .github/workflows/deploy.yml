@@ -37,14 +37,10 @@ jobs:
         run: npx hexo g
       
       - name: Commit Report
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: EndBug/add-and-commit@v9
         with:
-          commit_message: Site deployed
-          file_pattern: '*'
-          branch: master
-          repository: ./public
-          push_options: '--force'
-          disable_globbing: true
+          new_branch: master
+          cwd: './public/'
 
       # - name: Commit report
       #   run: |
