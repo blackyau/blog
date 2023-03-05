@@ -37,7 +37,7 @@ jobs:
         run: npx hexo g
       
       - name: Commit Report
-      - uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Site deployed
           branch: master
