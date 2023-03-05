@@ -36,7 +36,7 @@ jobs:
       - name: Bulid Blog
         run: |
           npx hexo g
-          rm -rf`find -type f ! -name "public"`
+          rm -rf `find -type f ! -name "public"`
       
       - name: Commit Report
         uses: EndBug/add-and-commit@v9
