@@ -42,7 +42,7 @@ jobs:
           commit_message: Site deployed
           file_pattern: '*'
           branch: master
-          repository: ./public
+          repository: public
           push_options: '--force'
 
       # - name: Commit report
