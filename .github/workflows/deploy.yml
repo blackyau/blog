@@ -35,13 +35,21 @@ jobs:
 
       - name: Bulid Blog
         run: npx hexo g
+      
+      - name: Commit Report
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Site deployed
+          branch: master
+          repository: ./public
+          push_options: '--force'
 
-      - name: Commit report
-        run: |
-            cd ./public
-            git init
-            git config --global user.name 'GitHub Action'
-            git config --global user.email 'action@github.com'
-            git add .
-            git commit -m "Site deployed by GitHub Actions"
-            git push --force --quiet "https://${{ secrets.TOKEN }}@github.com/blackyau/blog" master:master
+      # - name: Commit report
+      #   run: |
+      #       cd ./public
+      #       git init
+      #       git config --global user.name 'GitHub Action'
+      #       git config --global user.email 'action@github.com'
+      #       git add .
+      #       git commit -m "Site deployed by GitHub Actions"
+      #       git push --force --quiet "https://${{ secrets.TOKEN }}@github.com/blackyau/blog" master:master
