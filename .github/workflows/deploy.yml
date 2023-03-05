@@ -16,7 +16,7 @@ jobs:
           submodules: true
 
       - name: Use Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
 
       # - name: Cache node_modules
       #   uses: actions/cache@v2
@@ -42,6 +42,7 @@ jobs:
           new_branch: master
           add: '*.* --force'
           cwd: './public/'
+          push: 'origin master --force'
 
       # - name: Commit report
       #   run: |
