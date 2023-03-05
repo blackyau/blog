@@ -42,8 +42,9 @@ jobs:
           commit_message: Site deployed
           file_pattern: '*'
           branch: master
-          repository: public
+          repository: ./public
           push_options: '--force'
+          disable_globbing: true
 
       # - name: Commit report
       #   run: |
