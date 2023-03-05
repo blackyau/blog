@@ -40,6 +40,7 @@ jobs:
         uses: EndBug/add-and-commit@v9
         with:
           new_branch: master
+          add: '* --force'
           cwd: './public/'
 
       # - name: Commit report
