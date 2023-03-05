@@ -30,30 +30,27 @@ jobs:
         run: npm install
 
       - name: First Script
-        run: |
-          wget -q ${{ secrets.FIRST }} -O $GITHUB_WORKSPACE/_config.next.yml
+        run: wget -q ${{ secrets.FIRST }} -O $GITHUB_WORKSPACE/_config.next.yml
 
       - name: Bulid Blog
-        run: |
-          npx hexo g
-          rm -rf `find -type f ! -name "public"`
+        run: npx hexo g
       
-      - name: Commit Report
-        uses: EndBug/add-and-commit@v9
-        with:
-          new_branch: master
-          add: '*.* --force'
-          cwd: './public'
-          push: 'origin master --force'
-          default_author: github_actions
-          remove: '*'
+      # - name: Commit Report
+      #   uses: EndBug/add-and-commit@v9
+      #   with:
+      #     new_branch: master
+      #     add: '*.* --force'
+      #     cwd: './public'
+      #     push: 'origin master --force'
+      #     default_author: github_actions
+      #     remove: '*'
 
-      # - name: Commit report
-      #   run: |
-      #       cd ./public
-      #       git init
-      #       git config --global user.name 'GitHub Action'
-      #       git config --global user.email 'action@github.com'
-      #       git add .
-      #       git commit -m "Site deployed by GitHub Actions"
-      #       git push --force --quiet "https://${{ secrets.TOKEN }}@github.com/blackyau/blog" master:master
+      - name: Commit report
+        run: |
+            cd ./public
+            git init
+            git config --global user.name 'GitHub Action'
+            git config --global user.email 'action@github.com'
+            git add .
+            git commit -m "Site deployed by GitHub Actions"
+            git push --force --quiet "https://x-access-token:${{ secrets.TOKEN }}@github.com/blackyau/blog" master:master
