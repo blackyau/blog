@@ -57,4 +57,3 @@ jobs:
       #       git add .
       #       git commit -m "Site deployed by GitHub Actions"
       #       git push --force --quiet "https://${{ secrets.TOKEN }}@github.com/blackyau/blog" master:master
-git remote set-url origin https://x-access-token:${{ secrets.MY_TOKEN}}@github.com/${GH_USERNAME/Dash-User-Contributions
