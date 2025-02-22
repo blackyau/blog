@@ -1,6 +1,7 @@
 name: Deploy Site
 
 on:
+  pull_request:
   push:
     branches:
       - source
@@ -9,25 +10,31 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - name: Install pandoc
         run: sudo apt-get install -y pandoc
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
+          ref: ${{ github.head_ref }}
 
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-      # - name: Cache node_modules
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: node_modules
-      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-node-
+      - name: Cache NPM dependencies
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-npm-cache
+          restore-keys: |
+            ${{ runner.OS }}-npm-cache
 
       - name: NPM install
         run: npm install
@@ -36,8 +43,16 @@ jobs:
         run: wget -q ${{ secrets.FIRST }} -O $GITHUB_WORKSPACE/_config.next.yml
 
       - name: Bulid Blog
-        run: npx hexo g
-      
+        run: npm run build
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'Site deployed by GitHub Actions'
+          branch: master
+          push_options: '--force'
+          file_pattern: 'public/**'
+
+
       # - name: Commit Report
       #   uses: EndBug/add-and-commit@v9
       #   with:
@@ -48,12 +63,12 @@ jobs:
       #     default_author: github_actions
       #     remove: '*'
 
-      - name: Commit report
-        run: |
-            cd ./public
-            git init
-            git config --global user.name 'GitHub Action'
-            git config --global user.email 'action@github.com'
-            git add .
-            git commit -m "Site deployed by GitHub Actions"
-            git push --force --quiet "https://x-access-token:${{ secrets.TOKEN }}@github.com/blackyau/blog" master:master
+      # - name: Commit report
+      #   run: |
+      #       cd ./public
+      #       git init
+      #       git config --global user.name 'GitHub Action'
+      #       git config --global user.email 'action@github.com'
+      #       git add .
+      #       git commit -m "Site deployed by GitHub Actions"
+      #       git push --force --quiet "https://x-access-token:${{ secrets.TOKEN }}@github.com/blackyau/blog" master:master
