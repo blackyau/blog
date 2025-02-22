@@ -52,6 +52,7 @@ jobs:
           create_branch: true
           push_options: '--force'
           repository: 'public'
+          skip_dirty_check: true
 
 
       # - name: Commit Report
