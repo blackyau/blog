@@ -47,7 +47,6 @@ jobs:
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'Site deployed by GitHub Actions'
           branch: master
           create_branch: true
           push_options: '--force'
