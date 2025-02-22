@@ -54,6 +54,8 @@ jobs:
           repository: 'public'
           skip_dirty_check: true
           add_options: '-f'
+          skip_checkout: true
+          skip_fetch: true
 
 
       # - name: Commit Report
