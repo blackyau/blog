@@ -6,7 +6,7 @@
   <a href="https://blackyau.cc/"><img src="https://img.shields.io/website/https/blackyau.cc.svg?down_message=Down&label=WebSite&up_message=Up" title="Website"></a>
   <a href="https://github.com/blackyau/blog/tree/source/themes"><img src="https://img.shields.io/badge/Themes-NexT-green.svg"></a>
   <a href="https://blackyau.cc/"><img src="https://img.shields.io/badge/Language-zh--CN-red.svg"></a>
-  <a target="_blank" href="https://hexo.io"><img src="https://img.shields.io/badge/Hexo-5.2.0-blue?logo=Hexo"></a>
+  <a target="_blank" href="https://hexo.io"><img src="https://img.shields.io/badge/Hexo-7.3.0-blue?logo=Hexo"></a>
 </p>
 
 <p align="center">
