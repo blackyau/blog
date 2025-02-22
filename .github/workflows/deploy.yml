@@ -55,6 +55,7 @@ jobs:
           add_options: '-f'
           skip_checkout: true
           skip_fetch: true
+          file_pattern: 'public/**'
 
 
       # - name: Commit Report
