@@ -53,6 +53,7 @@ jobs:
           push_options: '--force'
           repository: 'public'
           skip_dirty_check: true
+          add_options: '-f'
 
 
       # - name: Commit Report
