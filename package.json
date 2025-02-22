@@ -4,23 +4,22 @@
   "private": true,
   "scripts": {
     "highlight": "node lib/highlight.js",
-    "build": "hexo generate"
+    "build": "hexo generate",
+    "start": "hexo s"
   },
   "hexo": {
-    "version": "6.3.0"
+    "version": "7.3.0"
   },
   "dependencies": {
-    "hexo": "6.3.0",
+    "hexo": "7.3.0",
     "hexo-generator-archive": "2.0.0",
     "hexo-generator-feed": "3.0.0",
-    "hexo-generator-index": "3.0.0",
+    "hexo-generator-index": "4.0.0",
     "hexo-generator-searchdb": "1.4.1",
-    "hexo-renderer-pandoc": "^0.3.1",
-    "hexo-renderer-stylus": "2.1.0",
+    "hexo-renderer-marked": "7.0.0",
+    "hexo-renderer-stylus": "3.0.1",
     "hexo-server": "3.0.0",
-    "highlight.js": "^11.7.0"
-  },
-  "engines": {
-    "node": ">=12.17.0"
+    "hexo-tag-embed": "1.0.0",
+    "hexo-theme-next": "8.22.0"
   }
 }
