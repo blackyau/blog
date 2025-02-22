@@ -21,7 +21,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: true
-          ref: ${{ github.head_ref }}
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -55,7 +54,6 @@ jobs:
           add_options: '-f'
           skip_checkout: true
           skip_fetch: true
-          file_pattern: 'public/**'
 
 
       # - name: Commit Report
