@@ -13,7 +13,7 @@ timezone: Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://blackyau.cc/
+# url: https://blackyau.cc/
 root: /
 permalink: :urlname.html
 permalink_defaults:
