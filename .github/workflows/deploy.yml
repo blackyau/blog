@@ -49,8 +49,9 @@ jobs:
         with:
           commit_message: 'Site deployed by GitHub Actions'
           branch: master
+          create_branch: true
           push_options: '--force'
-          file_pattern: 'public/**'
+          repository: 'public'
 
 
       # - name: Commit Report
