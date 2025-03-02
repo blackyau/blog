@@ -148,7 +148,7 @@ reboot # 重启生效
 
 ## 安装 Java
 
-下载 [https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+下载 [https://www.oracle.com/cn/java/technologies/javase/javase8u211-later-archive-downloads.html](https://www.oracle.com/cn/java/technologies/javase/javase8u211-later-archive-downloads.html)
 
 我选择了 `Linux x64 rpm 安装包`
 

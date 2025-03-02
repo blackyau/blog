@@ -138,7 +138,7 @@ slave2
 
 JobHistory WEB 端能够正常显示，但是它不显示 `job` 。查 `log` 发现还是权限的问题，需要给一下权限。`hdfs dfs -chown -R mapred /tmp/hadoop-yarn/staging/history`上面的不见效就直接 777 `hdfs dfs -chmod 777 /tmp/hadoop-yarn/staging/history` 。
 
-如果启动的时候失败了，数据没有成功同步到所有节点。就吧 `hadoop.tmp.dir` 和 `/tmp` 目录里面的东西全部删完，重新格式化就行了。而且注意不要格式化太多次，格式化太多次导致 `ID` 不一样也会是一个很头大的事情，[之前](https://blackyau.cc/12.html#%E6%8E%92%E9%94%99)因为这个问题我头疼了 1-2 天。
+如果启动的时候失败了，数据没有成功同步到所有节点。就吧 `hadoop.tmp.dir` 和 `/tmp` 目录里面的东西全部删完，重新格式化就行了。而且注意不要格式化太多次，格式化太多次导致 `ID` 不一样也会是一个很头大的事情，[之前](https://blackyau.cc/12#%E6%8E%92%E9%94%99)因为这个问题我头疼了 1-2 天。
 
 ## HIVE
 

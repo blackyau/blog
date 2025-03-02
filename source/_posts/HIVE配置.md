@@ -28,7 +28,7 @@ comment: true
 
 ## 准备工作
 
-这里我选择版本较老的 HIVE 1.1.0 使用，因为它和我 [之前安装的 Hadoop ](https://blackyau.cc/11.html)比较配
+这里我选择版本较老的 HIVE 1.1.0 使用，因为它和我 {% post_link Hadoop伪分布部署 '之前安装过的 Hadoop' %}比较配
 
 因为版本太老了在 Mirror 里面都找不到，只有 Archive 里面才有
 

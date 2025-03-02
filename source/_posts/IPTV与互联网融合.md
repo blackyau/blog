@@ -125,7 +125,7 @@ IPTV与互联网融合，的主要设备也就是路由器了。一款合适的�
 
 ### 抓包工具
 
-通过抓包获取 IPTV 的[组播地址](https://blackyau.cc/23.html#iGMP-%E4%B8%8E-RTSP)也是必不可少的一步。如果你的路由器没有 `交换机端口镜像` 的功能，你就需要淘宝单独购买一个 网络抓包工具，下图为 Amazon 搜索 `Throwing Star LAN Tap` 的外观图。
+通过抓包获取 IPTV 的[组播地址](https://blackyau.cc/23#iGMP-%E4%B8%8E-RTSP)也是必不可少的一步。如果你的路由器没有 `交换机端口镜像` 的功能，你就需要淘宝单独购买一个 网络抓包工具，下图为 Amazon 搜索 `Throwing Star LAN Tap` 的外观图。
 
 ![Throwing Star LAN Tap](https://st.blackyau.net/blog/23/11.jpg)
 

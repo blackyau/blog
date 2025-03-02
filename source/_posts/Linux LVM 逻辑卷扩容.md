@@ -12,7 +12,7 @@ urlname: 22
 comment: true
 ---
 
-接上文 [真机安装 CentOS 7](https://blackyau.cc/10.html) 在安装完毕后，我又给它加了一次硬盘。得益于安装的时候使用了 LVM (Logical Volume Manager) 可以实现不关机扩展当前分区。
+接上文 {% post_link 真机安装CentOS7 '真机安装 CentOS 7' %} 在安装完毕后，我又给它加了一次硬盘。得益于安装的时候使用了 LVM (Logical Volume Manager) 可以实现不关机扩展当前分区。
 
 <!-- more -->
 

@@ -27,7 +27,7 @@ comment: true
 本次搭建的目标为，搭建 3 个 `DataNode` ，2个 `NameNode` ，2个 `yarn` 。并让两个 `NameNode` 做到能够异常自动切换， `yarn` 也同理。如下表：
 
 | HostName | Function | IP |
-| --- | --- | --- | --- |
+| --- | --- | --- |
 | master | DataNode/NameNode/ResourceManager | 192.168.66.128 |
 | slave1 | DataNode/NameNode/JobHistoryServer | 192.168.66.129 |
 | slave2 | DataNode/ResourceManager | 192.168.66.130 |
@@ -36,8 +36,8 @@ comment: true
 
 | Program | Version | URL |
 | --- | --- | --- |
-| System | CentOS-7-x86_64-Minimal-1810 | [TUNA Mirrors](https://mirrors.tuna.tsinghua.edu.cn/centos/7.6.1810/isos/x86_64/) |
-| JAVA | jdk-8u211-linux-x64.tar.gz | [Oracle](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) |
+| System | CentOS-7-x86_64-Minimal-1810 | [TUNA Mirrors](https://mirrors.tuna.tsinghua.edu.cn/centos-vault/centos/7.9.2009/isos/x86_64/) |
+| JAVA | jdk-8u211-linux-x64.tar.gz | [Oracle](https://www.oracle.com/cn/java/technologies/javase/javase8u211-later-archive-downloads.html) |
 | Hadoop | hadoop-2.6.0.tar.gz | [Apache Archive](http://archive.apache.org/dist/hadoop/common/hadoop-2.6.0/) |
 | ZooKeeper | zookeeper-3.4.5.tar.gz | [Apache Archive](http://archive.apache.org/dist/zookeeper/zookeeper-3.4.5/) |
 
@@ -45,7 +45,7 @@ comment: true
 
 ## 基础环境配置
 
-参考 [Hadoop 伪分布部署](https://blackyau.cc/11.html) 和 [Hadoop 完全分布部署](https://blackyau.cc/14.html) 吧，这里不再多说。在开始配置之前吧所有相关服务都停止了再继续。
+参考 {% post_link Hadoop伪分布部署 'Hadoop 伪分布部署' %} 和 {% post_link Hadoop完全分布部署 'Hadoop 完全分布部署' %} 吧，这里不再多说。在开始配置之前吧所有相关服务都停止了再继续。
 
 ## ZooKeeper 配置
 

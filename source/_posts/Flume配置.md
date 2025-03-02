@@ -14,7 +14,7 @@ urlname: 12
 comment: true
 ---
 
-接上文，我们已经完成了 [Hadoop 伪分布部署](https://blackyau.cc/11.html) 接下来就可以配置 Flume 了。
+接上文，我们已经完成了 {% post_link Hadoop伪分布部署 'Hadoop 伪分布部署' %} 接下来就可以配置 Flume 了。
 
 <!-- more -->
 

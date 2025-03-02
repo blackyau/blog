@@ -23,8 +23,8 @@ comment: true
 
 | Program | Version | URL |
 | --- | --- | --- |
-| System | CentOS-7-x86_64-Minimal-1810 | [TUNA Mirrors](https://mirrors.tuna.tsinghua.edu.cn/centos/7.6.1810/isos/x86_64/) |
-| JAVA | jdk-8u211-linux-x64.tar.gz | [Oracle](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) |
+| System | CentOS-7-x86_64-Minimal-1810 | [TUNA Mirrors](https://mirrors.tuna.tsinghua.edu.cn/centos-vault/centos/7.9.2009/isos/x86_64/) |
+| JAVA | jdk-8u211-linux-x64.tar.gz | [Oracle](https://www.oracle.com/cn/java/technologies/javase/javase8u211-later-archive-downloads.html) |
 | Hadoop | hadoop-2.6.0.tar.gz | [Apache Archive](http://archive.apache.org/dist/hadoop/common/hadoop-2.6.0/) |
 | Spark | spark-2.0.0-bin-hadoop2.6.gz | [Apache Archive](http://archive.apache.org/dist/spark/spark-2.0.0/) |
 | ZooKeeper | zookeeper-3.4.5.tar.gz | [Apache Archive](http://archive.apache.org/dist/zookeeper/zookeeper-3.4.5/) |
@@ -37,7 +37,7 @@ comment: true
 
 ## 基础环境配置
 
-参考 [Hadoop HA 搭建](https://blackyau.cc/16.html) 目前已完成 Hadoop/ZooKeeper 环境搭建
+参考 {% post_link Hadoop_HA_搭建 'Hadoop HA 搭建' %} 目前已完成 Hadoop/ZooKeeper 环境搭建
 
 ### 下载解压
 
@@ -179,7 +179,7 @@ scp -r /usr/local/src/spark/conf/ slave1:/usr/local/src/spark/
 scp -r /usr/local/src/spark/conf/ slave2:/usr/local/src/spark/
 ```
 
-启动 `ZooKeeper`，如果你还没有配置可以参考这篇文章[Hadoop HA 配置 - ZooKeeper 配置](https://blackyau.cc/16.html#ZooKeeper-%E9%85%8D%E7%BD%AE)
+启动 `ZooKeeper`，如果你还没有配置可以参考这篇文章[Hadoop HA 配置 - ZooKeeper 配置](https://blackyau.cc/16#ZooKeeper-%E9%85%8D%E7%BD%AE)
 
 ```shell
 # 每台机子都要启动

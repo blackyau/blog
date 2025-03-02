@@ -2,7 +2,7 @@
 layout: post
 title: 真机安装 CentOS 7
 date: 2019-03-27 19:45:17
-updated: 2019-03-28 00:31:45
+updated: 2025-03-02 20:55:01
 categories: 教程
 tags: 
     - Linux
@@ -12,6 +12,11 @@ comment: true
 ---
 
 在家里用一台老古董台式机装了个 CentOS 遇到了一些以前用云服务器根本不会遇到的问题，这里也就做一下记录。
+
+{% note danger %}
+#### 警告
+CentOS Linux 7 已经于 2024 年 6 月 30 日终止生命周期（EOL），不建议继续在继续使用 CentOS 7 了，推荐使用 [Rocky Linux](https://rockylinux.org/) 替代。
+{% endnote %}
 
 <!-- more -->
 
