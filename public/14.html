@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://st.blackyau.net/blog/file/favicon-180x180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://st.blackyau.net/blog/file/favicon-64x64.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://st.blackyau.net/blog/file/favicon-32x32.png">
+  <link rel="mask-icon" href="https://st.blackyau.net/blog/file/favicon-512x512.svg" color="#222">
+  <meta name="google-site-verification" content="nXthYmLKSXqupL96tIOSCBi3yiBjEEkTqK9vEYv808U">
+  <meta name="msvalidate.01" content="56ABC0C6006554B668AA5972B359B773">
+  <meta name="baidu-site-verification" content="VQvGuCkX3O">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blackyau.cc","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/config.js"></script>
+
+    <meta name="description" content="之前有说过Hadoop伪分布的部署，这次来讲讲完全分布。总体来说和伪分布的配置差别不大，只是不同机子之前的衔接和小部分的配置修改。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop 完全分布部署">
+<meta property="og:url" content="https://blackyau.cc/14">
+<meta property="og:site_name" content="蠢黑通行">
+<meta property="og:description" content="之前有说过Hadoop伪分布的部署，这次来讲讲完全分布。总体来说和伪分布的配置差别不大，只是不同机子之前的衔接和小部分的配置修改。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-04-24T12:00:29.000Z">
+<meta property="article:modified_time" content="2019-04-25T08:18:40.000Z">
+<meta property="article:author" content="蠢黑通行">
+<meta property="article:tag" content="CentOS">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Hadoop">
+<meta property="article:tag" content="HDFS">
+<meta property="article:tag" content="YARN">
+<meta property="article:tag" content="VMware">
+<meta property="article:tag" content="MapReduce">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blackyau.cc/14">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blackyau.cc/14","path":"14.html","title":"Hadoop 完全分布部署"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hadoop 完全分布部署 | 蠢黑通行</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKREM40HY8"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TKREM40HY8","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="蠢黑通行" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">蠢黑通行</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个人的全世界</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-CentOS"><span class="nav-number">1.</span> <span class="nav-text">安装 CentOS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">基础环境配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">Hadoop配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#core-site-xml"><span class="nav-number">3.1.</span> <span class="nav-text">core-site.xml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hdfs-site-xml"><span class="nav-number">3.2.</span> <span class="nav-text">hdfs-site.xml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yarn-site-xml"><span class="nav-number">3.3.</span> <span class="nav-text">yarn-site.xml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mapred-site-xml"><span class="nav-number">3.4.</span> <span class="nav-text">mapred-site.xml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#slaves"><span class="nav-number">3.5.</span> <span class="nav-text">slaves</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C"><span class="nav-number">4.</span> <span class="nav-text">运行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HIVE"><span class="nav-number">5.</span> <span class="nav-text">HIVE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蠢黑通行"
+      src="https://st.blackyau.net/head.jpg">
+  <p class="site-author-name" itemprop="name">蠢黑通行</p>
+  <div class="site-description" itemprop="description">BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。</div>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/blackyau" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;blackyau" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:blackyau426@gmail.com" title="E-Mail → mailto:blackyau426@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/black_yau" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;black_yau" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://bbs.letitfly.me/" title="https:&#x2F;&#x2F;bbs.letitfly.me" rel="noopener" target="_blank">LIF BBS</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.ixk.me/" title="https:&#x2F;&#x2F;www.ixk.me" rel="noopener" target="_blank">青空之蓝</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blackyau.cc/14">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://st.blackyau.net/head.jpg">
+      <meta itemprop="name" content="蠢黑通行">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蠢黑通行">
+      <meta itemprop="description" content="BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hadoop 完全分布部署 | 蠢黑通行">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hadoop 完全分布部署
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-04-24 20:00:29" itemprop="dateCreated datePublished" datetime="2019-04-24T20:00:29+08:00">2019-04-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-04-25 16:18:40" itemprop="dateModified" datetime="2019-04-25T16:18:40+08:00">2019-04-25</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>之前有说过Hadoop伪分布的部署，这次来讲讲完全分布。总体来说和伪分布的配置差别不大，只是不同机子之前的衔接和小部分的配置修改。</p>
+<span id="more"></span>
+
+<p>这次就不像以前的傻瓜式教程了，这次主要说说在这一次搭建中遇到的一些问题，同时也是对之前伪分布搭建的补充。</p>
+<h2 id="安装-CentOS"><a href="#安装-CentOS" class="headerlink" title="安装 CentOS"></a>安装 CentOS</h2><p>之前分配只分配了 <code>1G</code> 内存太小了，至少要给 <code>master</code> 分配 <code>4G</code> 的内存。在安装的时候可以直接打开网络，同时吧 <code>hostname</code> 设置好，省的后面又要自己去改。先打开网络之后，就用打开一下 <code>网络时间同步</code> 同时吧时区调到和真机一样，方便调试。磁盘分区什么的直接自动走起就行了。</p>
+<h2 id="基础环境配置"><a href="#基础环境配置" class="headerlink" title="基础环境配置"></a>基础环境配置</h2><p>关 <code>selinux</code> 和关 <code>防火墙</code> 是必须的，省了很多麻烦。然后我这次在部署的时候，为每个程序都分了一个用户(hadoop, yarn, hdfs, mapred 都在 <code>hadoop group</code> 里面)。这就和之前无脑使用 <code>root</code> 有点不一样，要很注意权限的问题。冷不丁顶的就会 <code>Permission denied</code> ，而且文件被新建的权限同组用户是只有读权限的。每次都要手动新建一下，然后 <code>chmod g+w xxxxxx</code> 挺讲究。其次就是 <code>ssh</code> 的配置，因为 <code>hdfs</code> 和 <code>yarn</code> 在不同的机子之间有交互，所以要把所有的 <code>id_rsa.pub</code> 都放在同一个 <code>authorized_key</code> 里面，每个机子的 <code>hdfs</code> 和 <code>yarn</code> 用户都要，然后每一行一个，如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ssh-rsa AAAAB3N......KcSd+lF9EYT7ED9KMWlajl yarn@master</span><br><span class="line">ssh-rsa AAAAB3N......pggVZIG3+ElmBlPqYp3O8D hdfs@master</span><br><span class="line">ssh-rsa AAAAB3N......a2X44NMnhAbcQVDcMwdoIA hdfs@slave1</span><br><span class="line">ssh-rsa AAAAB3N......PCBqtandHgi0CwKsLsCv2d yarn@slave1</span><br><span class="line">ssh-rsa AAAAB3N......GXNfdgrthrtgf0+1DrYHGp hdfs@slave2</span><br><span class="line">ssh-rsa AAAAB3N......PXvHKFTQ2b8Xt8ZAvB/dKy yarn@slave2</span><br></pre></td></tr></table></figure>
+
+<h2 id="Hadoop配置"><a href="#Hadoop配置" class="headerlink" title="Hadoop配置"></a>Hadoop配置</h2><p>配置上面其实和伪分布差不了太多，只有一些小地方有变化。而且很方便的就是，所有机子的配置文件是一样的。所以不需要对每个单独的写配置，无脑的复制粘贴就好了。在机子比较多的情况下，还有很多可以自动化同步配置的工具，我这里目前用不上也没了解，就不多说了。直接看看配置吧。</p>
+<h3 id="core-site-xml"><a href="#core-site-xml" class="headerlink" title="core-site.xml"></a>core-site.xml</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- Hadoop Core 配置项，用于设置 HDFS、MapReduce和YARN常用的 I/O 设置 --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 默认文件系统，端口默认值为 8020 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>hdfs://master/<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- HDFS的储存目录,HDSF里面的数据都该目录内 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>/usr/local/hadoop-2.6.0/tmp<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="hdfs-site-xml"><a href="#hdfs-site-xml" class="headerlink" title="hdfs-site.xml"></a>hdfs-site.xml</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- HDFS的配置,因为我没什么需求挺多目录都跟随上面的 hadoop.tmp.dir 走就行了--&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line"> <span class="comment">&lt;!-- HDFS的默认副本数，其实这里的值默认就是3可以不用改 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.replication<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>3<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="yarn-site-xml"><a href="#yarn-site-xml" class="headerlink" title="yarn-site.xml"></a>yarn-site.xml</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- YARN 守护进程的配置项，包括资源管理器，WEB应用代理服务器和节点管理器 --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 指定一台电脑作为资源管理器 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.hostname<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>master<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 看官方文档说这里的默认是就是这个，但是书上说需要手动设置才能运行正常。后面有时间再深究 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.aux-services<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>mapreduce_shuffle<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="mapred-site-xml"><a href="#mapred-site-xml" class="headerlink" title="mapred-site.xml"></a>mapred-site.xml</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 这个文件本身是不存在的，需要手动 cp 一下改个名字。字如其名，MapReduce的配置文件 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 指定 MapReduce 的使用框架，这里如果不指定的话他就默认使用的 local 模式，而且 8088 里面看不到 job--&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="slaves"><a href="#slaves" class="headerlink" title="slaves"></a>slaves</h3><p>这是一个和其他配置文件同一目录的纯文本，它里面定义了该集群中所有主机的 <code>hostname</code> 或 <code>ip</code> ，这里我使用的 <code>hostname</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">master</span><br><span class="line">slave1</span><br><span class="line">slave2</span><br></pre></td></tr></table></figure>
+
+<h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><p>还需要注意的就是运行的时候，还是因为我使用了不同的用户管理不同的进程。所以运行的时候要来回切换用户，下面是不同服务启动时所对应的用户。</p>
+<table>
+<thead>
+<tr>
+<th>User</th>
+<th>Start command</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>hdfs</code></td>
+<td><code>hdfs namenode -format</code></td>
+</tr>
+<tr>
+<td><code>hdfs</code></td>
+<td><code>start-dfs.sh</code></td>
+</tr>
+<tr>
+<td><code>yarn</code></td>
+<td><code>start-yarn.sh</code></td>
+</tr>
+<tr>
+<td><code>mapred</code></td>
+<td><code>mr-jobhistory-daemon.sh start historyserver</code></td>
+</tr>
+</tbody></table>
+<p>JobHistory WEB 端能够正常显示，但是它不显示 <code>job</code> 。查 <code>log</code> 发现还是权限的问题，需要给一下权限。<code>hdfs dfs -chown -R mapred /tmp/hadoop-yarn/staging/history</code>上面的不见效就直接 777 <code>hdfs dfs -chmod 777 /tmp/hadoop-yarn/staging/history</code> 。</p>
+<p>如果启动的时候失败了，数据没有成功同步到所有节点。就吧 <code>hadoop.tmp.dir</code> 和 <code>/tmp</code> 目录里面的东西全部删完，重新格式化就行了。而且注意不要格式化太多次，格式化太多次导致 <code>ID</code> 不一样也会是一个很头大的事情，<a href="https://blackyau.cc/12#%E6%8E%92%E9%94%99">之前</a>因为这个问题我头疼了 1-2 天。</p>
+<h2 id="HIVE"><a href="#HIVE" class="headerlink" title="HIVE"></a>HIVE</h2><p>HIVE 启动的时候，还是要注意删一下和 <code>Hadoop</code> 冲突的 <code>jar</code> ,其中任选一个删除都可以</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/hadoop-2.6.0/share/hadoop/common/lib/slf4j-log4j12-1.7.5.jar</span><br><span class="line">/usr/local/hadoop-2.6.0/share/hadoop/yarn/lib/hive-jdbc-1.1.0-standalone.jar</span><br></pre></td></tr></table></figure>
+
+<p>也可以用环境变量，让他自己选择高版本的使用。但是这样设置的话，还是会有一串警告，看着挺不爽的。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export HADOOP_USER_CLASSPATH_FIRST=true</span><br></pre></td></tr></table></figure>
+
+<p>其他 大数据系列文章 请看 <a href="https://blackyau.cc/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">这里</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://item.jd.com/12109713.html">Hadoop: The Definitive Guide@Tom White</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>蠢黑通行
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blackyau.cc/14" title="Hadoop 完全分布部署">https://blackyau.cc/14</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/CentOS/" rel="tag"># CentOS</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+              <a href="/tags/HDFS/" rel="tag"># HDFS</a>
+              <a href="/tags/YARN/" rel="tag"># YARN</a>
+              <a href="/tags/VMware/" rel="tag"># VMware</a>
+              <a href="/tags/MapReduce/" rel="tag"># MapReduce</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/13" rel="prev" title="Hive 配置">
+                  <i class="fa fa-angle-left"></i> Hive 配置
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/15" rel="next" title="Hadoop 添加和删除节点">
+                  Hadoop 添加和删除节点 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments disqusjs-container">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2016 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蠢黑通行</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div><div class="powered-by">本网站由 <a style="border-bottom: none;"href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" class="theme-link" rel="noopener" target="_blank" title="upyun"><img style="display: inline; vertical-align: middle;" src="https://st.blackyau.net/blog/file/upyun_dark.svg" alt="upyun">提供CDN加速/云储存服务</a> </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/sidebar.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/disqusjs@3.0.2/dist/browser/styles/disqusjs.css" integrity="sha256-71XarXwNr1Td27HmZI9zjY+rMzRdush6/glo6VFXp7o=" crossorigin="anonymous">
+
+<script class="next-config" data-name="disqusjs" type="application/json">{"enable":true,"api":"https://disqusjs-proxy-rose.vercel.app/","apikey":"40wkCy0ewvq5nL9eGvjiJHkBCc35Rk4DIQmje6UJ3vnO1mDt0C1b5yxqlbUeoo6P","shortname":"blackyau","js":{"url":"https://unpkg.com/disqusjs@3.0.2/dist/browser/disqusjs.es2015.umd.min.js","integrity":"sha256-okP99ZQKVpIy7+NogAMpGlIQzJa9XKXhIJcFgdju5bU="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/comments/disqusjs.js"></script>
+
+</body>
+</html>

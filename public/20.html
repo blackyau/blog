@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://st.blackyau.net/blog/file/favicon-180x180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://st.blackyau.net/blog/file/favicon-64x64.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://st.blackyau.net/blog/file/favicon-32x32.png">
+  <link rel="mask-icon" href="https://st.blackyau.net/blog/file/favicon-512x512.svg" color="#222">
+  <meta name="google-site-verification" content="nXthYmLKSXqupL96tIOSCBi3yiBjEEkTqK9vEYv808U">
+  <meta name="msvalidate.01" content="56ABC0C6006554B668AA5972B359B773">
+  <meta name="baidu-site-verification" content="VQvGuCkX3O">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blackyau.cc","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/config.js"></script>
+
+    <meta name="description" content="Apache Spark 是一个开源集群运算框架，作用类似于 Hadoop 的 MapReduce 。但是相对于 MapReduce 来说它的速度要快得多。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark 配置">
+<meta property="og:url" content="https://blackyau.cc/20">
+<meta property="og:site_name" content="蠢黑通行">
+<meta property="og:description" content="Apache Spark 是一个开源集群运算框架，作用类似于 Hadoop 的 MapReduce 。但是相对于 MapReduce 来说它的速度要快得多。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://st.blackyau.net/blog/20/1.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/20/2.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/20/3.png">
+<meta property="article:published_time" content="2019-06-07T06:34:34.000Z">
+<meta property="article:modified_time" content="2019-06-07T09:21:15.000Z">
+<meta property="article:author" content="蠢黑通行">
+<meta property="article:tag" content="CentOS">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Hadoop">
+<meta property="article:tag" content="YARN">
+<meta property="article:tag" content="Spark">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://st.blackyau.net/blog/20/1.png">
+
+
+<link rel="canonical" href="https://blackyau.cc/20">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blackyau.cc/20","path":"20.html","title":"Spark 配置"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Spark 配置 | 蠢黑通行</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKREM40HY8"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TKREM40HY8","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="蠢黑通行" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">蠢黑通行</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个人的全世界</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">环境介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87"><span class="nav-number">2.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">基础环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E8%A7%A3%E5%8E%8B"><span class="nav-number">3.1.</span> <span class="nav-text">下载解压</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Standalone-Mode"><span class="nav-number">4.</span> <span class="nav-text">Standalone Mode</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%8B%E5%8A%A8%E5%90%AF%E5%8A%A8%E9%9B%86%E7%BE%A4"><span class="nav-number">4.1.</span> <span class="nav-text">手动启动集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC%E5%90%AF%E5%8A%A8%E9%9B%86%E7%BE%A4"><span class="nav-number">4.2.</span> <span class="nav-text">脚本启动集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="nav-number">4.3.</span> <span class="nav-text">高可用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蠢黑通行"
+      src="https://st.blackyau.net/head.jpg">
+  <p class="site-author-name" itemprop="name">蠢黑通行</p>
+  <div class="site-description" itemprop="description">BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。</div>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/blackyau" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;blackyau" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:blackyau426@gmail.com" title="E-Mail → mailto:blackyau426@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/black_yau" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;black_yau" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://bbs.letitfly.me/" title="https:&#x2F;&#x2F;bbs.letitfly.me" rel="noopener" target="_blank">LIF BBS</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.ixk.me/" title="https:&#x2F;&#x2F;www.ixk.me" rel="noopener" target="_blank">青空之蓝</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blackyau.cc/20">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://st.blackyau.net/head.jpg">
+      <meta itemprop="name" content="蠢黑通行">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蠢黑通行">
+      <meta itemprop="description" content="BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Spark 配置 | 蠢黑通行">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Spark 配置
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2019-06-07 14:34:34 / 修改时间：17:21:15" itemprop="dateCreated datePublished" datetime="2019-06-07T14:34:34+08:00">2019-06-07</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><code>Apache Spark</code> 是一个开源集群运算框架，作用类似于 <code>Hadoop</code> 的 <code>MapReduce</code> 。但是相对于 <code>MapReduce</code> 来说它的速度要快得多。</p>
+<span id="more"></span>
+
+<h2 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h2><p>软件版本如下：</p>
+<table>
+<thead>
+<tr>
+<th>Program</th>
+<th>Version</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>System</td>
+<td>CentOS-7-x86_64-Minimal-1810</td>
+<td><a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/centos-vault/centos/7.9.2009/isos/x86_64/">TUNA Mirrors</a></td>
+</tr>
+<tr>
+<td>JAVA</td>
+<td>jdk-8u211-linux-x64.tar.gz</td>
+<td><a target="_blank" rel="noopener" href="https://www.oracle.com/cn/java/technologies/javase/javase8u211-later-archive-downloads.html">Oracle</a></td>
+</tr>
+<tr>
+<td>Hadoop</td>
+<td>hadoop-2.6.0.tar.gz</td>
+<td><a target="_blank" rel="noopener" href="http://archive.apache.org/dist/hadoop/common/hadoop-2.6.0/">Apache Archive</a></td>
+</tr>
+<tr>
+<td>Spark</td>
+<td>spark-2.0.0-bin-hadoop2.6.gz</td>
+<td><a target="_blank" rel="noopener" href="http://archive.apache.org/dist/spark/spark-2.0.0/">Apache Archive</a></td>
+</tr>
+<tr>
+<td>ZooKeeper</td>
+<td>zookeeper-3.4.5.tar.gz</td>
+<td><a target="_blank" rel="noopener" href="http://archive.apache.org/dist/zookeeper/zookeeper-3.4.5/">Apache Archive</a></td>
+</tr>
+</tbody></table>
+<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
+<li>完成 Standalone 集群搭建</li>
+<li>在 YARN 上运行 Spark</li>
+<li>在 Mesos 上运行 Spark</li>
+</ul>
+<h2 id="基础环境配置"><a href="#基础环境配置" class="headerlink" title="基础环境配置"></a>基础环境配置</h2><p>参考 <a href="/16" title="Hadoop HA 搭建">Hadoop HA 搭建</a> 目前已完成 Hadoop&#x2F;ZooKeeper 环境搭建</p>
+<h3 id="下载解压"><a href="#下载解压" class="headerlink" title="下载解压"></a>下载解压</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl -O http://archive.apache.org/dist/spark/spark-2.0.0/spark-2.0.0-bin-hadoop2.6.tgz</span><br><span class="line">tar xf spark-2.0.0-bin-hadoop2.6.tgz -C /usr/local/src/</span><br><span class="line">mv /usr/local/src/spark-2.0.0-bin-hadoop2.6 /usr/local/src/spark</span><br></pre></td></tr></table></figure>
+
+<h2 id="Standalone-Mode"><a href="#Standalone-Mode" class="headerlink" title="Standalone Mode"></a>Standalone Mode</h2><p>使用这种模式搭建，不需要借助其他外部工具(高可用性需要 ZooKeeper)</p>
+<h3 id="手动启动集群"><a href="#手动启动集群" class="headerlink" title="手动启动集群"></a>手动启动集群</h3><p>先搭建一个最简单的</p>
+<table>
+<thead>
+<tr>
+<th>HostName</th>
+<th>Mode</th>
+<th>IP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>master</td>
+<td>Master</td>
+<td>192.168.66.128</td>
+</tr>
+<tr>
+<td>slave1</td>
+<td>Worker</td>
+<td>192.168.66.129</td>
+</tr>
+<tr>
+<td>slave2</td>
+<td>Worker</td>
+<td>192.168.66.130</td>
+</tr>
+</tbody></table>
+<p>不需要修改任何配置，直接启动即可。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">master</span></span><br><span class="line">cd /usr/local/src/spark/sbin</span><br><span class="line">./start-master.sh</span><br></pre></td></tr></table></figure>
+
+<p>用浏览器打开的 <code>Web UI</code> 看看 <a target="_blank" rel="noopener" href="http://master:8080/">http://master:8080/</a></p>
+<p>其中的 <code>URL</code> 是让其他的 <code>Workers</code> 连接到 <code>master</code> 的重要参数</p>
+<p><img data-src="https://st.blackyau.net/blog/20/1.png" alt="1"></p>
+<p>将程序传到另外两台机子上</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp -r /usr/local/src/spark slave1:/usr/local/src/</span><br><span class="line">scp -r /usr/local/src/spark slave2:/usr/local/src/</span><br></pre></td></tr></table></figure>
+
+<p>接下来在另外两台机子上启动 <code>workers</code> 并连接到 <code>master</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">两台机子都要运行</span></span><br><span class="line">cd /usr/local/src/spark/sbin</span><br><span class="line">./start-slave.sh spark://master:7077</span><br></pre></td></tr></table></figure>
+
+<p>如图出现了两个 <code>Worker</code> 且 <code>State</code> 处于 <code>ALIVE</code> 搭建完毕</p>
+<p><img data-src="https://st.blackyau.net/blog/20/2.png" alt="2"></p>
+<h3 id="脚本启动集群"><a href="#脚本启动集群" class="headerlink" title="脚本启动集群"></a>脚本启动集群</h3><p>首先将之前启动的服务都手动关掉</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">master</span></span><br><span class="line">./stop-master.sh</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">两个 slave 都需要关闭</span></span><br><span class="line">./stop-slave.sh</span><br></pre></td></tr></table></figure>
+
+<p>将默认的配置文件改名为正式使用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/src/spark/conf/</span><br><span class="line">cp spark-env.sh.template spark-env.sh</span><br><span class="line">cp slaves.template slaves</span><br></pre></td></tr></table></figure>
+
+<p>修改 <code>slaves</code> 文件删掉里面的所有内容写入以下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slave1</span><br><span class="line">slave2</span><br></pre></td></tr></table></figure>
+
+<p>修改 <code>spark-env.sh</code> 文件指定 <code>master</code>，写入以下内容</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SPARK_MASTER_HOST=master</span><br><span class="line">JAVA_HOME=/usr/local/src/jdk1.8.0_211</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果不写 <code>JAVA_HOME</code> 的话，在启动 <code>slave</code> 的时候会报 <code>JAVA_HOME is not set</code> 估计是因为我的 <code>JAVA_HOME</code> 设置的仅对 <code>root</code> 生效的原因吧</p>
+</blockquote>
+<p>将配置文件同步给另外两台机子</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp -r /usr/local/src/spark/conf/ slave1:/usr/local/src/spark/</span><br><span class="line">scp -r /usr/local/src/spark/conf/ slave2:/usr/local/src/spark/</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>master</code> 上面启动 <code>master</code> 和 <code>slaves</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/src/spark/sbin/</span><br><span class="line">./start-master.sh</span><br><span class="line">./start-slaves.sh</span><br></pre></td></tr></table></figure>
+
+<p>启动成功后浏览器打开 <a target="_blank" rel="noopener" href="http://master:8080/">http://master:8080/</a> 看看，应该和上面的图片是一样的</p>
+<p>下面的命令可以关闭</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./stop-master.sh</span><br><span class="line">./stop-slaves.sh</span><br></pre></td></tr></table></figure>
+
+<h3 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h3><p>编辑配置文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/src/spark/conf/spark-env.sh</span><br></pre></td></tr></table></figure>
+
+<p>在配置文件中新增以下内容</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SPARK_DAEMON_JAVA_OPTS=&quot;-Dspark.deploy.recoveryMode=ZOOKEEPER -Dspark.deploy.zookeeper.url=master:2181,slave1:2181,slave2:2181 -Dspark.deploy.zookeeper.dir=/sparkha&quot;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意如果你之前添加了 <code>SPARK_MASTER_HOST=master</code> 要删掉，因为 <code>master</code> 的任命被 <code>ZooKeeper</code> 接管了这个配置没用了</p>
+</blockquote>
+<p>将配置同步到另外两台机器上</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp -r /usr/local/src/spark/conf/ slave1:/usr/local/src/spark/</span><br><span class="line">scp -r /usr/local/src/spark/conf/ slave2:/usr/local/src/spark/</span><br></pre></td></tr></table></figure>
+
+<p>启动 <code>ZooKeeper</code>，如果你还没有配置可以参考这篇文章<a href="https://blackyau.cc/16#ZooKeeper-%E9%85%8D%E7%BD%AE">Hadoop HA 配置 - ZooKeeper 配置</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">每台机子都要启动</span></span><br><span class="line">zkServer.sh start</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>mastrt</code> 上启动 <code>master</code> 和 <code>slaves</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./start-master.sh</span><br><span class="line">./start-slaves.sh</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>slave1</code> 上启动 <code>备用 master</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./start-master.sh</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://st.blackyau.net/blog/20/3.png" alt="3"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://kafka.apache.org/">Apache Kafka</a></p>
+<p><a target="_blank" rel="noopener" href="http://kafka.apachecn.org/">Kafka 中文文档</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/luotianshuai/p/5206662.html">博客园@Mr.心弦 - Kafka【第一篇】Kafka集群搭建</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42207486/article/details/80647802">CSDN@运维白菜鹏 - kafka搭建入门（手把手教你搭建）</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/belalds/article/details/80575751">CSDN@360linker - kafka如何彻底删除topic及数据</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>蠢黑通行
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blackyau.cc/20" title="Spark 配置">https://blackyau.cc/20</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/CentOS/" rel="tag"># CentOS</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+              <a href="/tags/YARN/" rel="tag"># YARN</a>
+              <a href="/tags/Spark/" rel="tag"># Spark</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/19" rel="prev" title="Storm 配置">
+                  <i class="fa fa-angle-left"></i> Storm 配置
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/21" rel="next" title="微信小程序开发记录">
+                  微信小程序开发记录 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments disqusjs-container">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2016 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蠢黑通行</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div><div class="powered-by">本网站由 <a style="border-bottom: none;"href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" class="theme-link" rel="noopener" target="_blank" title="upyun"><img style="display: inline; vertical-align: middle;" src="https://st.blackyau.net/blog/file/upyun_dark.svg" alt="upyun">提供CDN加速/云储存服务</a> </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/sidebar.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/disqusjs@3.0.2/dist/browser/styles/disqusjs.css" integrity="sha256-71XarXwNr1Td27HmZI9zjY+rMzRdush6/glo6VFXp7o=" crossorigin="anonymous">
+
+<script class="next-config" data-name="disqusjs" type="application/json">{"enable":true,"api":"https://disqusjs-proxy-rose.vercel.app/","apikey":"40wkCy0ewvq5nL9eGvjiJHkBCc35Rk4DIQmje6UJ3vnO1mDt0C1b5yxqlbUeoo6P","shortname":"blackyau","js":{"url":"https://unpkg.com/disqusjs@3.0.2/dist/browser/disqusjs.es2015.umd.min.js","integrity":"sha256-okP99ZQKVpIy7+NogAMpGlIQzJa9XKXhIJcFgdju5bU="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/comments/disqusjs.js"></script>
+
+</body>
+</html>

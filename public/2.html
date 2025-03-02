@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://st.blackyau.net/blog/file/favicon-180x180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://st.blackyau.net/blog/file/favicon-64x64.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://st.blackyau.net/blog/file/favicon-32x32.png">
+  <link rel="mask-icon" href="https://st.blackyau.net/blog/file/favicon-512x512.svg" color="#222">
+  <meta name="google-site-verification" content="nXthYmLKSXqupL96tIOSCBi3yiBjEEkTqK9vEYv808U">
+  <meta name="msvalidate.01" content="56ABC0C6006554B668AA5972B359B773">
+  <meta name="baidu-site-verification" content="VQvGuCkX3O">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blackyau.cc","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/config.js"></script>
+
+    <meta name="description" content="现在blog使用的VPS搭建，与这个实现方法有较大的差异。会更新的 高三开学的第一天，这个特殊的日子。本站终于实现了全站完美HTTPS加密访问，在这个人人都注重隐私的时代。我这个博客当然不能落后于别人，顺便也在这里记录一下添加HTTPS访问时遇到的问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="已实现全站HTTPS安全连接">
+<meta property="og:url" content="https://blackyau.cc/2">
+<meta property="og:site_name" content="蠢黑通行">
+<meta property="og:description" content="现在blog使用的VPS搭建，与这个实现方法有较大的差异。会更新的 高三开学的第一天，这个特殊的日子。本站终于实现了全站完美HTTPS加密访问，在这个人人都注重隐私的时代。我这个博客当然不能落后于别人，顺便也在这里记录一下添加HTTPS访问时遇到的问题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://st.blackyau.net/blog/3/1.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/3/2.png">
+<meta property="article:published_time" content="2016-08-14T03:36:00.000Z">
+<meta property="article:modified_time" content="2018-06-24T15:50:25.000Z">
+<meta property="article:author" content="蠢黑通行">
+<meta property="article:tag" content="WEB">
+<meta property="article:tag" content="教程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://st.blackyau.net/blog/3/1.jpg">
+
+
+<link rel="canonical" href="https://blackyau.cc/2">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blackyau.cc/2","path":"2.html","title":"已实现全站HTTPS安全连接"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>已实现全站HTTPS安全连接 | 蠢黑通行</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKREM40HY8"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TKREM40HY8","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="蠢黑通行" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">蠢黑通行</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个人的全世界</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蠢黑通行"
+      src="https://st.blackyau.net/head.jpg">
+  <p class="site-author-name" itemprop="name">蠢黑通行</p>
+  <div class="site-description" itemprop="description">BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。</div>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/blackyau" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;blackyau" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:blackyau426@gmail.com" title="E-Mail → mailto:blackyau426@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/black_yau" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;black_yau" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://bbs.letitfly.me/" title="https:&#x2F;&#x2F;bbs.letitfly.me" rel="noopener" target="_blank">LIF BBS</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.ixk.me/" title="https:&#x2F;&#x2F;www.ixk.me" rel="noopener" target="_blank">青空之蓝</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blackyau.cc/2">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://st.blackyau.net/head.jpg">
+      <meta itemprop="name" content="蠢黑通行">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蠢黑通行">
+      <meta itemprop="description" content="BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="已实现全站HTTPS安全连接 | 蠢黑通行">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          已实现全站HTTPS安全连接
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-08-14 11:36:00" itemprop="dateCreated datePublished" datetime="2016-08-14T11:36:00+08:00">2016-08-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2018-06-24 23:50:25" itemprop="dateModified" datetime="2018-06-24T23:50:25+08:00">2018-06-24</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><strong>现在blog使用的VPS搭建，与这个实现方法有较大的差异。会更新的</strong></p>
+<p>高三开学的第一天，这个特殊的日子。本站终于实现了全站完美HTTPS加密访问，在这个人人都注重隐私的时代。我这个博客当然不能落后于别人，顺便也在这里记录一下添加HTTPS访问时遇到的问题。</p>
+<span id="more"></span>
+
+<p>首先，需要一个<a target="_blank" rel="noopener" href="http://baike.baidu.com/view/1009264.htm">SSL证书</a>。我的证书是使用的<a target="_blank" rel="noopener" href="https://freessl.wosign.com/">沃通DV免费SSL证书</a>，毕竟一个穷逼学生党没多少钱就用的免费的..<br>其次，因为本站是搭建于虚拟主机之上。所以导入证书和私钥都很简单，直接用Notepad++打开，把里面的内容粘贴进面板对应SSL设置的地方就行。</p>
+<p>满怀信心在地址栏中输入了连接，打开后却没有<strong>高贵的绿色小锁</strong>。使用F12检查后，发现是<a target="_blank" rel="noopener" href="https://github.com/newraina/typecho-theme-NexTPisces">我选择的主题</a>中的 <code>header.php</code> 引用了Google前端公共库没有通过HTTPS传输。而且更为捉急是，我来回更换了好几个国内的CDN库全都不支持HTTPS。当然了这种问题是阻挡不了绿色小锁对我的诱惑。</p>
+<p>我直接将他引用的CSS，全部下载到本地修改后上传到主机。然后把header.php中引用的地址改为了主机。就这样我的博客前面就有了耀眼的绿色小锁。同时还将站点中的静态文件全部放到了<a target="_blank" rel="noopener" href="https://www.qiniu.com/">七牛云储存</a>中，七牛云支持HTTPS链接还是挺不错的！最主要的是他每月有免费的10G流量，这对于我的博客绰绰有余。</p>
+<p>对于上传的图片如何使用七牛云托管，我也通过google找到了<a target="_blank" rel="noopener" href="https://www.xiaoz.me/archives/6842">解决方法</a>。设置镜像储存的镜像源为我的博客<br><img data-src="https://st.blackyau.net/blog/3/1.jpg" alt="img"><br>然后修改post.php中</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">content</span>(); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>其中的 <a href="https://blackyau.cc/">https://blackyau.cc</a> 为我的博客域名，<a target="_blank" rel="noopener" href="https://obvrtdse2.qnssl.com/">https://obvrtdse2.qnssl.com</a> 为七牛云空间的域名，这个方法的原理就是七牛支持镜像存储，设置镜像源后，当你访问七牛的地址会自动从源地址获取对应文件并抓取过来，连SDK都不需要使用。</p>
+<p>经过了这样一鼓捣，开学了就可以安心的写字了。<br><img data-src="https://st.blackyau.net/blog/3/2.png" alt="img"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>蠢黑通行
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blackyau.cc/2" title="已实现全站HTTPS安全连接">https://blackyau.cc/2</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/WEB/" rel="tag"># WEB</a>
+              <a href="/tags/%E6%95%99%E7%A8%8B/" rel="tag"># 教程</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/1" rel="prev" title="开始">
+                  <i class="fa fa-angle-left"></i> 开始
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/guozixi" rel="next" title="良心不易">
+                  良心不易 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments disqusjs-container">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2016 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蠢黑通行</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div><div class="powered-by">本网站由 <a style="border-bottom: none;"href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" class="theme-link" rel="noopener" target="_blank" title="upyun"><img style="display: inline; vertical-align: middle;" src="https://st.blackyau.net/blog/file/upyun_dark.svg" alt="upyun">提供CDN加速/云储存服务</a> </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/sidebar.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/disqusjs@3.0.2/dist/browser/styles/disqusjs.css" integrity="sha256-71XarXwNr1Td27HmZI9zjY+rMzRdush6/glo6VFXp7o=" crossorigin="anonymous">
+
+<script class="next-config" data-name="disqusjs" type="application/json">{"enable":true,"api":"https://disqusjs-proxy-rose.vercel.app/","apikey":"40wkCy0ewvq5nL9eGvjiJHkBCc35Rk4DIQmje6UJ3vnO1mDt0C1b5yxqlbUeoo6P","shortname":"blackyau","js":{"url":"https://unpkg.com/disqusjs@3.0.2/dist/browser/disqusjs.es2015.umd.min.js","integrity":"sha256-okP99ZQKVpIy7+NogAMpGlIQzJa9XKXhIJcFgdju5bU="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/comments/disqusjs.js"></script>
+
+</body>
+</html>

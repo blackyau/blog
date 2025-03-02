@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://st.blackyau.net/blog/file/favicon-180x180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://st.blackyau.net/blog/file/favicon-64x64.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://st.blackyau.net/blog/file/favicon-32x32.png">
+  <link rel="mask-icon" href="https://st.blackyau.net/blog/file/favicon-512x512.svg" color="#222">
+  <meta name="google-site-verification" content="nXthYmLKSXqupL96tIOSCBi3yiBjEEkTqK9vEYv808U">
+  <meta name="msvalidate.01" content="56ABC0C6006554B668AA5972B359B773">
+  <meta name="baidu-site-verification" content="VQvGuCkX3O">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blackyau.cc","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/config.js"></script>
+
+    <meta name="description" content="刚刚完成了一个微信小程序的开发，从开发到发布线上版本体验了一起全过程。在这里也记录一下在开发过程中的一些想法和心得。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信小程序开发记录">
+<meta property="og:url" content="https://blackyau.cc/21">
+<meta property="og:site_name" content="蠢黑通行">
+<meta property="og:description" content="刚刚完成了一个微信小程序的开发，从开发到发布线上版本体验了一起全过程。在这里也记录一下在开发过程中的一些想法和心得。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://st.blackyau.net/blog/21/1.png">
+<meta property="article:published_time" content="2019-07-24T07:18:02.000Z">
+<meta property="article:modified_time" content="2019-07-24T09:17:40.000Z">
+<meta property="article:author" content="蠢黑通行">
+<meta property="article:tag" content="微信小程序">
+<meta property="article:tag" content="开发">
+<meta property="article:tag" content="实时公交">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://st.blackyau.net/blog/21/1.png">
+
+
+<link rel="canonical" href="https://blackyau.cc/21">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blackyau.cc/21","path":"21.html","title":"微信小程序开发记录"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>微信小程序开发记录 | 蠢黑通行</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKREM40HY8"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TKREM40HY8","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="蠢黑通行" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">蠢黑通行</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个人的全世界</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">项目介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E8%A1%8C%E6%80%A7%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">可行性分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82"><span class="nav-number">3.</span> <span class="nav-text">网络请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E5%B1%82"><span class="nav-number">4.</span> <span class="nav-text">逻辑层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%95%8C%E9%9D%A2%E5%B1%82"><span class="nav-number">5.</span> <span class="nav-text">界面层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E7%AB%AF"><span class="nav-number">6.</span> <span class="nav-text">后端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蠢黑通行"
+      src="https://st.blackyau.net/head.jpg">
+  <p class="site-author-name" itemprop="name">蠢黑通行</p>
+  <div class="site-description" itemprop="description">BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。</div>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/blackyau" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;blackyau" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:blackyau426@gmail.com" title="E-Mail → mailto:blackyau426@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/black_yau" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;black_yau" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://bbs.letitfly.me/" title="https:&#x2F;&#x2F;bbs.letitfly.me" rel="noopener" target="_blank">LIF BBS</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.ixk.me/" title="https:&#x2F;&#x2F;www.ixk.me" rel="noopener" target="_blank">青空之蓝</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blackyau.cc/21">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://st.blackyau.net/head.jpg">
+      <meta itemprop="name" content="蠢黑通行">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蠢黑通行">
+      <meta itemprop="description" content="BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="微信小程序开发记录 | 蠢黑通行">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          微信小程序开发记录
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2019-07-24 15:18:02 / 修改时间：17:17:40" itemprop="dateCreated datePublished" datetime="2019-07-24T15:18:02+08:00">2019-07-24</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>刚刚完成了一个微信小程序的开发，从开发到发布线上版本体验了一起全过程。在这里也记录一下在开发过程中的一些想法和心得。</p>
+<span id="more"></span>
+
+<h2 id="项目介绍"><a href="#项目介绍" class="headerlink" title="项目介绍"></a>项目介绍</h2><p>这次开发的是一个公交的实时位置查询工具，当时的灵感来自我使用 APP 的时候。因为坐车这个事儿，其实每天也就是坐那几条线不会有太多变化，但是那 APP 每次都需要手动输入线路点击一下查询。而且 APP 的冷启动速度那也是相当的感人，从点击到出现首页广告都需要 4s 左右。然后就想自己来试试能不能解决这个问题，用抓包软件看了看这软件也是从 API 获取信息，而且调用 API 也没有经过鉴权传入的参数也都是固定的几个。</p>
+<p>本来在这之前，一直都想体验一下 微信小程序 的开发。因为我平时在使用的时候，给我的体验还是挺不错的。启动速度也不赖，而且不用单独的下载其他 APP 。还可以轻松的做到跨平台，对于轻度的工具类应用来说，这个平台看起来是那么的美好。在加上和友人在聊天的时候，也说到了现在的 APP 对于普通人来说确实太「重」了，所以也就更加坚定了这次开发要使用微信小程序。</p>
+<h2 id="可行性分析"><a href="#可行性分析" class="headerlink" title="可行性分析"></a>可行性分析</h2><p>首先分析抓包的数据，它到底需要传给它什么信息，同时又会传回什么数据。简单的用 <code>Postman</code> 试了试，发现所有的 API 传入的数据都只有 3 个。</p>
+<ul>
+<li>线路唯一标识</li>
+<li>上下行状态</li>
+<li>城市代码</li>
+</ul>
+<p>用 <code>Python</code> 的 <code>requests</code> 简单的尝试了一下，数据还是挺好抓取下来的。然后就开始咸鱼了十几天，等到7月15号的时候才开始认认真真的开始写代码。</p>
+<h2 id="网络请求"><a href="#网络请求" class="headerlink" title="网络请求"></a>网络请求</h2><p>微信小程序的网络请求这方面，都是有提供 API 可以直接调用。我这里因为是第一次用 <code>JavaScript</code> 所以还是淌了不少浑水。</p>
+<p>刚开始的时候最困惑我的就是，它不能二次调用经过传值了一次的 <code>request Object</code>。因为公交查询 API 这里，它的站点信息和车辆当前的运行状态是两个单独的，虽然车辆当前运行状态也有站台的标识，但是我做不到把他们关联起来。所以我在二次调用的时候，总是会提示错误。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Cannot read property &#x27;xxx&#x27; of undefined;at api request success callback function</span><br><span class="line">TypeError: Cannot read property &#x27;xxx&#x27; of undefined</span><br></pre></td></tr></table></figure>
+
+<p>真的让人挺头疼的，到了后面我还是使用的全局变量解决这个问题了的。每次都把获取到的数据放进全局变量，然后其他 <code>function</code> 在调用的时候也直接从全局变量里面取值。每次从全局变量里面取值都还挺讲究，每次都要写 <code>this.data.xxx</code> 。不知道这是 <code>JavaScript</code> 在作妖，还是微信小程序在作妖。用不同的名字区分不好吗，非要弄个 <code>this</code> 怪怪的。</p>
+<h2 id="逻辑层"><a href="#逻辑层" class="headerlink" title="逻辑层"></a>逻辑层</h2><p>做逻辑层的前端数据展示花了挺多时间，对于静态数据的处理还是可以轻松的应对。但是一方面自己又懒，不想为每个线路都写一个不同的页面去做展示（后面想想好恐怖，这样搞的话不知道冗余的代码量得有多少），后面还是使用微信提供的 API 来解决这个问题。也就是给点击这个方法传参，然后将参数拼接成带有完整数据的 url 在交给线路查询页进行显示。</p>
+<p>还有点击切换按钮切换线路上下行的时候，我也是发现 API 有一些怪怪的问题。有个别环线它的起点和终点是一摸一样的，所以切换线路的时候不只是上下行这个值有变化，同时线路的唯一标识也在变化，当然线路的名字也有变化，名字一般都是 A和B 来回切换。而且我发现，官方 APP 这个地方他也没作对，它对于环线是不能切换的，估计也是切换的时候单纯的切换了一下上下行状态。这大概就是前端和后端不打好招呼的后果？</p>
+<h2 id="界面层"><a href="#界面层" class="headerlink" title="界面层"></a>界面层</h2><p>界面的数据写法和我以前接触的 <code>Jinja2</code> 特别相似，不过我接触 <code>Jinja2</code> 的时候也只是和 <code>ECharts</code> 配合做了一些简单的数据展示。做这个公交线路的显示的前端，代码量倒是非常的小，但真的是每一行都是比较费脑子的感觉。大概也是我对某些地方有着莫名的偏执，所以带来了这些麻烦。</p>
+<p>也就比如在线路查询页的地方，我就必须想让公交车的图标要和站点名字处在同一行上，而且站点名字必须要在页面接近居中的文字左对齐。当时我在写这个页面的时候，一开始是使用的 条件渲染 也看这个站点有没有车，如果有就显示没有就不显示。使用这个方法就会导致，有公交车的和没公交车的站点名字他们的缩进是不一样的。然后我就很魔性的想到了使用控制透明度来解决这个问题，每个位置上默认都是要显示图标的，但是会根据这个位置有没有车然后改变透明度。刚刚想到这个方法的时候，都在想为什么我这么聪明233。</p>
+<p><img data-src="https://st.blackyau.net/blog/21/1.png" alt="图标缩进不同解决方法"></p>
+<p>后面还有个问题，就是有的站点他会有停很多车，一般都是在收车的时候，始发站就会停很多车。车多了的话，界面显示会抽风。一开始是想直接吧车辆直接 <code>for</code> 开始，然后一个一个的判断 <code>&gt;5</code>、<code>&lt;=5</code> 、<code>=0</code> 这种情况，但是写半天都不会。因为这个也没法设断点，看 Debug 信息它到底现在循环到了多少之类的。所以就直接在 <code>js</code> 里面吧数据处理了，吧站点当前停留的车辆 <code>&gt;5</code> 的全部都只显示 5 。</p>
+<p>还有问题个问题就是，微信小程序官方的 开发者工具 在显示图标的时候对大小写不敏感。但是在真实设备上，对大小写是敏感的。我一开始调试的时候，车辆图标用的 <code>Bus.png</code> 开发工具上模拟一直没问题，就是到了真机死活显示不出来。最后检查出来是这个问题，挺福气的。而且 <code>Git</code> 也很奇怪，我改了个大小写他都显示我没有任何变动。最后是我强行改了个别的名字，打了个 <code>commit</code> 再改回小写。</p>
+<h2 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h2><p>后端的开发这次倒是没什么技术，就只是单纯的吧数据转发过去然后把拿回来的数据返回过去。因为微信小程序官方不允许使用 http 协议，所以我就只能使用服务器去代理转发流量。官方什么时候要是把我服务器的 IP ban 了那就麻烦了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>最深的感觉还是在开发的时候，因为官方文档都是中文所以查文档还是方便不少。但是搜索一些怪怪的问题的时候，反而用 Google 搜不出来太好的结果，还得要用百度在 CSDN 里面的一大堆重复文章中去找解决方法。</p>
+<p>后面看看有没有时间再完善一下，增加个根据当前位置判断车还有多久到底最近站点的功能。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>蠢黑通行
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blackyau.cc/21" title="微信小程序开发记录">https://blackyau.cc/21</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="tag"># 微信小程序</a>
+              <a href="/tags/%E5%BC%80%E5%8F%91/" rel="tag"># 开发</a>
+              <a href="/tags/%E5%AE%9E%E6%97%B6%E5%85%AC%E4%BA%A4/" rel="tag"># 实时公交</a>
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/20" rel="prev" title="Spark 配置">
+                  <i class="fa fa-angle-left"></i> Spark 配置
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/22" rel="next" title="Linux LVM 逻辑卷扩容">
+                  Linux LVM 逻辑卷扩容 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments disqusjs-container">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2016 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蠢黑通行</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div><div class="powered-by">本网站由 <a style="border-bottom: none;"href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" class="theme-link" rel="noopener" target="_blank" title="upyun"><img style="display: inline; vertical-align: middle;" src="https://st.blackyau.net/blog/file/upyun_dark.svg" alt="upyun">提供CDN加速/云储存服务</a> </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/sidebar.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/disqusjs@3.0.2/dist/browser/styles/disqusjs.css" integrity="sha256-71XarXwNr1Td27HmZI9zjY+rMzRdush6/glo6VFXp7o=" crossorigin="anonymous">
+
+<script class="next-config" data-name="disqusjs" type="application/json">{"enable":true,"api":"https://disqusjs-proxy-rose.vercel.app/","apikey":"40wkCy0ewvq5nL9eGvjiJHkBCc35Rk4DIQmje6UJ3vnO1mDt0C1b5yxqlbUeoo6P","shortname":"blackyau","js":{"url":"https://unpkg.com/disqusjs@3.0.2/dist/browser/disqusjs.es2015.umd.min.js","integrity":"sha256-okP99ZQKVpIy7+NogAMpGlIQzJa9XKXhIJcFgdju5bU="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/comments/disqusjs.js"></script>
+
+</body>
+</html>

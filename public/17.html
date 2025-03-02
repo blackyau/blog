@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://st.blackyau.net/blog/file/favicon-180x180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://st.blackyau.net/blog/file/favicon-64x64.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://st.blackyau.net/blog/file/favicon-32x32.png">
+  <link rel="mask-icon" href="https://st.blackyau.net/blog/file/favicon-512x512.svg" color="#222">
+  <meta name="google-site-verification" content="nXthYmLKSXqupL96tIOSCBi3yiBjEEkTqK9vEYv808U">
+  <meta name="msvalidate.01" content="56ABC0C6006554B668AA5972B359B773">
+  <meta name="baidu-site-verification" content="VQvGuCkX3O">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blackyau.cc","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/config.js"></script>
+
+    <meta name="description" content="我接触的第一个 非关系型数据库 就是 HBase ,有关它的更多概念我这里就不说了。本文关注的是它的搭建、配置、使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HBase 配置">
+<meta property="og:url" content="https://blackyau.cc/17">
+<meta property="og:site_name" content="蠢黑通行">
+<meta property="og:description" content="我接触的第一个 非关系型数据库 就是 HBase ,有关它的更多概念我这里就不说了。本文关注的是它的搭建、配置、使用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://st.blackyau.net/blog/17/1.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/17/2.png">
+<meta property="article:published_time" content="2019-06-01T10:09:22.000Z">
+<meta property="article:modified_time" content="2019-06-02T09:36:14.000Z">
+<meta property="article:author" content="蠢黑通行">
+<meta property="article:tag" content="CentOS">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Hadoop">
+<meta property="article:tag" content="HDFS">
+<meta property="article:tag" content="HBase">
+<meta property="article:tag" content="Hadoop HA">
+<meta property="article:tag" content="Hadoop 高可用">
+<meta property="article:tag" content="ZooKeeper">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://st.blackyau.net/blog/17/1.png">
+
+
+<link rel="canonical" href="https://blackyau.cc/17">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blackyau.cc/17","path":"17.html","title":"HBase 配置"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HBase 配置 | 蠢黑通行</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKREM40HY8"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TKREM40HY8","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="蠢黑通行" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">蠢黑通行</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个人的全世界</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">环境介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87"><span class="nav-number">2.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">基础环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E8%A7%A3%E5%8E%8B"><span class="nav-number">3.1.</span> <span class="nav-text">下载解压</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">3.2.</span> <span class="nav-text">系统环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hbase-env"><span class="nav-number">3.3.</span> <span class="nav-text">hbase-env</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E6%9C%BA%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.</span> <span class="nav-text">单机模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hbase-site-xml%E5%8D%95%E6%9C%BA%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.1.</span> <span class="nav-text">hbase-site.xml单机模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E5%8D%95%E6%9C%BA%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.2.</span> <span class="nav-text">运行单机模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.</span> <span class="nav-text">分布式模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hbase-site-xml%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.1.</span> <span class="nav-text">hbase-site.xml分布式模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#regionservers"><span class="nav-number">5.2.</span> <span class="nav-text">regionservers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%B7%E8%B4%9DHadoop%E9%85%8D%E7%BD%AE"><span class="nav-number">5.3.</span> <span class="nav-text">拷贝Hadoop配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E5%90%8C%E6%AD%A5%E9%85%8D%E7%BD%AE"><span class="nav-number">5.4.</span> <span class="nav-text">集群同步配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.5.</span> <span class="nav-text">运行分布式模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HBase-Shell"><span class="nav-number">6.</span> <span class="nav-text">HBase Shell</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA%E6%95%B0%E6%8D%AE"><span class="nav-number">7.</span> <span class="nav-text">导入导出数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蠢黑通行"
+      src="https://st.blackyau.net/head.jpg">
+  <p class="site-author-name" itemprop="name">蠢黑通行</p>
+  <div class="site-description" itemprop="description">BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。</div>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/blackyau" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;blackyau" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:blackyau426@gmail.com" title="E-Mail → mailto:blackyau426@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/black_yau" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;black_yau" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://bbs.letitfly.me/" title="https:&#x2F;&#x2F;bbs.letitfly.me" rel="noopener" target="_blank">LIF BBS</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.ixk.me/" title="https:&#x2F;&#x2F;www.ixk.me" rel="noopener" target="_blank">青空之蓝</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blackyau.cc/17">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://st.blackyau.net/head.jpg">
+      <meta itemprop="name" content="蠢黑通行">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蠢黑通行">
+      <meta itemprop="description" content="BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="HBase 配置 | 蠢黑通行">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HBase 配置
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-06-01 18:09:22" itemprop="dateCreated datePublished" datetime="2019-06-01T18:09:22+08:00">2019-06-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-06-02 17:36:14" itemprop="dateModified" datetime="2019-06-02T17:36:14+08:00">2019-06-02</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>我接触的第一个 非关系型数据库 就是 HBase ,有关它的更多概念我这里就不说了。本文关注的是它的搭建、配置、使用。</p>
+<span id="more"></span>
+
+<h2 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h2><p>软件版本如下：</p>
+<table>
+<thead>
+<tr>
+<th>Program</th>
+<th>Version</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>System</td>
+<td>CentOS-7-x86_64-Minimal-1810</td>
+<td><a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/centos-vault/centos/7.9.2009/isos/x86_64/">TUNA Mirrors</a></td>
+</tr>
+<tr>
+<td>JAVA</td>
+<td>jdk-8u211-linux-x64.tar.gz</td>
+<td><a target="_blank" rel="noopener" href="https://www.oracle.com/cn/java/technologies/javase/javase8u211-later-archive-downloads.html">Oracle</a></td>
+</tr>
+<tr>
+<td>Hadoop</td>
+<td>hadoop-2.6.0.tar.gz</td>
+<td><a target="_blank" rel="noopener" href="http://archive.apache.org/dist/hadoop/common/hadoop-2.6.0/">Apache Archive</a></td>
+</tr>
+<tr>
+<td>ZooKeeper</td>
+<td>zookeeper-3.4.5.tar.gz</td>
+<td><a target="_blank" rel="noopener" href="http://archive.apache.org/dist/zookeeper/zookeeper-3.4.5/">Apache Archive</a></td>
+</tr>
+<tr>
+<td>HBase</td>
+<td>hbase-1.2.0-bin.tar.gz</td>
+<td><a target="_blank" rel="noopener" href="http://archive.apache.org/dist/hbase/1.2.0/">Apache Archive</a></td>
+</tr>
+</tbody></table>
+<p>关于版本的问题，我这里使用的环境并不是官方推荐的组合。在官方文档上面有关 Hadoop 不同版本与 HBase 的兼容性有介绍，可以看<a target="_blank" rel="noopener" href="https://hbase.apache.org/book.html#hadoop">这里</a></p>
+<blockquote>
+<p>在 Hadoop 2.6.x 中的 Hadoop 2.6.0 版本下运行 HBase 可能会导致集群故障和数据丢失，请使用 Hadoop 2.6.1+ 版本</p>
+</blockquote>
+<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
+<li>完成 HBase 单机模式配置</li>
+<li>完成 HBase 分布模式配置</li>
+<li>HBase 数据的导出&#x2F;导入</li>
+</ul>
+<h2 id="基础环境配置"><a href="#基础环境配置" class="headerlink" title="基础环境配置"></a>基础环境配置</h2><p>参考 <a href="/16" title="Hadoop HA 搭建">Hadoop HA 搭建</a> 目前已完成 Hadoop HA 环境搭建</p>
+<p>| HostName | Function | IP |<br>| — | — | — | — |<br>| master | DataNode&#x2F;NameNode&#x2F;ResourceManager | 192.168.66.128 |<br>| slave1 | DataNode&#x2F;NameNode&#x2F;JobHistoryServer | 192.168.66.129 |<br>| slave2 | DataNode&#x2F;ResourceManager | 192.168.66.130 |</p>
+<h3 id="下载解压"><a href="#下载解压" class="headerlink" title="下载解压"></a>下载解压</h3><p>首先下载，解压 HBase</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -O http://archive.apache.org/dist/hbase/1.2.0/hbase-1.2.0-bin.tar.gz</span><br><span class="line">tar xf hbase-1.2.0-bin.tar.gz -C /usr/local/src/</span><br></pre></td></tr></table></figure>
+
+<h3 id="系统环境变量"><a href="#系统环境变量" class="headerlink" title="系统环境变量"></a>系统环境变量</h3><p>配置 HBase 环境变量，只对当前用户生效</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi ~/.bash_profile</span><br></pre></td></tr></table></figure>
+
+<p>添加以下内容</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export HBASE_HOME=/usr/local/src/hbase-1.2.0</span><br><span class="line">PATH=$PATH:$HBASE_HOME/bin</span><br></pre></td></tr></table></figure>
+
+<p>使其生效</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source ~/.bash_profile</span><br></pre></td></tr></table></figure>
+
+<p>测试是否配置成功</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase version</span><br></pre></td></tr></table></figure>
+
+<p>输出以下信息说明配置成功</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HBase 1.2.0</span><br><span class="line">Source code repository git://asf-dev/home/busbey/projects/hbase revision=25b281972df2f5b15c426c8963cbf77dd853a5ad</span><br><span class="line">Compiled by busbey on Thu Feb 18 23:01:49 CST 2016</span><br><span class="line">From source with checksum bcb25b7506ecf5d62c79d8f7193c829b</span><br></pre></td></tr></table></figure>
+
+<h3 id="hbase-env"><a href="#hbase-env" class="headerlink" title="hbase-env"></a>hbase-env</h3><p>把 JAVA_HOME 写进 HBase 环境变量</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/src/hbase-1.2.0/conf/hbase-env.sh</span><br></pre></td></tr></table></figure>
+
+<p>添加以下内容</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export /usr/local/src/jdk1.8.0_211/</span><br></pre></td></tr></table></figure>
+
+<h2 id="单机模式"><a href="#单机模式" class="headerlink" title="单机模式"></a>单机模式</h2><h3 id="hbase-site-xml单机模式"><a href="#hbase-site-xml单机模式" class="headerlink" title="hbase-site.xml单机模式"></a>hbase-site.xml单机模式</h3><p>打开主配置文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/src/hbase-1.2.0/conf/hbase-site.xml</span><br></pre></td></tr></table></figure>
+
+<p>将光标放在第一行，输入以下命令清空配置文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:.,$d</span><br></pre></td></tr></table></figure>
+
+<p>写入以下内容,配置来自 <a target="_blank" rel="noopener" href="https://hbase.apache.org/1.2/book.html#_get_started_with_hbase">HBase Doc v1.2</a></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.rootdir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>file:///root/standalone/hbase<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 设置储存目录 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.zookeeper.property.dataDir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>/root/standalone/zookeeper<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- ZooKeeper目录 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="运行单机模式"><a href="#运行单机模式" class="headerlink" title="运行单机模式"></a>运行单机模式</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start-hbase.sh</span><br></pre></td></tr></table></figure>
+
+<p>查看进程是否在运行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]# jps</span><br><span class="line">10082 HMaster</span><br><span class="line">10346 Jps</span><br></pre></td></tr></table></figure>
+
+<p>到这里单机模式就配置完成了</p>
+<h2 id="分布式模式"><a href="#分布式模式" class="headerlink" title="分布式模式"></a>分布式模式</h2><h3 id="hbase-site-xml分布式模式"><a href="#hbase-site-xml分布式模式" class="headerlink" title="hbase-site.xml分布式模式"></a>hbase-site.xml分布式模式</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/src/hbase-1.2.0/conf/hbase-site.xml</span><br></pre></td></tr></table></figure>
+
+<p>将光标放在第一行，输入以下命令清空配置文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:.,$d</span><br></pre></td></tr></table></figure>
+
+<p>写入以下内容,配置来自 <a target="_blank" rel="noopener" href="https://hbase.apache.org/1.2/book.html#example_config">HBase Doc v1.2</a></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;?xml-stylesheet type=<span class="string">&quot;text/xsl&quot;</span> href=<span class="string">&quot;configuration.xsl&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.zookeeper.quorum<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>master,slave1,slave2<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 集群主机的 hostname --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span>The directory shared by RegionServers.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.zookeeper.property.dataDir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>/export/zookeeper<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span>Property from ZooKeeper config zoo.cfg.</span><br><span class="line">    The directory where the snapshot is stored.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.rootdir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>hdfs://nscluster:8020/hbase<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 注意这里要和你 Hadoop hdfs-site.xml 配置中的 fs.defaultFS 设置相同 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span>The directory shared by RegionServers.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.cluster.distributed<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span>The mode the cluster will be in. Possible values are</span><br><span class="line">      false: standalone and pseudo-distributed setups with managed Zookeeper</span><br><span class="line">      true: fully-distributed with unmanaged Zookeeper Quorum (see hbase-env.sh)</span><br><span class="line">    <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="regionservers"><a href="#regionservers" class="headerlink" title="regionservers"></a>regionservers</h3><p>修改集群节点信息配置文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/src/hbase-1.2.0/conf/regionservers</span><br></pre></td></tr></table></figure>
+
+<p>清空所有内容，写入以下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">master</span><br><span class="line">slave1</span><br><span class="line">slave2</span><br></pre></td></tr></table></figure>
+
+<h3 id="拷贝Hadoop配置"><a href="#拷贝Hadoop配置" class="headerlink" title="拷贝Hadoop配置"></a>拷贝Hadoop配置</h3><p>因为我 Hadoop 使用了 ZooKeeper 高可用模式， HBase 在没有 Hadoop 配置的情况下会找不到 HDFS 的地址。所以需要将配置拷贝到它的目录。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cp $HADOOP_HOME/etc/hadoop/core-site.xml $HBASE_HOME/conf/</span><br><span class="line">cp $HADOOP_HOME/etc/hadoop/hdfs-site.xml $HBASE_HOME/conf/</span><br></pre></td></tr></table></figure>
+
+<h3 id="集群同步配置"><a href="#集群同步配置" class="headerlink" title="集群同步配置"></a>集群同步配置</h3><p>将配置文件同步到集群中的其他机器中去</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp -r /usr/local/src/hbase-1.2.0 slave1:/usr/local/src/</span><br><span class="line">scp -r /usr/local/src/hbase-1.2.0 slave2:/usr/local/src/</span><br></pre></td></tr></table></figure>
+
+<p>参考 <a href="https://blackyau.cc/17#%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F">HBase配置-系统环境变量</a> 在其他机器中也设置好系统环境变量</p>
+<h3 id="运行分布式模式"><a href="#运行分布式模式" class="headerlink" title="运行分布式模式"></a>运行分布式模式</h3><blockquote>
+<p>在运行之前要先启动 Hadoop ，启动 Hadoop 的命令根据你自己的环境而定</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start-hbase.sh</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>jps</code> 查看正在运行的进程是否存在 <code>HMaster</code> 和 <code>HRegionServer</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]# jps</span><br><span class="line">11538 HMaster</span><br><span class="line">10692 DataNode</span><br><span class="line">10884 NodeManager</span><br><span class="line">10517 JournalNode</span><br><span class="line">11221 DFSZKFailoverController</span><br><span class="line">12008 Jps</span><br><span class="line">11657 HRegionServer</span><br><span class="line">10795 ResourceManager</span><br><span class="line">10446 QuorumPeerMain</span><br><span class="line">10574 NameNode</span><br></pre></td></tr></table></figure>
+
+<p>WEB端</p>
+<p><a target="_blank" rel="noopener" href="http://master:16010/">http://master:16010</a></p>
+<p><img data-src="https://st.blackyau.net/blog/17/1.png" alt="WEB端截图"></p>
+<h2 id="HBase-Shell"><a href="#HBase-Shell" class="headerlink" title="HBase Shell"></a>HBase Shell</h2><p>启动 HBase Shell</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase shell</span><br></pre></td></tr></table></figure>
+
+<p>如果出现以下报错</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SLF4J: Class path contains multiple SLF4J bindings.</span><br><span class="line">SLF4J: Found binding in [jar:file:/usr/local/src/hbase-1.2.0/lib/slf4j-log4j12-1.7.5.jar!/org/slf4j/impl/StaticLoggerBinder.class]</span><br><span class="line">SLF4J: Found binding in [jar:file:/usr/local/hadoop-2.6.0/share/hadoop/common/lib/slf4j-log4j12-1.7.5.jar!/org/slf4j/impl/StaticLoggerBinder.class]</span><br><span class="line">SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.</span><br><span class="line">SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]</span><br></pre></td></tr></table></figure>
+
+<p>是因为 <code>HBase</code> 自带的 <code>Jar</code> 包和 <code>Hadoop</code> 的包有冲突，删除冲突包即可</p>
+<p>接下来开始创建 数据库&#x2F;表 插入数据。注意，创建表的时候如果不指定数据库，表就会被放进 <code>default</code> 表中</p>
+<p>表结构如下:</p>
+<escape>
+<table>
+  <tr>
+    <th rowspan="2" align="center">Row Key</th>
+    <th colspan="2" align="center">inside</th>
+    <th colspan="2" align="center">outside</th>
+  </tr>
+  <tr>
+    <td align="center">name</td>
+    <td align="center">age</td>
+    <td align="center">slang</td>
+    <td align="center">zh</td>
+  </tr>
+  <tr>
+    <td align="center">1</td>
+    <td align="center">tom</td>
+    <td align="center">3</td>
+    <td align="center">cat</td>
+    <td align="center">mao</td>
+  </tr>
+  <tr>
+    <td align="center">2</td>
+    <td align="center">jerry</td>
+    <td align="center">2</td>
+    <td align="center">rat</td>
+    <td align="center">laoshu</td>
+  </tr>
+</table>
+</escape>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">create_namespace <span class="string">&#x27;test&#x27;</span> <span class="comment">--创建数据库</span></span><br><span class="line"><span class="keyword">create</span> <span class="string">&#x27;test:emp&#x27;</span>, <span class="string">&#x27;inside&#x27;</span>, <span class="string">&#x27;outside&#x27;</span> <span class="comment">--在test库中创建emp表</span></span><br><span class="line">list_namespace_tables <span class="string">&#x27;test&#x27;</span> <span class="comment">--查看test中的表</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">TABLE</span></span><br><span class="line">emp</span><br><span class="line"><span class="number">1</span> <span class="type">row</span>(s) <span class="keyword">in</span> <span class="number">0.0130</span> seconds</span><br></pre></td></tr></table></figure>
+
+<p>查看表结构</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">desc</span> <span class="string">&#x27;test:emp&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Table</span> test:emp <span class="keyword">is</span> ENABLED</span><br><span class="line">test:emp</span><br><span class="line"><span class="keyword">COLUMN</span> FAMILIES DESCRIPTION</span><br><span class="line">&#123;NAME <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;inside&#x27;</span>, BLOOMFILTER <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;ROW&#x27;</span>, VERSIONS <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;1&#x27;</span>, IN_MEMORY <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;false&#x27;</span>, KEEP_DELETED_CELLS <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;FALSE&#x27;</span>, DATA_BLOCK_ENCODING <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;NONE&#x27;</span>, TTL <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;FOREVER&#x27;</span>, COMPRESSION <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;NONE&#x27;</span>, MIN_VERSIONS <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;0&#x27;</span>, BLOCKCACHE <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;true&#x27;</span>, BLOCKSIZE <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;65536&#x27;</span>, REPLICATION_SCOPE <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;0&#x27;</span>&#125;</span><br><span class="line">&#123;NAME <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;outside&#x27;</span>, BLOOMFILTER <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;ROW&#x27;</span>, VERSIONS <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;1&#x27;</span>, IN_MEMORY <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;false&#x27;</span>, KEEP_DELETED_CELLS <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;FALSE&#x27;</span>, DATA_BLOCK_ENCODING <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;NONE&#x27;</span>, TTL <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;FOREVER&#x27;</span>, COMPRESSION <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;NONE&#x27;</span>, MIN_VERSIONS <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;0&#x27;</span>, BLOCKCACHE <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;true&#x27;</span>, BLOCKSIZE <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;65536&#x27;</span>, REPLICATION_SCOPE <span class="operator">=</span><span class="operator">&gt;</span> <span class="string">&#x27;0&#x27;</span>&#125;</span><br><span class="line"><span class="number">2</span> <span class="type">row</span>(s) <span class="keyword">in</span> <span class="number">0.0410</span> seconds</span><br></pre></td></tr></table></figure>
+
+<p>插入数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">put <span class="string">&#x27;test:emp&#x27;</span>, <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;inside:name&#x27;</span>, <span class="string">&#x27;tom&#x27;</span></span><br><span class="line">put <span class="string">&#x27;test:emp&#x27;</span>, <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;inside:age&#x27;</span>, <span class="string">&#x27;3&#x27;</span></span><br><span class="line">put <span class="string">&#x27;test:emp&#x27;</span>, <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;outside:slang&#x27;</span>, <span class="string">&#x27;cat&#x27;</span></span><br><span class="line">put <span class="string">&#x27;test:emp&#x27;</span>, <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;outside:zh&#x27;</span>, <span class="string">&#x27;mao&#x27;</span></span><br><span class="line">put <span class="string">&#x27;test:emp&#x27;</span>, <span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;inside:name&#x27;</span>, <span class="string">&#x27;jerry&#x27;</span></span><br><span class="line">put <span class="string">&#x27;test:emp&#x27;</span>, <span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;inside:age&#x27;</span>, <span class="string">&#x27;2&#x27;</span></span><br><span class="line">put <span class="string">&#x27;test:emp&#x27;</span>, <span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;outside:slang&#x27;</span>, <span class="string">&#x27;rat&#x27;</span></span><br><span class="line">put <span class="string">&#x27;test:emp&#x27;</span>, <span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;outside:zh&#x27;</span>, <span class="string">&#x27;laoshu&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>扫描表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scan <span class="string">&#x27;test:emp&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ROW</span>    <span class="keyword">COLUMN</span><span class="operator">+</span>CELL</span><br><span class="line"></span><br><span class="line"> <span class="number">1</span>     <span class="keyword">column</span><span class="operator">=</span>inside:age, <span class="type">timestamp</span><span class="operator">=</span><span class="number">1559458876365</span>, <span class="keyword">value</span><span class="operator">=</span><span class="number">3</span></span><br><span class="line"> <span class="number">1</span>     <span class="keyword">column</span><span class="operator">=</span>inside:name, <span class="type">timestamp</span><span class="operator">=</span><span class="number">1559458822328</span>, <span class="keyword">value</span><span class="operator">=</span>tom</span><br><span class="line"> <span class="number">1</span>     <span class="keyword">column</span><span class="operator">=</span>outside:slang, <span class="type">timestamp</span><span class="operator">=</span><span class="number">1559459016767</span>, <span class="keyword">value</span><span class="operator">=</span>cat</span><br><span class="line"> <span class="number">1</span>     <span class="keyword">column</span><span class="operator">=</span>outside:zh, <span class="type">timestamp</span><span class="operator">=</span><span class="number">1559459100544</span>, <span class="keyword">value</span><span class="operator">=</span>mao</span><br><span class="line"> <span class="number">2</span>     <span class="keyword">column</span><span class="operator">=</span>inside:age, <span class="type">timestamp</span><span class="operator">=</span><span class="number">1559459253516</span>, <span class="keyword">value</span><span class="operator">=</span><span class="number">2</span></span><br><span class="line"> <span class="number">2</span>     <span class="keyword">column</span><span class="operator">=</span>inside:name, <span class="type">timestamp</span><span class="operator">=</span><span class="number">1559459242949</span>, <span class="keyword">value</span><span class="operator">=</span>jerry</span><br><span class="line"> <span class="number">2</span>     <span class="keyword">column</span><span class="operator">=</span>outside:slang, <span class="type">timestamp</span><span class="operator">=</span><span class="number">1559459336624</span>, <span class="keyword">value</span><span class="operator">=</span>rat</span><br><span class="line"> <span class="number">2</span>     <span class="keyword">column</span><span class="operator">=</span>outside:zh, <span class="type">timestamp</span><span class="operator">=</span><span class="number">1559459347676</span>, <span class="keyword">value</span><span class="operator">=</span>laoshu</span><br><span class="line"><span class="number">2</span> <span class="type">row</span>(s) <span class="keyword">in</span> <span class="number">0.0190</span> seconds</span><br></pre></td></tr></table></figure>
+
+<p>删除表数据之前要先禁用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">disable <span class="string">&#x27;test:emp&#x27;</span> <span class="comment">--禁用表</span></span><br><span class="line"><span class="keyword">drop</span> <span class="string">&#x27;test:emp&#x27;</span> <span class="comment">--删除表(先别删,后面导出了再删)</span></span><br></pre></td></tr></table></figure>
+
+<p>退出 <code>HBase Shell</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">quit</span><br></pre></td></tr></table></figure>
+
+<h2 id="导入导出数据"><a href="#导入导出数据" class="headerlink" title="导入导出数据"></a>导入导出数据</h2><p>使用 <code>HBase</code> 自带的类 导出 二进制格式文件</p>
+<blockquote>
+<p>如果不加 <code>file://</code> 就会导出到 <code>HDFS</code> 上面去，如果带了数据库名一定要加 <code>&#39;&#39;</code> 不然导出的数据是空白。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hbase org.apache.hadoop.hbase.mapreduce.Export `test:emp` file:///root/emp_out</span><br><span class="line">ls /root/emp_out/</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">part-m-00000  _SUCCESS</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>之前导出文件后一直找不到,结果是因为我启用的 <code>Hadoop HA</code> 把这个任务分配给了别的机器，所以不在 <code>master</code> 上面。上 <a target="_blank" rel="noopener" href="http://master:8088/">http://master:8088</a> 看看也能知道是谁在运行。</p>
+</blockquote>
+<p><img data-src="https://st.blackyau.net/blog/17/2.png" alt="资源管理器 截图"></p>
+<p>删除表，为导入数据做准备</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase shell</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">disable <span class="string">&#x27;test:emp&#x27;</span> <span class="comment">--禁用表</span></span><br><span class="line"><span class="keyword">drop</span> <span class="string">&#x27;test:emp&#x27;</span> <span class="comment">--删除表</span></span><br><span class="line"><span class="keyword">create</span> <span class="string">&#x27;test:emp&#x27;</span>, <span class="string">&#x27;inside&#x27;</span>, <span class="string">&#x27;outside&#x27;</span> <span class="comment">--新建表(没有同名表无法导入数据)</span></span><br><span class="line">quit</span><br></pre></td></tr></table></figure>
+
+<p>导入之前导出的数据</p>
+<blockquote>
+<p>注意你的 <code>MapReduce</code> 任务会被分配到那台机器上运行，文件要放对位置。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase org.apache.hadoop.hbase.mapreduce.Import `test:emp` file:///root/emp_out</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://hbase.apache.org/1.2/book.html">Apache HBase ™ Reference Guide Version 1.2.12</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/y472360651/article/details/79017308">CSDN@奔跑的豆子_ - HBase-单机模式安装</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/huanlegu0426/p/hbase03.html">博客园@huanlegu0426 - hadoop2.5.1+hbase1.1.2安装与配置</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/jjshouji/article/details/78054556">CSDN@jjshouji - hbase 1.2.6 安装</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u011444062/article/details/81138861">CSDN@疯子. - 大数据系列之数据库Hbase知识整理（三）Hbase的表结构，基本操作，元数据表meta</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.yiibai.com/hbase">易白教程@张新发 - HBase教程</a></p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/25909132">Stack Overflow@Nanda - How to import&#x2F;export hbase data via hdfs (hadoop commands)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a97fbdb2f03f">简书@冯宇Ops - HBase入坑须知(一)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u012882134/article/details/52527469">CSDN@芙兰泣露 - hbase导入导出数据</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/helloxiaozhe/article/details/80325212">CSDN@Data_IT_Farmer - Hbase表两种数据备份方法-导入和导出示例</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_40652340/article/details/78744518">CSDN@weixin_4065234 - Hbase数据库的常用操作命令</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/maligebazi/article/details/79952459">CSDN@niugeblog - hbase 命令详解之namespace与table</a></p>
+<p><a target="_blank" rel="noopener" href="https://3nice.cc/2018/10/01/markdowntable/">3NICE - 解决在Markdown中的表格单元格合并的问题</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>蠢黑通行
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blackyau.cc/17" title="HBase 配置">https://blackyau.cc/17</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/CentOS/" rel="tag"># CentOS</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+              <a href="/tags/HDFS/" rel="tag"># HDFS</a>
+              <a href="/tags/HBase/" rel="tag"># HBase</a>
+              <a href="/tags/Hadoop-HA/" rel="tag"># Hadoop HA</a>
+              <a href="/tags/Hadoop-%E9%AB%98%E5%8F%AF%E7%94%A8/" rel="tag"># Hadoop 高可用</a>
+              <a href="/tags/ZooKeeper/" rel="tag"># ZooKeeper</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/16" rel="prev" title="Hadoop HA 搭建">
+                  <i class="fa fa-angle-left"></i> Hadoop HA 搭建
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/18" rel="next" title="Kafka 配置">
+                  Kafka 配置 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments disqusjs-container">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2016 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蠢黑通行</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div><div class="powered-by">本网站由 <a style="border-bottom: none;"href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" class="theme-link" rel="noopener" target="_blank" title="upyun"><img style="display: inline; vertical-align: middle;" src="https://st.blackyau.net/blog/file/upyun_dark.svg" alt="upyun">提供CDN加速/云储存服务</a> </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/sidebar.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/disqusjs@3.0.2/dist/browser/styles/disqusjs.css" integrity="sha256-71XarXwNr1Td27HmZI9zjY+rMzRdush6/glo6VFXp7o=" crossorigin="anonymous">
+
+<script class="next-config" data-name="disqusjs" type="application/json">{"enable":true,"api":"https://disqusjs-proxy-rose.vercel.app/","apikey":"40wkCy0ewvq5nL9eGvjiJHkBCc35Rk4DIQmje6UJ3vnO1mDt0C1b5yxqlbUeoo6P","shortname":"blackyau","js":{"url":"https://unpkg.com/disqusjs@3.0.2/dist/browser/disqusjs.es2015.umd.min.js","integrity":"sha256-okP99ZQKVpIy7+NogAMpGlIQzJa9XKXhIJcFgdju5bU="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/comments/disqusjs.js"></script>
+
+</body>
+</html>

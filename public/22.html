@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://st.blackyau.net/blog/file/favicon-180x180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://st.blackyau.net/blog/file/favicon-64x64.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://st.blackyau.net/blog/file/favicon-32x32.png">
+  <link rel="mask-icon" href="https://st.blackyau.net/blog/file/favicon-512x512.svg" color="#222">
+  <meta name="google-site-verification" content="nXthYmLKSXqupL96tIOSCBi3yiBjEEkTqK9vEYv808U">
+  <meta name="msvalidate.01" content="56ABC0C6006554B668AA5972B359B773">
+  <meta name="baidu-site-verification" content="VQvGuCkX3O">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blackyau.cc","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/config.js"></script>
+
+    <meta name="description" content="接上文 真机安装 CentOS 7 在安装完毕后，我又给它加了一次硬盘。得益于安装的时候使用了 LVM (Logical Volume Manager) 可以实现不关机扩展当前分区。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux LVM 逻辑卷扩容">
+<meta property="og:url" content="https://blackyau.cc/22">
+<meta property="og:site_name" content="蠢黑通行">
+<meta property="og:description" content="接上文 真机安装 CentOS 7 在安装完毕后，我又给它加了一次硬盘。得益于安装的时候使用了 LVM (Logical Volume Manager) 可以实现不关机扩展当前分区。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://st.blackyau.net/blog/22/Lvm.svg">
+<meta property="article:published_time" content="2019-08-09T03:00:00.000Z">
+<meta property="article:modified_time" content="2019-08-09T06:13:08.000Z">
+<meta property="article:author" content="蠢黑通行">
+<meta property="article:tag" content="CentOS">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="LVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://st.blackyau.net/blog/22/Lvm.svg">
+
+
+<link rel="canonical" href="https://blackyau.cc/22">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blackyau.cc/22","path":"22.html","title":"Linux LVM 逻辑卷扩容"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Linux LVM 逻辑卷扩容 | 蠢黑通行</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKREM40HY8"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TKREM40HY8","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="蠢黑通行" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">蠢黑通行</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个人的全世界</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LVM-%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">LVM 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E7%A1%AC%E7%9B%98"><span class="nav-number">2.</span> <span class="nav-text">安装硬盘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83"><span class="nav-number">3.</span> <span class="nav-text">系统环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E6%89%A9%E5%B1%95"><span class="nav-number">4.</span> <span class="nav-text">开始扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蠢黑通行"
+      src="https://st.blackyau.net/head.jpg">
+  <p class="site-author-name" itemprop="name">蠢黑通行</p>
+  <div class="site-description" itemprop="description">BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。</div>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/blackyau" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;blackyau" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:blackyau426@gmail.com" title="E-Mail → mailto:blackyau426@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/black_yau" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;black_yau" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://bbs.letitfly.me/" title="https:&#x2F;&#x2F;bbs.letitfly.me" rel="noopener" target="_blank">LIF BBS</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.ixk.me/" title="https:&#x2F;&#x2F;www.ixk.me" rel="noopener" target="_blank">青空之蓝</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blackyau.cc/22">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://st.blackyau.net/head.jpg">
+      <meta itemprop="name" content="蠢黑通行">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蠢黑通行">
+      <meta itemprop="description" content="BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Linux LVM 逻辑卷扩容 | 蠢黑通行">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux LVM 逻辑卷扩容
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2019-08-09 11:00:00 / 修改时间：14:13:08" itemprop="dateCreated datePublished" datetime="2019-08-09T11:00:00+08:00">2019-08-09</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>接上文 <a href="/10" title="真机安装 CentOS 7">真机安装 CentOS 7</a> 在安装完毕后，我又给它加了一次硬盘。得益于安装的时候使用了 LVM (Logical Volume Manager) 可以实现不关机扩展当前分区。</p>
+<span id="more"></span>
+
+<h2 id="LVM-介绍"><a href="#LVM-介绍" class="headerlink" title="LVM 介绍"></a>LVM 介绍</h2><p><img data-src="https://st.blackyau.net/blog/22/Lvm.svg" alt="Lvm"></p>
+<blockquote>
+<p>图片来自 <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Lvm.svg#/media/File:Lvm.svg">Wikimedia Logical Volume Manager (Linux)</a></p>
+</blockquote>
+<ul>
+<li>PV：物理卷，PV处于LVM系统最低层，它可以是整个硬盘，或者与磁盘分区具有相同功能的设备（如RAID），但和基本的物理存储介质相比较，多了与LVM相关管理参数</li>
+<li>VG：卷组，创建在PV之上，由一个或多个PV组成，可以在VG上创建一个或多个“LVM分区”（逻辑卷），功能类似非LVM系统的物理硬盘</li>
+<li>LV：逻辑卷，从VG中分割出的一块空间，创建之后其大小可以伸缩，在LV上可以创建文件系统（如&#x2F;var,&#x2F;home）</li>
+<li>PE：物理区域，每一个PV被划分为基本单元（也被称为PE），具有唯一编号的PE是可以被LVM寻址的最小存储单元，默认为4MB</li>
+</ul>
+<p>本次扩容就是将设备转换为<code>物理卷</code>，然后将其加入<code>卷组</code>，最后再将<code>卷组</code>的剩余空间划分给<code>逻辑卷</code></p>
+<h2 id="安装硬盘"><a href="#安装硬盘" class="headerlink" title="安装硬盘"></a>安装硬盘</h2><p>这一步没啥可说的了吧，直接把硬盘接上主板就行了</p>
+<h2 id="系统环境"><a href="#系统环境" class="headerlink" title="系统环境"></a>系统环境</h2><table>
+<thead>
+<tr>
+<th>设备名</th>
+<th>大小</th>
+<th>状态</th>
+<th>所属卷组名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&#x2F;dev&#x2F;sdc</td>
+<td>500.1 GB</td>
+<td>新加盘</td>
+<td>无</td>
+</tr>
+<tr>
+<td>&#x2F;dev&#x2F;sdb</td>
+<td>3000.6 GB</td>
+<td>原有数据盘</td>
+<td>all</td>
+</tr>
+<tr>
+<td>&#x2F;dev&#x2F;sda</td>
+<td>500.1 GB</td>
+<td>原有数据盘</td>
+<td>all</td>
+</tr>
+<tr>
+<td>&#x2F;dev&#x2F;sdd</td>
+<td>320.1 GB</td>
+<td>系统盘+数据盘</td>
+<td>centos all</td>
+</tr>
+</tbody></table>
+<p>这里我会将 <code>/dev/sdc</code> 划分进 <code>all</code> 卷组中以扩大它的可用容量</p>
+<p>查询磁盘空间信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df -H</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Filesystem               Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/centos-root   54G  2.1G   52G   4% /</span><br><span class="line">devtmpfs                 889M     0  889M   0% /dev</span><br><span class="line">tmpfs                    902M     0  902M   0% /dev/shm</span><br><span class="line">tmpfs                    902M   18M  884M   2% /run</span><br><span class="line">tmpfs                    902M     0  902M   0% /sys/fs/cgroup</span><br><span class="line">/dev/mapper/all-home     3.8T  3.6T  252G  94% /home</span><br><span class="line">/dev/sdd1                1.1G  143M  811M  15% /boot</span><br><span class="line">tmpfs                    181M     0  181M   0% /run/user/1000</span><br></pre></td></tr></table></figure>
+
+<p>查询物理卷信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pvs</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PV         VG     Fmt  Attr PSize    PFree</span><br><span class="line">/dev/sda1  all    lvm2 a--  &lt;465.76g    0 </span><br><span class="line">/dev/sdb1  all    lvm2 a--    &lt;2.73t    0 </span><br><span class="line">/dev/sdd2  all    lvm2 a--  &lt;245.08g    0 </span><br><span class="line">/dev/sdd3  centos lvm2 a--    52.00g 4.00m</span><br></pre></td></tr></table></figure>
+
+<p>查询硬盘分区表情况</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo fdisk -l</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">Disk /dev/sdc: 500.1 GB, 500107862016 bytes, 976773168 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 4096 bytes</span><br><span class="line">I/O size (minimum/optimal): 4096 bytes / 4096 bytes</span><br><span class="line">Disk label type: dos</span><br><span class="line">Disk identifier: 0x95fe95fe</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/sdc1   *        4096   976773119   488384512    7  HPFS/NTFS/exFAT</span><br><span class="line"></span><br><span class="line">Disk /dev/sdd: 320.1 GB, 320072933376 bytes, 625142448 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disk label type: dos</span><br><span class="line">Disk identifier: 0x00084660</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/sdd1   *        2048     2099199     1048576   83  Linux</span><br><span class="line">/dev/sdd2         2099200   516073471   256987136   8e  Linux LVM</span><br><span class="line">/dev/sdd3       516073472   625141759    54534144   8e  Linux LVM</span><br><span class="line">WARNING: fdisk GPT support is currently new, and therefore in an experimental phase. Use at your own discretion.</span><br><span class="line"></span><br><span class="line">Disk /dev/sdb: 3000.6 GB, 3000592982016 bytes, 5860533168 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 4096 bytes</span><br><span class="line">I/O size (minimum/optimal): 4096 bytes / 4096 bytes</span><br><span class="line">Disk label type: gpt</span><br><span class="line">Disk identifier: BDF3367A-EECA-4A93-BE0B-10D867E87AF1</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">        Start          End    Size  Type            Name</span></span><br><span class="line"> 1         2048   5860532223    2.7T  Linux LVM       </span><br><span class="line"></span><br><span class="line">Disk /dev/sda: 500.1 GB, 500107862016 bytes, 976773168 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 4096 bytes</span><br><span class="line">I/O size (minimum/optimal): 4096 bytes / 4096 bytes</span><br><span class="line">Disk label type: dos</span><br><span class="line">Disk identifier: 0x000c3c53</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/sda1            2048   976773119   488385536   8e  Linux LVM</span><br><span class="line"></span><br><span class="line">Disk /dev/mapper/centos-root: 53.7 GB, 53687091200 bytes, 104857600 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disk /dev/mapper/centos-swap: 2147 MB, 2147483648 bytes, 4194304 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disk /dev/mapper/all-home: 3763.8 GB, 3763842580480 bytes, 7351255040 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 4096 bytes</span><br><span class="line">I/O size (minimum/optimal): 4096 bytes / 4096 bytes</span><br></pre></td></tr></table></figure>
+
+<h2 id="开始扩展"><a href="#开始扩展" class="headerlink" title="开始扩展"></a>开始扩展</h2><p>首先将 <code>/dev/sdc1</code> 转换为物理卷(PV)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pvcreate /dev/sdc1 /dev/sde</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WARNING: ext4 signature detected on /dev/sdc1 at offset 1080. Wipe it? [y/n]: y</span><br><span class="line">  Wiping ext4 signature on /dev/sdc1.</span><br><span class="line">  Physical volume &quot;/dev/sdc1&quot; successfully created.</span><br></pre></td></tr></table></figure>
+
+<p>查看物理卷(PV)信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pvs</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">PV         VG     Fmt  Attr PSize    PFree   </span><br><span class="line">/dev/sda1  all    lvm2 a--  &lt;465.76g       0 </span><br><span class="line">/dev/sdb1  all    lvm2 a--    &lt;2.73t       0 </span><br><span class="line">/dev/sdc1         lvm2 ---  &lt;465.76g &lt;465.76g</span><br><span class="line">/dev/sdd2  all    lvm2 a--  &lt;245.08g       0 </span><br><span class="line">/dev/sdd3  centos lvm2 a--    52.00g    4.00m</span><br></pre></td></tr></table></figure>
+
+<p>将物理卷加入卷组(VG) <code>all</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vgextend all /dev/sdc1</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Volume group &quot;all&quot; successfully extended</span><br></pre></td></tr></table></figure>
+
+<p>查看物理卷(PV)信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pvs</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">PV         VG     Fmt  Attr PSize    PFree   </span><br><span class="line">/dev/sda1  all    lvm2 a--  &lt;465.76g       0 </span><br><span class="line">/dev/sdb1  all    lvm2 a--    &lt;2.73t       0 </span><br><span class="line">/dev/sdc1  all    lvm2 a--  &lt;465.76g &lt;465.76g</span><br><span class="line">/dev/sdd2  all    lvm2 a--  &lt;245.08g       0 </span><br><span class="line">/dev/sdd3  centos lvm2 a--    52.00g    4.00m</span><br></pre></td></tr></table></figure>
+
+<p>查看逻辑卷(LV)信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo lvs</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LV   VG     Attr       LSize  Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert</span><br><span class="line">home all    -wi-ao----  3.42t                                                    </span><br><span class="line">root centos -wi-ao---- 50.00g                                                    </span><br><span class="line">swap centos -wi-ao----  2.00g  </span><br></pre></td></tr></table></figure>
+
+<p>看起来容量并没有变大，这是因为还需要将卷组中的空闲空间扩展到 <code>/home</code> 中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo lvextend -L +465.75g /dev/mapper/all-home</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Size of logical volume all/home changed from 3.42 TiB (897370 extents) to &lt;3.88 TiB (1016602 extents).</span><br><span class="line">Logical volume all/home successfully resized.</span><br></pre></td></tr></table></figure>
+
+<p>查看逻辑卷信息(LV)，可以发现空间已经变大了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo lvs</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LV   VG     Attr       LSize  Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert</span><br><span class="line">home all    -wi-ao---- &lt;3.88t                                                    </span><br><span class="line">root centos -wi-ao---- 50.00g                                                    </span><br><span class="line">swap centos -wi-ao----  2.00g   </span><br></pre></td></tr></table></figure>
+
+<p>查看物理卷(PV)信息，可以发现物理卷的可用空间已经变小了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pvs</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">PV         VG     Fmt  Attr PSize    PFree</span><br><span class="line">/dev/sda1  all    lvm2 a--  &lt;465.76g    0 </span><br><span class="line">/dev/sdb1  all    lvm2 a--    &lt;2.73t    0 </span><br><span class="line">/dev/sdc1  all    lvm2 a--  &lt;465.76g 8.00m</span><br><span class="line">/dev/sdd2  all    lvm2 a--  &lt;245.08g    0 </span><br><span class="line">/dev/sdd3  centos lvm2 a--    52.00g 4.00m</span><br></pre></td></tr></table></figure>
+
+<p>使扩容生效 <code>xfs_groufs</code> 针对 xfs文件系统</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mount</span><br><span class="line">sudo xfs_growfs /dev/mapper/all-home</span><br></pre></td></tr></table></figure>
+
+<p>查看剩余空间信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df -h</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Filesystem               Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/centos-root   50G  2.0G   49G   4% /</span><br><span class="line">devtmpfs                 848M     0  848M   0% /dev</span><br><span class="line">tmpfs                    860M     0  860M   0% /dev/shm</span><br><span class="line">tmpfs                    860M   17M  843M   2% /run</span><br><span class="line">tmpfs                    860M     0  860M   0% /sys/fs/cgroup</span><br><span class="line">/dev/mapper/all-home     3.9T  3.2T  701G  83% /home</span><br><span class="line">/dev/sdd1                976M  136M  774M  15% /boot</span><br><span class="line">tmpfs                    172M     0  172M   0% /run/user/1000</span><br></pre></td></tr></table></figure>
+
+<p><code>/home</code> 空间变大了0.4T,扩容成功</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/yaofengyaofeng/article/details/82353282">https://blog.csdn.net/yaofengyaofeng/article/details/82353282</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u012439646/article/details/73380197">https://blog.csdn.net/u012439646/article/details/73380197</a></p>
+<p><a target="_blank" rel="noopener" href="http://lzw.me/a/linux-lvm.html">http://lzw.me/a/linux-lvm.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/youjin/article/details/79137203">https://blog.csdn.net/youjin/article/details/79137203</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_27281257/article/details/81603410">https://blog.csdn.net/qq_27281257/article/details/81603410</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42350212/article/details/80570211">https://blog.csdn.net/weixin_42350212/article/details/80570211</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>蠢黑通行
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blackyau.cc/22" title="Linux LVM 逻辑卷扩容">https://blackyau.cc/22</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/CentOS/" rel="tag"># CentOS</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/LVM/" rel="tag"># LVM</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/21" rel="prev" title="微信小程序开发记录">
+                  <i class="fa fa-angle-left"></i> 微信小程序开发记录
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/23" rel="next" title="IPTV 与互联网融合">
+                  IPTV 与互联网融合 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments disqusjs-container">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2016 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蠢黑通行</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div><div class="powered-by">本网站由 <a style="border-bottom: none;"href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" class="theme-link" rel="noopener" target="_blank" title="upyun"><img style="display: inline; vertical-align: middle;" src="https://st.blackyau.net/blog/file/upyun_dark.svg" alt="upyun">提供CDN加速/云储存服务</a> </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/sidebar.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/disqusjs@3.0.2/dist/browser/styles/disqusjs.css" integrity="sha256-71XarXwNr1Td27HmZI9zjY+rMzRdush6/glo6VFXp7o=" crossorigin="anonymous">
+
+<script class="next-config" data-name="disqusjs" type="application/json">{"enable":true,"api":"https://disqusjs-proxy-rose.vercel.app/","apikey":"40wkCy0ewvq5nL9eGvjiJHkBCc35Rk4DIQmje6UJ3vnO1mDt0C1b5yxqlbUeoo6P","shortname":"blackyau","js":{"url":"https://unpkg.com/disqusjs@3.0.2/dist/browser/disqusjs.es2015.umd.min.js","integrity":"sha256-okP99ZQKVpIy7+NogAMpGlIQzJa9XKXhIJcFgdju5bU="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/comments/disqusjs.js"></script>
+
+</body>
+</html>

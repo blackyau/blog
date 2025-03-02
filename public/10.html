@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://st.blackyau.net/blog/file/favicon-180x180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://st.blackyau.net/blog/file/favicon-64x64.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://st.blackyau.net/blog/file/favicon-32x32.png">
+  <link rel="mask-icon" href="https://st.blackyau.net/blog/file/favicon-512x512.svg" color="#222">
+  <meta name="google-site-verification" content="nXthYmLKSXqupL96tIOSCBi3yiBjEEkTqK9vEYv808U">
+  <meta name="msvalidate.01" content="56ABC0C6006554B668AA5972B359B773">
+  <meta name="baidu-site-verification" content="VQvGuCkX3O">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blackyau.cc","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/config.js"></script>
+
+    <meta name="description" content="在家里用一台老古董台式机装了个 CentOS 遇到了一些以前用云服务器根本不会遇到的问题，这里也就做一下记录。 警告CentOS Linux 7 已经于 2024 年 6 月 30 日终止生命周期（EOL），不建议继续在继续使用 CentOS 7 了，推荐使用 Rocky Linux 替代。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="真机安装 CentOS 7">
+<meta property="og:url" content="https://blackyau.cc/10">
+<meta property="og:site_name" content="蠢黑通行">
+<meta property="og:description" content="在家里用一台老古董台式机装了个 CentOS 遇到了一些以前用云服务器根本不会遇到的问题，这里也就做一下记录。 警告CentOS Linux 7 已经于 2024 年 6 月 30 日终止生命周期（EOL），不建议继续在继续使用 CentOS 7 了，推荐使用 Rocky Linux 替代。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://st.blackyau.net/blog/10/1.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/10/2.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/10/3.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/10/4.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/10/5.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/10/6.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/10/7.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/10/8.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/10/9.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/10/10.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/10/11.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/10/12.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/10/13.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/10/14.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/10/15.png">
+<meta property="article:published_time" content="2019-03-27T11:45:17.000Z">
+<meta property="article:modified_time" content="2025-03-02T12:55:01.000Z">
+<meta property="article:author" content="蠢黑通行">
+<meta property="article:tag" content="CentOS">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://st.blackyau.net/blog/10/1.png">
+
+
+<link rel="canonical" href="https://blackyau.cc/10">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blackyau.cc/10","path":"10.html","title":"真机安装 CentOS 7"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>真机安装 CentOS 7 | 蠢黑通行</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKREM40HY8"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TKREM40HY8","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="蠢黑通行" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">蠢黑通行</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个人的全世界</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AD%A6%E5%91%8A"><span class="nav-number">1.</span> <span class="nav-text">警告</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-number"></span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E5%85%A5%E5%AE%89%E8%A3%85%E5%90%91%E5%AF%BC"><span class="nav-number"></span> <span class="nav-text">进入安装向导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%90%91%E5%AF%BC"><span class="nav-number"></span> <span class="nav-text">安装向导</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E8%AF%AD%E8%A8%80"><span class="nav-number"></span> <span class="nav-text">选择语言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E7%9B%98%E5%88%86%E5%8C%BA"><span class="nav-number"></span> <span class="nav-text">硬盘分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E9%97%B4"><span class="nav-number"></span> <span class="nav-text">时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%99%BB%E9%99%86%E5%87%AD%E8%AF%81"><span class="nav-number"></span> <span class="nav-text">登陆凭证</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%AE%8C%E6%AF%95"><span class="nav-number"></span> <span class="nav-text">安装完毕</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number"></span> <span class="nav-text">参考:</span></a></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蠢黑通行"
+      src="https://st.blackyau.net/head.jpg">
+  <p class="site-author-name" itemprop="name">蠢黑通行</p>
+  <div class="site-description" itemprop="description">BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。</div>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/blackyau" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;blackyau" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:blackyau426@gmail.com" title="E-Mail → mailto:blackyau426@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/black_yau" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;black_yau" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://bbs.letitfly.me/" title="https:&#x2F;&#x2F;bbs.letitfly.me" rel="noopener" target="_blank">LIF BBS</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.ixk.me/" title="https:&#x2F;&#x2F;www.ixk.me" rel="noopener" target="_blank">青空之蓝</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blackyau.cc/10">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://st.blackyau.net/head.jpg">
+      <meta itemprop="name" content="蠢黑通行">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蠢黑通行">
+      <meta itemprop="description" content="BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="真机安装 CentOS 7 | 蠢黑通行">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          真机安装 CentOS 7
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-03-27 19:45:17" itemprop="dateCreated datePublished" datetime="2019-03-27T19:45:17+08:00">2019-03-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-02 20:55:01" itemprop="dateModified" datetime="2025-03-02T20:55:01+08:00">2025-03-02</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在家里用一台老古董台式机装了个 CentOS 遇到了一些以前用云服务器根本不会遇到的问题，这里也就做一下记录。</p>
+<div class="note danger"><h4 id="警告"><a href="#警告" class="headerlink" title="警告"></a>警告</h4><p>CentOS Linux 7 已经于 2024 年 6 月 30 日终止生命周期（EOL），不建议继续在继续使用 CentOS 7 了，推荐使用 <a target="_blank" rel="noopener" href="https://rockylinux.org/">Rocky Linux</a> 替代。</p>
+</div>
+
+<span id="more"></span>
+
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>直接在 <a target="_blank" rel="noopener" href="https://www.centos.org/download/">官网</a> 下载的完整镜像，然后用 UltraISO 写进U盘制作成启动盘的。其实在安装 CentOS 之前，我为了安装 Ubuntu 断断续续折腾了两天的时间。就是初始化安装完毕后，始终进不去系统实在是搞不明白所以就转投了 CentOS 。</p>
+<h2 id="进入安装向导"><a href="#进入安装向导" class="headerlink" title="进入安装向导"></a>进入安装向导</h2><p>使用 <code>UEFI</code> 方式从U盘启动后，会进入到这个界面。👇</p>
+<p><img data-src="https://st.blackyau.net/blog/10/1.png" alt="1"></p>
+<p>按 <code>e</code> 编辑一下(如果是使用 <code>Legacy BIOS</code> 启动，则按 <code>tab</code> 键)，将第一行的 <code>linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:.......</code> 👇</p>
+<p><img data-src="https://st.blackyau.net/blog/10/2.png" alt="2"></p>
+<p>改为下面的 <code>linuxefi /images/pxeboot/vmlinuz initrd=initrd.img linux dd quiet</code> 这里是为了确定启动盘的 <code>设备名</code> 便于后续的安装。👇</p>
+<p><img data-src="https://st.blackyau.net/blog/10/3.png" alt="3"></p>
+<p>按下 <code>Ctrl-x</code> 后，等待片刻你就会在这里停下来。最好在这里拍个照记录一下，自己通过 <code>LABEL</code> 和 <code>TYPE</code> 记住 CentOS 启动盘的 <code>设备名</code> 。（下图是 <code>sda4</code> ）👇</p>
+<p><img data-src="https://st.blackyau.net/blog/10/4.png" alt="4"></p>
+<p>按电源键重启计算机，还是从U盘启动。还是按 <code>e</code> 编辑一下，不过这次要把第一行修改为 <code>linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:/dev/设备名 quiet</code> 。（下图是 <code>sda4</code> ）然后按下<code>Ctrl+x</code> 进入安装向导。</p>
+<p><img data-src="https://st.blackyau.net/blog/10/5.png" alt="5"></p>
+<p><img data-src="https://st.blackyau.net/blog/10/6.png" alt="6"></p>
+<h2 id="安装向导"><a href="#安装向导" class="headerlink" title="安装向导"></a>安装向导</h2><h3 id="选择语言"><a href="#选择语言" class="headerlink" title="选择语言"></a>选择语言</h3><p>毫不犹豫的选择 <code>English</code> ，遇到了一些问题比较方便找到解决方法。</p>
+<p><img data-src="https://st.blackyau.net/blog/10/7.png" alt="7"></p>
+<h3 id="硬盘分区"><a href="#硬盘分区" class="headerlink" title="硬盘分区"></a>硬盘分区</h3><p>点击 <code>SYSTEM - INSTALLATION DESTINATION</code> </p>
+<p><img data-src="https://st.blackyau.net/blog/10/8.png" alt="8"></p>
+<p>选中要作为启动盘的硬盘，并点击左下方的 <code>Set as Boot Device</code> </p>
+<p><img data-src="https://st.blackyau.net/blog/10/9.jpg" alt="9"></p>
+<p>因为我有多个物理磁盘，这里我使用了手动分配。并使用 LVM 进行磁盘管理，方便后续的扩容。</p>
+<p>点击下面的 <code>x storage devices selected</code> 勾选上所有磁盘，在进行下一步的处理。</p>
+<p><img data-src="https://st.blackyau.net/blog/10/10.jpg" alt="10"></p>
+<p>添加分区后，点击左侧 <code>Volume Group - Modify</code> 创建一个名为 <code>all</code> 分组，并选择了所有的磁盘。再逐步调整。</p>
+<p>我的设置如下：</p>
+<p><img data-src="https://st.blackyau.net/blog/10/11.jpg" alt="11"></p>
+<p><img data-src="https://st.blackyau.net/blog/10/12.jpg" alt="12"></p>
+<p>还需要注意一下， <code>bios</code> 不能使用 <code>LVM</code> 分组。文件系统也不能使用 <code>LVM</code> ，这里的 <code>/</code> 和 <code>swap</code> 分区大小请各位根据自己的情况而定。</p>
+<h3 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h3><p>磁盘配置完毕后，建议配置一下时间。建议与计算机当前当地时间保持一致，或者是你期望的位置。</p>
+<p><img data-src="https://st.blackyau.net/blog/10/13.jpg" alt="13"></p>
+<h3 id="登陆凭证"><a href="#登陆凭证" class="headerlink" title="登陆凭证"></a>登陆凭证</h3><p>一切准备就绪后，点击右下方的 <code>Begin Installation</code> 即可开始最后的登陆凭证设置。这里就不再赘述。</p>
+<p><img data-src="https://st.blackyau.net/blog/10/14.png" alt="14"></p>
+<h2 id="安装完毕"><a href="#安装完毕" class="headerlink" title="安装完毕"></a>安装完毕</h2><p><img data-src="https://st.blackyau.net/blog/10/15.png" alt="15"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考:"></a>参考:</h2><p><a target="_blank" rel="noopener" href="http://linux.vbird.org/linux_basic/0157installcentos7.php">鳥哥的 Linux 私房菜 - 第三章、安裝 CentOS7.x</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/35161351">知乎@cenbug - 真机安装CentOS7&#x2F;Linux</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/wudongyu/p/6673784.html">博客园@期待某一天 - 笔记本真机安装centos7</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>蠢黑通行
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blackyau.cc/10" title="真机安装 CentOS 7">https://blackyau.cc/10</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/CentOS/" rel="tag"># CentOS</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/9" rel="prev" title="使用 PGP/GPG 进行数字签名加密解密">
+                  <i class="fa fa-angle-left"></i> 使用 PGP/GPG 进行数字签名加密解密
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/11" rel="next" title="Hadoop 伪分布部署">
+                  Hadoop 伪分布部署 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments disqusjs-container">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2016 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蠢黑通行</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div><div class="powered-by">本网站由 <a style="border-bottom: none;"href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" class="theme-link" rel="noopener" target="_blank" title="upyun"><img style="display: inline; vertical-align: middle;" src="https://st.blackyau.net/blog/file/upyun_dark.svg" alt="upyun">提供CDN加速/云储存服务</a> </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/sidebar.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/disqusjs@3.0.2/dist/browser/styles/disqusjs.css" integrity="sha256-71XarXwNr1Td27HmZI9zjY+rMzRdush6/glo6VFXp7o=" crossorigin="anonymous">
+
+<script class="next-config" data-name="disqusjs" type="application/json">{"enable":true,"api":"https://disqusjs-proxy-rose.vercel.app/","apikey":"40wkCy0ewvq5nL9eGvjiJHkBCc35Rk4DIQmje6UJ3vnO1mDt0C1b5yxqlbUeoo6P","shortname":"blackyau","js":{"url":"https://unpkg.com/disqusjs@3.0.2/dist/browser/disqusjs.es2015.umd.min.js","integrity":"sha256-okP99ZQKVpIy7+NogAMpGlIQzJa9XKXhIJcFgdju5bU="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/comments/disqusjs.js"></script>
+
+</body>
+</html>

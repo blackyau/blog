@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://st.blackyau.net/blog/file/favicon-180x180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://st.blackyau.net/blog/file/favicon-64x64.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://st.blackyau.net/blog/file/favicon-32x32.png">
+  <link rel="mask-icon" href="https://st.blackyau.net/blog/file/favicon-512x512.svg" color="#222">
+  <meta name="google-site-verification" content="nXthYmLKSXqupL96tIOSCBi3yiBjEEkTqK9vEYv808U">
+  <meta name="msvalidate.01" content="56ABC0C6006554B668AA5972B359B773">
+  <meta name="baidu-site-verification" content="VQvGuCkX3O">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blackyau.cc","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/config.js"></script>
+
+    <meta name="description" content="接上文，我们已经完成了 Hadoop 伪分布部署 接下来就可以配置 Flume 了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flume 配置">
+<meta property="og:url" content="https://blackyau.cc/12">
+<meta property="og:site_name" content="蠢黑通行">
+<meta property="og:description" content="接上文，我们已经完成了 Hadoop 伪分布部署 接下来就可以配置 Flume 了。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://st.blackyau.net/blog/12/1.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/12/2.png">
+<meta property="article:published_time" content="2019-04-14T12:50:08.000Z">
+<meta property="article:modified_time" content="2019-04-17T09:30:32.000Z">
+<meta property="article:author" content="蠢黑通行">
+<meta property="article:tag" content="CentOS">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Hadoop">
+<meta property="article:tag" content="HDFS">
+<meta property="article:tag" content="Flume">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://st.blackyau.net/blog/12/1.png">
+
+
+<link rel="canonical" href="https://blackyau.cc/12">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blackyau.cc/12","path":"12.html","title":"Flume 配置"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Flume 配置 | 蠢黑通行</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKREM40HY8"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TKREM40HY8","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="蠢黑通行" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">蠢黑通行</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个人的全世界</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Flume-%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">Flume 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E8%A7%A3%E5%8E%8B-Flume"><span class="nav-number">2.1.</span> <span class="nav-text">下载解压 Flume</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">2.2.</span> <span class="nav-text">环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B%E4%BE%9D%E8%B5%96"><span class="nav-number">2.3.</span> <span class="nav-text">检测依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B-Flume"><span class="nav-number">3.</span> <span class="nav-text">配置示例 Flume</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E7%A4%BA%E4%BE%8B%E9%85%8D%E7%BD%AE"><span class="nav-number">3.1.</span> <span class="nav-text">编辑示例配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E7%A4%BA%E4%BE%8B%E9%85%8D%E7%BD%AE%E7%9A%84-Flume"><span class="nav-number">3.2.</span> <span class="nav-text">运行示例配置的 Flume</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE"><span class="nav-number">3.3.</span> <span class="nav-text">发送测试数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-Flume"><span class="nav-number">4.</span> <span class="nav-text">配置 Flume</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E9%85%8D%E7%BD%AE"><span class="nav-number">4.1.</span> <span class="nav-text">编辑配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C"><span class="nav-number">4.2.</span> <span class="nav-text">运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%92%E9%94%99"><span class="nav-number">4.3.</span> <span class="nav-text">排错</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96-sources"><span class="nav-number">4.4.</span> <span class="nav-text">其他 sources</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蠢黑通行"
+      src="https://st.blackyau.net/head.jpg">
+  <p class="site-author-name" itemprop="name">蠢黑通行</p>
+  <div class="site-description" itemprop="description">BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。</div>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/blackyau" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;blackyau" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:blackyau426@gmail.com" title="E-Mail → mailto:blackyau426@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/black_yau" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;black_yau" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://bbs.letitfly.me/" title="https:&#x2F;&#x2F;bbs.letitfly.me" rel="noopener" target="_blank">LIF BBS</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.ixk.me/" title="https:&#x2F;&#x2F;www.ixk.me" rel="noopener" target="_blank">青空之蓝</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blackyau.cc/12">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://st.blackyau.net/head.jpg">
+      <meta itemprop="name" content="蠢黑通行">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蠢黑通行">
+      <meta itemprop="description" content="BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Flume 配置 | 蠢黑通行">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Flume 配置
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-04-14 20:50:08" itemprop="dateCreated datePublished" datetime="2019-04-14T20:50:08+08:00">2019-04-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-04-17 17:30:32" itemprop="dateModified" datetime="2019-04-17T17:30:32+08:00">2019-04-17</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>接上文，我们已经完成了 <a href="/11" title="Hadoop 伪分布部署">Hadoop 伪分布部署</a> 接下来就可以配置 Flume 了。</p>
+<span id="more"></span>
+
+<h2 id="Flume-介绍"><a href="#Flume-介绍" class="headerlink" title="Flume 介绍"></a>Flume 介绍</h2><p>Flume是一个分布式、可靠、和高可用的海量日志采集、聚合和传输的系统。支持在日志系统中定制各类数据发送方，用于收集数据；同时，Flume提供对数据进行简单处理，并写到各种数据接受方(比如文本、HDFS、Hbase等)的能力。</p>
+<p>Flume Agent (代理) 主要由以下三部分组成</p>
+<ul>
+<li><strong>Source</strong>: 从外部接收 <code>Source</code> 所识别格式的数据,并向 <code>Flume</code> 发送 <code>事件(Avent)</code> 。当 <code>Flume</code> 接收到事件后，会将它储存到一个或多个 <code>Channel</code></li>
+<li><strong>Channel</strong>: 一个被动的储存器，用于保存事件，直到被 <code>sink</code> 消耗为止</li>
+<li><strong>sink</strong>: 从 <code>Channel</code> 中移除事件并将其放入 <code>外部储存库</code> (例如:<code>HDFS</code>)，或将其转发到下一个 <code>Flume Agent</code> 的 <code>Flume Source</code>。</li>
+</ul>
+<p><code>Flume</code> 中的 <code>Source</code>、 <code>Channel</code> 和 <code>sink</code> 之间暂存的事件是异步运行的</p>
+<p><img data-src="https://st.blackyau.net/blog/12/1.png" alt="1"></p>
+<p>这里我主要使用 Flume 实现以下功能:</p>
+<ul>
+<li>监听5555网络端口</li>
+<li>将从网络端口接收到的数据落地到hdfs以下目录 <code>/raw_data/receive/</code></li>
+<li>文件名称格式以 <code>[YYYYMMDD]_</code> 为前缀</li>
+<li>每接收 <code>10M</code> 数据落地一个文件，当接收数据不足 <code>10M</code> 时，每 <code>15分钟</code> 落地一个文件。</li>
+</ul>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><h3 id="下载解压-Flume"><a href="#下载解压-Flume" class="headerlink" title="下载解压 Flume"></a>下载解压 Flume</h3><p>我使用的是 <a target="_blank" rel="noopener" href="http://archive.apache.org/dist/flume/1.6.0/apache-flume-1.6.0-bin.tar.gz">Flume 1.6.0</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl -O http://192.168.66.1/apache-flume-1.6.0-bin.tar.gz # 从本地下载</span><br><span class="line">curl -O http://archive.apache.org/dist/flume/1.6.0/apache-flume-1.6.0-bin.tar.gz # 需要连接到公网</span><br><span class="line">tar -xf apache-flume-1.6.0-bin.tar.gz # 解压</span><br></pre></td></tr></table></figure>
+
+<h3 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>在文件末尾添加以下内容</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export FLUME_HOME=/root/apache-flume-1.6.0-bin</span><br><span class="line">export PATH=$PATH:$FLUME_HOME/bin</span><br></pre></td></tr></table></figure>
+
+<p>让系统更新配置文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>测试配置是否成功</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flume-ng version</span><br></pre></td></tr></table></figure>
+
+<p>输出以下信息说明配置成功</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Flume 1.6.0</span><br><span class="line">Source code repository: https://git-wip-us.apache.org/repos/asf/flume.git</span><br><span class="line">Revision: 2561a23240a71ba20bf288c7c2cda88f443c2080</span><br><span class="line">Compiled by hshreedharan on Mon May 11 11:15:44 PDT 2015</span><br><span class="line">From source with checksum b29e416802ce9ece3269d34233baf43f</span><br></pre></td></tr></table></figure>
+
+<h3 id="检测依赖"><a href="#检测依赖" class="headerlink" title="检测依赖"></a>检测依赖</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jps</span><br></pre></td></tr></table></figure>
+
+<p>输出以下信息说明 <code>NameNode</code> 正常运行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">33377 Jps</span><br><span class="line">20854 DataNode</span><br><span class="line">20998 SecondaryNameNode</span><br><span class="line">20743 NameNode</span><br></pre></td></tr></table></figure>
+
+<p>看看 NameNode 的 WEB 端是否正常运行</p>
+<p><a target="_blank" rel="noopener" href="http://192.168.66.135:50070/">http://192.168.66.135:50070</a></p>
+<p>如果它运行异常， <code>Flume</code> 是无法将数据正确写入 <code>HDFS</code> 的</p>
+<h2 id="配置示例-Flume"><a href="#配置示例-Flume" class="headerlink" title="配置示例 Flume"></a>配置示例 Flume</h2><h3 id="编辑示例配置"><a href="#编辑示例配置" class="headerlink" title="编辑示例配置"></a>编辑示例配置</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /root/apache-flume-1.6.0-bin/conf/example.conf</span><br></pre></td></tr></table></figure>
+
+<p>写入以下信息，该示例配置来自于 <a target="_blank" rel="noopener" href="http://flume.apache.org/releases/content/1.6.0/FlumeUserGuide.html#starting-an-agent">Flume docs</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># Flume 示例配置,监听 44444 端口，并将来自该端口的信息存储在内存中，最后把信息打印在终端</span><br><span class="line"></span><br><span class="line"># 为该 Agent 的组件设置名字</span><br><span class="line">a1.sources = r1</span><br><span class="line">a1.sinks = k1</span><br><span class="line">a1.channels = c1</span><br><span class="line"></span><br><span class="line"># 设置 Sources 的属性,侦听网络端口并将每行文本转换为 Event</span><br><span class="line"># http://flume.apache.org/releases/content/1.6.0/FlumeUserGuide.html#netcat-source</span><br><span class="line">a1.sources.r1.type = netcat</span><br><span class="line">a1.sources.r1.bind = master</span><br><span class="line">a1.sources.r1.port = 44444</span><br><span class="line"></span><br><span class="line"># 设置 Sinks 的属性,在日志中以 INFO 级别记录所有 Event</span><br><span class="line"># http://flume.apache.org/releases/content/1.6.0/FlumeUserGuide.html#logger-sink</span><br><span class="line">a1.sinks.k1.type = logger</span><br><span class="line"></span><br><span class="line"># 设置 Channels 的属性,将 Event 储存在内存中</span><br><span class="line"># http://flume.apache.org/releases/content/1.6.0/FlumeUserGuide.html#memory-channel</span><br><span class="line">a1.channels.c1.type = memory</span><br><span class="line">a1.channels.c1.capacity = 1000</span><br><span class="line">a1.channels.c1.transactionCapacity = 100</span><br><span class="line"></span><br><span class="line"># 将 Sources 和 Sinks 绑定到 Channels</span><br><span class="line">a1.sources.r1.channels = c1</span><br><span class="line">a1.sinks.k1.channel = c1</span><br></pre></td></tr></table></figure>
+
+<h3 id="运行示例配置的-Flume"><a href="#运行示例配置的-Flume" class="headerlink" title="运行示例配置的 Flume"></a>运行示例配置的 Flume</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">start-dfs.sh # 启动 HDFS</span><br><span class="line">flume-ng agent --conf-file /root/apache-flume-1.6.0-bin/conf/example.conf --name a1</span><br></pre></td></tr></table></figure>
+
+<h3 id="发送测试数据"><a href="#发送测试数据" class="headerlink" title="发送测试数据"></a>发送测试数据</h3><p>使用真机的 <code>telnet</code> 连接到 Flume 服务器，发送任意字符串查看终端有没有显示相关信息。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">telnet 192.168.66.135 44444</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>‘telnet’ 不是内部或外部命令，也不是可运行的程序或批处理文件。请到 <code>控制面板-程序和功能-启动或关闭 Windows 功能</code> 勾选 <code>Telnet Client</code></p>
+</blockquote>
+<p><img data-src="https://st.blackyau.net/blog/12/2.png" alt="2"></p>
+<h2 id="配置-Flume"><a href="#配置-Flume" class="headerlink" title="配置 Flume"></a>配置 Flume</h2><h3 id="编辑配置"><a href="#编辑配置" class="headerlink" title="编辑配置"></a>编辑配置</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /root/apache-flume-1.6.0-bin/conf/flume.conf</span><br></pre></td></tr></table></figure>
+
+<p>写入以下配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"># Flume 完整配置,监听 5555 端口，并将来自该端口的信息存储在本地文件中，最后把信息发送到 HDFS</span><br><span class="line"></span><br><span class="line"># 为该 Agent 的组件设置名字</span><br><span class="line">a1.sources = r1</span><br><span class="line">a1.sinks = k1</span><br><span class="line">a1.channels = c1</span><br><span class="line"></span><br><span class="line"># 设置 Sources 的属性,侦听网络端口并将每行文本转换为 Event</span><br><span class="line"># http://flume.apache.org/releases/content/1.6.0/FlumeUserGuide.html#netcat-source</span><br><span class="line">a1.sources.r1.type = netcat</span><br><span class="line">a1.sources.r1.bind = master</span><br><span class="line">a1.sources.r1.port = 5555</span><br><span class="line"></span><br><span class="line"># 设置 Sinks 的属性,将落地到 HDFS</span><br><span class="line"># http://flume.apache.org/releases/content/1.6.0/FlumeUserGuide.html#hdfs-sink</span><br><span class="line">a1.sinks.k1.type = hdfs</span><br><span class="line"># 设置路径</span><br><span class="line">a1.sinks.k1.hdfs.path = hdfs://master:9000/raw_data/receive/</span><br><span class="line"># 设置前缀</span><br><span class="line">a1.sinks.k1.hdfs.filePrefix = [%Y%m%d]_</span><br><span class="line"># 落地文件大小单位为 bytes</span><br><span class="line">a1.sinks.k1.hdfs.rollSize = 10485760</span><br><span class="line"># 无视基于事件块的落地配置</span><br><span class="line">a1.sinks.k1.hdfs.rollCount = 0</span><br><span class="line"># 超时落地文件</span><br><span class="line">a1.sinks.k1.hdfs.rollInterval = 900</span><br><span class="line"># 设置使用本地时区，如果不设置的话会报错</span><br><span class="line">a1.sinks.k1.hdfs.useLocalTimeStamp = true</span><br><span class="line"></span><br><span class="line"># 设置 Channels 的属性,将 Event 储存在文件中</span><br><span class="line"># http://flume.apache.org/releases/content/1.6.0/FlumeUserGuide.html#file-channel</span><br><span class="line">a1.channels.c1.type = file</span><br><span class="line"># 存放 event 在那个 data 文件 logFileID ，的什么位置 offset 等信息，相当于索引</span><br><span class="line">a1.channels.c1.checkpointDir = /root/flume/checkpoint</span><br><span class="line"># 主数据文件</span><br><span class="line">a1.channels.c1.dataDirs = /root/flume/data</span><br><span class="line"></span><br><span class="line"># 将 Sources 和 Sinks 绑定到 Channels</span><br><span class="line">a1.sources.r1.channels = c1</span><br><span class="line">a1.sinks.k1.channel = c1</span><br></pre></td></tr></table></figure>
+
+<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flume-ng agent --conf-file /root/apache-flume-1.6.0-bin/conf/flume.conf --name a1</span><br></pre></td></tr></table></figure>
+
+<p>输出类似下列信息说明配置成功</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">19/04/17 16:49:14 INFO instrumentation.MonitoredCounterGroup: Component type: SINK, name: k1 started</span><br><span class="line">19/04/17 16:49:29 INFO hdfs.HDFSSequenceFile: writeFormat = Writable, UseRawLocalFileSystem = false</span><br><span class="line">19/04/17 16:49:29 INFO hdfs.BucketWriter: Creating hdfs://master:9000/raw_data/receive//[20190417]_.1555490969042.tmp</span><br><span class="line">19/04/17 16:49:43 INFO file.EventQueueBackingStoreFile: Start checkpoint for /root/flume/checkpoint/checkpoint, elements to sync = 4</span><br><span class="line">19/04/17 16:49:43 INFO file.EventQueueBackingStoreFile: Updating checkpoint metadata: logWriteOrderID: 1555490953596, queueSize: 0, queueHead: 2</span><br><span class="line">19/04/17 16:49:43 INFO file.Log: Updated checkpoint for file: /root/flume/data/log-9 position: 1654 logWriteOrderID: 1555490953596</span><br><span class="line">19/04/17 16:49:43 INFO file.LogFile: Closing RandomReader /root/flume/data/log-7</span><br><span class="line">19/04/17 16:50:13 INFO file.EventQueueBackingStoreFile: Start checkpoint for /root/flume/checkpoint/checkpoint, elements to sync = 1</span><br><span class="line">19/04/17 16:50:13 INFO file.EventQueueBackingStoreFile: Updating checkpoint metadata: logWriteOrderID: 1555490953601, queueSize: 0, queueHead: 2</span><br><span class="line">19/04/17 16:50:13 INFO file.Log: Updated checkpoint for file: /root/flume/data/log-9 position: 1840 logWriteOrderID: 1555490953601</span><br><span class="line">19/04/17 16:50:13 INFO file.Log: Removing old file: /root/flume/data/log-7</span><br><span class="line">19/04/17 16:50:13 INFO file.Log: Removing old file: /root/flume/data/log-7.meta</span><br><span class="line">19/04/17 17:04:30 INFO hdfs.BucketWriter: Closing hdfs://master:9000/raw_data/receive//[20190417]_.1555490969042.tmp</span><br><span class="line">19/04/17 17:04:30 INFO hdfs.BucketWriter: Renaming hdfs://master:9000/raw_data/receive/[20190417]_.1555490969042.tmp to hdfs://master:9000/raw_data/receive/[20190417]_.1555490969042</span><br><span class="line">19/04/17 17:04:30 INFO hdfs.HDFSEventSink: Writer callback called.</span><br></pre></td></tr></table></figure>
+
+<h3 id="排错"><a href="#排错" class="headerlink" title="排错"></a>排错</h3><p>之前遇到了一个问题</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">There are 0 datanode(s) running and no node(s) are excluded in this operation</span><br></pre></td></tr></table></figure>
+
+<p>这个问题是因为多次格式化 HDFS 导致了 ID 错乱，所以无法正确的写入文件。删除一下之前的文件然后重新格式化就好了。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">stop-all.sh # 停止所有服务</span><br><span class="line">rm -rf /tmp/*</span><br><span class="line">rm -rf /root/hadoop-2.6.0/tmp</span><br><span class="line">hdfs namenode -format</span><br><span class="line">start-dfs.sh</span><br></pre></td></tr></table></figure>
+
+<p>接下来再启动 flume 就行了</p>
+<h3 id="其他-sources"><a href="#其他-sources" class="headerlink" title="其他 sources"></a>其他 sources</h3><p>由于信息来源多种多样，配置方法都大相径庭，参考官方的文档配置即可。</p>
+<p>Avro Source</p>
+<blockquote>
+<p>Flume到Flume</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="http://flume.apache.org/releases/content/1.6.0/FlumeUserGuide.html#avro-source">http://flume.apache.org/releases/content/1.6.0/FlumeUserGuide.html#avro-source</a></p>
+<p>HTTP Source</p>
+<blockquote>
+<p>通过POST和GET接收数据</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="http://flume.apache.org/releases/content/1.6.0/FlumeUserGuide.html#http-source">http://flume.apache.org/releases/content/1.6.0/FlumeUserGuide.html#http-source</a></p>
+<p>其他 大数据系列文章 请看 <a href="https://blackyau.cc/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">这里</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="http://flume.apache.org/releases/content/1.6.0/FlumeUserGuide.html">Flume 1.6.0 User Guide</a></p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/26545524/">StackOverFlow@prayagupd - There are 0 datanode(s) running and no node(s) are excluded in this operation</a></p>
+<p><a target="_blank" rel="noopener" href="https://my.oschina.net/u/3747963/blog/1834981">开源中国@海岸线的曙光 - Flume日志收集之Logger和HDFS数据传输方式</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.cnblogs.com/xiangyuqi/p/8690902.html">博客园@项羽齐 - 大数据3-Flume收集数据+落地HDFS</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/4f43780c82e9">简书@Woople - Flume HDFS Sink常用配置深度解读</a></p>
+<p><a target="_blank" rel="noopener" href="http://lxw1234.com/archives/2015/10/527.htm">lxw的大数据田地 - Flume中的HDFS Sink配置参数说明</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>蠢黑通行
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blackyau.cc/12" title="Flume 配置">https://blackyau.cc/12</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/CentOS/" rel="tag"># CentOS</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+              <a href="/tags/HDFS/" rel="tag"># HDFS</a>
+              <a href="/tags/Flume/" rel="tag"># Flume</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/11" rel="prev" title="Hadoop 伪分布部署">
+                  <i class="fa fa-angle-left"></i> Hadoop 伪分布部署
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/13" rel="next" title="Hive 配置">
+                  Hive 配置 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments disqusjs-container">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2016 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蠢黑通行</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div><div class="powered-by">本网站由 <a style="border-bottom: none;"href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" class="theme-link" rel="noopener" target="_blank" title="upyun"><img style="display: inline; vertical-align: middle;" src="https://st.blackyau.net/blog/file/upyun_dark.svg" alt="upyun">提供CDN加速/云储存服务</a> </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/sidebar.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/disqusjs@3.0.2/dist/browser/styles/disqusjs.css" integrity="sha256-71XarXwNr1Td27HmZI9zjY+rMzRdush6/glo6VFXp7o=" crossorigin="anonymous">
+
+<script class="next-config" data-name="disqusjs" type="application/json">{"enable":true,"api":"https://disqusjs-proxy-rose.vercel.app/","apikey":"40wkCy0ewvq5nL9eGvjiJHkBCc35Rk4DIQmje6UJ3vnO1mDt0C1b5yxqlbUeoo6P","shortname":"blackyau","js":{"url":"https://unpkg.com/disqusjs@3.0.2/dist/browser/disqusjs.es2015.umd.min.js","integrity":"sha256-okP99ZQKVpIy7+NogAMpGlIQzJa9XKXhIJcFgdju5bU="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/comments/disqusjs.js"></script>
+
+</body>
+</html>

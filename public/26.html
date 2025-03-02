@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://st.blackyau.net/blog/file/favicon-180x180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://st.blackyau.net/blog/file/favicon-64x64.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://st.blackyau.net/blog/file/favicon-32x32.png">
+  <link rel="mask-icon" href="https://st.blackyau.net/blog/file/favicon-512x512.svg" color="#222">
+  <meta name="google-site-verification" content="nXthYmLKSXqupL96tIOSCBi3yiBjEEkTqK9vEYv808U">
+  <meta name="msvalidate.01" content="56ABC0C6006554B668AA5972B359B773">
+  <meta name="baidu-site-verification" content="VQvGuCkX3O">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blackyau.cc","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/config.js"></script>
+
+    <meta name="description" content="记录自己的学习，以及为期末考试准备一份复习资料，不过复习的主要目的也不是为了那一份资料，而是复习的过程吧。我个人一直都对机器学习的「无中生有」比较感兴趣，正是这样的兴趣推动了我选择了这个专业方向。目前看来，大量的数学公式推导确实让我非常吃力，但是也算是满足了自己一窥端倪的好奇心。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习西瓜书 学习笔记">
+<meta property="og:url" content="https://blackyau.cc/26">
+<meta property="og:site_name" content="蠢黑通行">
+<meta property="og:description" content="记录自己的学习，以及为期末考试准备一份复习资料，不过复习的主要目的也不是为了那一份资料，而是复习的过程吧。我个人一直都对机器学习的「无中生有」比较感兴趣，正是这样的兴趣推动了我选择了这个专业方向。目前看来，大量的数学公式推导确实让我非常吃力，但是也算是满足了自己一窥端倪的好奇心。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://st.blackyau.net/blog/26/1.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/26/2.svg">
+<meta property="og:image" content="https://st.blackyau.net/blog/26/3.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/26/4.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/26/5.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/26/6.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/26/7.png">
+<meta property="article:published_time" content="2020-10-26T08:43:42.000Z">
+<meta property="article:modified_time" content="2021-01-19T09:24:55.000Z">
+<meta property="article:author" content="蠢黑通行">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="学习">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="西瓜书">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="周志华">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://st.blackyau.net/blog/26/1.png">
+
+
+<link rel="canonical" href="https://blackyau.cc/26">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blackyau.cc/26","path":"26.html","title":"机器学习西瓜书 学习笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>机器学习西瓜书 学习笔记 | 蠢黑通行</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKREM40HY8"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TKREM40HY8","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="蠢黑通行" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">蠢黑通行</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个人的全世界</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%89%8D%E9%9D%A2"><span class="nav-number">1.</span> <span class="nav-text">写在最前面</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%AA%E8%AE%BA"><span class="nav-number">2.</span> <span class="nav-text">绪论</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%9C%AF%E8%AF%AD"><span class="nav-number">2.1.</span> <span class="nav-text">基本术语</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AF%E8%AF%AD%E4%BE%8B%E9%A2%98"><span class="nav-number">2.1.1.</span> <span class="nav-text">术语例题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%81%87%E8%AE%BE%E7%A9%BA%E9%97%B4"><span class="nav-number">2.2.</span> <span class="nav-text">假设空间</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%87%E8%AE%BE%E7%9A%84%E7%A1%AE%E5%AE%9A"><span class="nav-number">2.2.1.</span> <span class="nav-text">假设的确定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E7%A9%BA%E9%97%B4%E4%BE%8B%E9%A2%981"><span class="nav-number">2.2.2.</span> <span class="nav-text">版本空间例题1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E7%A9%BA%E9%97%B4%E4%BE%8B%E9%A2%982"><span class="nav-number">2.2.3.</span> <span class="nav-text">版本空间例题2</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BD%92%E7%BA%B3%E5%81%8F%E5%A5%BD"><span class="nav-number">3.</span> <span class="nav-text">归纳偏好</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%A5%E5%8D%A1%E5%A7%86%E5%89%83%E5%88%80"><span class="nav-number">3.1.</span> <span class="nav-text">奥卡姆剃刀</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B2%A1%E6%9C%89%E5%85%8D%E8%B4%B9%E7%9A%84%E5%8D%88%E9%A4%90"><span class="nav-number">3.2.</span> <span class="nav-text">没有免费的午餐</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%8F%E9%AA%8C%E8%AF%AF%E5%B7%AE%E4%B8%8E%E8%BF%87%E6%8B%9F%E5%90%88"><span class="nav-number">4.</span> <span class="nav-text">经验误差与过拟合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%95%99%E5%87%BA%E6%B3%95"><span class="nav-number">4.1.</span> <span class="nav-text">留出法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E6%A3%80%E9%AA%8C%E6%B3%95"><span class="nav-number">4.2.</span> <span class="nav-text">交叉检验法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A9%E6%B3%95"><span class="nav-number">4.3.</span> <span class="nav-text">自助法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E5%BA%A6%E9%87%8F"><span class="nav-number">5.</span> <span class="nav-text">性能度量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E7%8E%87%E4%B8%8E%E7%B2%BE%E5%BA%A6"><span class="nav-number">5.1.</span> <span class="nav-text">错误率与精度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E7%8E%87"><span class="nav-number">5.1.1.</span> <span class="nav-text">错误率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B2%BE%E5%BA%A6"><span class="nav-number">5.1.2.</span> <span class="nav-text">精度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E5%87%86%E7%8E%87%E4%B8%8E%E6%9F%A5%E5%85%A8%E7%8E%87"><span class="nav-number">5.2.</span> <span class="nav-text">查准率与查全率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#F1-%E5%BA%A6%E9%87%8F"><span class="nav-number">5.3.</span> <span class="nav-text">F1 度量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8F-%E5%BE%AEF1"><span class="nav-number">5.4.</span> <span class="nav-text">宏&#x2F;微F1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8F"><span class="nav-number">5.4.1.</span> <span class="nav-text">宏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AE"><span class="nav-number">5.4.2.</span> <span class="nav-text">微</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#P-R-ROC-AUC"><span class="nav-number">5.5.</span> <span class="nav-text">P-R ROC AUC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#P-R"><span class="nav-number">5.5.1.</span> <span class="nav-text">P-R</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ROC"><span class="nav-number">5.5.2.</span> <span class="nav-text">ROC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AUC"><span class="nav-number">5.5.3.</span> <span class="nav-text">AUC</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%AF%E8%AF%AD%E4%B8%AD%E8%8B%B1%E5%AF%B9%E7%85%A7"><span class="nav-number">6.</span> <span class="nav-text">术语中英对照</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蠢黑通行"
+      src="https://st.blackyau.net/head.jpg">
+  <p class="site-author-name" itemprop="name">蠢黑通行</p>
+  <div class="site-description" itemprop="description">BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。</div>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/blackyau" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;blackyau" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:blackyau426@gmail.com" title="E-Mail → mailto:blackyau426@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/black_yau" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;black_yau" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://bbs.letitfly.me/" title="https:&#x2F;&#x2F;bbs.letitfly.me" rel="noopener" target="_blank">LIF BBS</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.ixk.me/" title="https:&#x2F;&#x2F;www.ixk.me" rel="noopener" target="_blank">青空之蓝</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blackyau.cc/26">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://st.blackyau.net/head.jpg">
+      <meta itemprop="name" content="蠢黑通行">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蠢黑通行">
+      <meta itemprop="description" content="BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="机器学习西瓜书 学习笔记 | 蠢黑通行">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          机器学习西瓜书 学习笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-26 16:43:42" itemprop="dateCreated datePublished" datetime="2020-10-26T16:43:42+08:00">2020-10-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2021-01-19 17:24:55" itemprop="dateModified" datetime="2021-01-19T17:24:55+08:00">2021-01-19</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>记录自己的学习，以及为期末考试准备一份复习资料，不过复习的主要目的也不是为了那一份资料，而是复习的过程吧。我个人一直都对机器学习的「无中生有」比较感兴趣，正是这样的兴趣推动了我选择了这个专业方向。目前看来，大量的数学公式推导确实让我非常吃力，但是也算是满足了自己一窥端倪的好奇心。</p>
+<span id="more"></span>
+
+<h1 id="写在最前面"><a href="#写在最前面" class="headerlink" title="写在最前面"></a>写在最前面</h1><p>本系列文章都会遵守 <a target="_blank" rel="noopener" href="https://github.com/sparanoid/chinese-copywriting-guidelines">中文文案排版指北</a>，愿各位看官和我都能够跟自己爱的人结婚😀。</p>
+<p>「有研究显示，打字的时候不喜欢在中文和英文之间加空格的人，感情路都走得很辛苦，有七成的比例会在 34 岁的时候跟自己不爱的人结婚，而其余三成的人最后只能把遗产留给自己的猫。毕竟爱情跟书写都需要适时地留白。</p>
+<p>与大家共勉之。」——<a target="_blank" rel="noopener" href="https://github.com/vinta/pangu.js">vinta&#x2F;paranoid-auto-spacing</a></p>
+<h1 id="绪论"><a href="#绪论" class="headerlink" title="绪论"></a>绪论</h1><h2 id="基本术语"><a href="#基本术语" class="headerlink" title="基本术语"></a>基本术语</h2><p>假设收集了一批关于西瓜的数据</p>
+<table>
+<thead>
+<tr>
+<th align="center">色泽</th>
+<th align="center">根蒂</th>
+<th align="center">敲声</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">青绿</td>
+<td align="center">蜷缩</td>
+<td align="center">混响</td>
+</tr>
+<tr>
+<td align="center">乌黑</td>
+<td align="center">稍蜷</td>
+<td align="center">沉闷</td>
+</tr>
+<tr>
+<td align="center">浅白</td>
+<td align="center">硬挺</td>
+<td align="center">清脆</td>
+</tr>
+</tbody></table>
+<p>数据集：上面这一组数据的集合。</p>
+<p><strong>样本</strong>：每一条（行）记录是关于一个时间或对象（这里是西瓜）的描述。</p>
+<p><strong>属性&#x2F;特征</strong>：反映时间或对象在某方面的表现或性质，例如「色泽」、「根蒂」、「敲声」。</p>
+<p>属性值：属性上的取值，例如「青绿」、「乌黑」。</p>
+<p><strong>属性空间</strong>&#x2F;样本空间：属性张成的空间，比如把“色泽” “根蒂” “敲声”作为三个坐标轴，则他们张成一个用于描述西瓜的三维空间。这个空间就是属性空间。</p>
+<p><strong>特征向量</strong>：把每个属性作为一个坐标轴，则它们能够组成一个多维空间，那么每一个实例都能够在空间中找到自己的坐标位置。因为每个点都对应一个坐标向量，因此一个实例也称特征向量。</p>
+<p><strong>维数</strong>：因为每个属性都作为一个坐标轴，而又因为有多少个坐标轴我们就将这个空间叫做几维空间，所以维数也就是样本有多少个属性。</p>
+<p><strong>学习&#x2F;训练</strong>：从数据中学的模型的过程，学习的过程是通过执行某个学习算法来完成的。</p>
+<p>训练数据：训练过程中使用的数据。</p>
+<p><strong>训练样本</strong>：训练过程中每个样本。</p>
+<p><strong>训练集</strong>：训练样本组成的集合。</p>
+<p>假设：学得模型对应关于数据的某种潜在的规律。</p>
+<p>标记：样本的好或坏，一般都是布尔值。</p>
+<p>样例：拥有标记值的样本。</p>
+<p>标记空间&#x2F;输出空间：所有标记的集合。</p>
+<p><strong>分类任务</strong>：预测的结果是离散值的任务。</p>
+<p><strong>回归任务</strong>：预测的是连续值，比如西瓜的成熟度 0.95、0.37。</p>
+<p>二分类任务：只要涉及的类别只有两个，通常一个为正类，另一个为反类。</p>
+<p>多分类任务：涉及多个类别，也即是大于两个吧。</p>
+<p><strong>测试</strong>：使用学得的模型进行预测。</p>
+<p><strong>测试样本</strong>：被预测的样本。</p>
+<p>聚类：将训练集中的西瓜分成若干组，例如高工资、低工资。</p>
+<p>簇：被聚类成分成的组，每一组就是一个簇。</p>
+<p><strong>监督学习</strong>：有标记信息，分类任务和回归任务。</p>
+<p><strong>半监督学习</strong>：监督学习与无监督学习相结合的一种学习方法。半监督学习使用大量的未标记数据，以及同时使用标记数据，来进行模式识别工作。 </p>
+<p><strong>无监督学习</strong>：无标记信息，聚类任务。</p>
+<p><strong>泛化能力</strong>：学的模型适用于新样本的能力。具有强泛化能力的模型能很好地适应于整个样本空间。</p>
+<p>独立同分布：可以先假设样本空间都服从一个未知的分布，我们获得的每个样本都是独立的从这个分布上采样获得的，即独立同分布。一般而言，训练样本越多，我们获得关于该分布的信息越多，就越有可能通过学习获得具有强泛化能力的模型。</p>
+<h3 id="术语例题"><a href="#术语例题" class="headerlink" title="术语例题"></a>术语例题</h3><table>
+<thead>
+<tr>
+<th align="center">编号</th>
+<th align="center">姓名</th>
+<th align="center">年收入</th>
+<th align="center">性别</th>
+<th align="center">职业</th>
+<th align="center">好顾客</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">张三</td>
+<td align="center">高</td>
+<td align="center">男</td>
+<td align="center">程序员</td>
+<td align="center">是</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">李四</td>
+<td align="center">高</td>
+<td align="center">男</td>
+<td align="center">企业家</td>
+<td align="center">是</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">王五</td>
+<td align="center">中</td>
+<td align="center">男</td>
+<td align="center">公务员</td>
+<td align="center">否</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">周六</td>
+<td align="center">低</td>
+<td align="center">女</td>
+<td align="center">学生</td>
+<td align="center">否</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">钱七</td>
+<td align="center">中</td>
+<td align="center">女</td>
+<td align="center">教师</td>
+<td align="center">否</td>
+</tr>
+</tbody></table>
+<ul>
+<li>上表中样本是？</li>
+<li>一共有多少样本？</li>
+<li>样本的属性都是？</li>
+<li>样本标记是？</li>
+<li>用户「周六」属性值和标记值是？</li>
+</ul>
+<details class="note info no-icon"><summary><p>答案</p>
+</summary>
+<ul>
+<li>样本是顾客。</li>
+<li>一共 5 个。</li>
+<li>年收入、性别和职业。</li>
+<li>是否为顾客（或好顾客）。</li>
+<li>属性值&amp;标记值：年收入&#x3D;低、性别&#x3D;女和职业&#x3D;学生。</li>
+</ul>
+
+</details>
+
+<h2 id="假设空间"><a href="#假设空间" class="headerlink" title="假设空间"></a>假设空间</h2><p>科学推理的两个基本手段：演绎、归纳。</p>
+<p>演绎：从一般到特殊的特化，即从基础原理推演出具体状况，例如数学公式就是从一些常识和推理逻辑，推导出了相洽的定理。</p>
+<p>归纳：从特殊到一般的泛化过程，就是从具体的事实归结出一般性规律。机器学习也就是用的这种推理方法。</p>
+<p>广义的归纳学习：从样例中学习。</p>
+<p>狭义的归纳学习：从训练数据中学得概念。</p>
+<p>狭义的归纳学习，有时候也成为概念学习。概念学习中最基础的就是布尔概念学习，也就是对「是」「不是」这样的目标概念的学习。</p>
+<h3 id="假设的确定"><a href="#假设的确定" class="headerlink" title="假设的确定"></a>假设的确定</h3><p>我们可以把学习的过程看做一个在所有假设组成的空间中进行搜索的过程，搜索的目标是 找到与训练集匹配的假设，也就是能够将训练集中的瓜判断正确的假设。</p>
+<p>假设的表示一旦确定下来，假设空间及其规模大小就确定了。</p>
+<blockquote>
+<p>简单的讲，假设就是所有属性的所有取值情况（不受数据集约束）。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">编号</th>
+<th align="center">色泽</th>
+<th align="center">根蒂</th>
+<th align="center">敲声</th>
+<th align="center">好瓜</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">青绿</td>
+<td align="center">蜷缩</td>
+<td align="center">浊响</td>
+<td align="center">是</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">乌黑</td>
+<td align="center">蜷缩</td>
+<td align="center">浊响</td>
+<td align="center">是</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">青绿</td>
+<td align="center">硬挺</td>
+<td align="center">清脆</td>
+<td align="center">否</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">乌黑</td>
+<td align="center">稍蜷</td>
+<td align="center">沉闷</td>
+<td align="center">否</td>
+</tr>
+</tbody></table>
+<p>与数据集匹配的假设就是</p>
+<p>色泽 &#x3D; *; 根蒂 &#x3D; 蜷缩； 敲声 &#x3D; 浊响</p>
+<p>也就是好瓜就是，根蒂蜷缩、敲声浊响，什么色泽都行的瓜。</p>
+<p>这个能够判断所有数据集的“假设集合”已经非常接近版本空间，版本空间与这个“假设集合”的区别主要是因为。<strong>版本空间是将所有假设全部列出来后，然后用数据集一个一个去进行搜索，然后将删除与正例不一致的假设</strong>。这里主要的问题就是，对于一些属性它无法进行判断，因为数据集没有覆盖完整。</p>
+<p>在做题的时候，也只有尽可能的往上面再想一层，看看它那个属性的上一层就算取任意值也算正例。</p>
+<h3 id="版本空间例题1"><a href="#版本空间例题1" class="headerlink" title="版本空间例题1"></a>版本空间例题1</h3><table>
+<thead>
+<tr>
+<th align="center">编号</th>
+<th align="center">姓名</th>
+<th align="center">年收入</th>
+<th align="center">性别</th>
+<th align="center">职业</th>
+<th align="center">好顾客</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">张三</td>
+<td align="center">高</td>
+<td align="center">男</td>
+<td align="center">程序员</td>
+<td align="center">是</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">李四</td>
+<td align="center">高</td>
+<td align="center">男</td>
+<td align="center">企业家</td>
+<td align="center">是</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">王五</td>
+<td align="center">中</td>
+<td align="center">男</td>
+<td align="center">公务员</td>
+<td align="center">否</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">周六</td>
+<td align="center">低</td>
+<td align="center">女</td>
+<td align="center">学生</td>
+<td align="center">否</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">钱七</td>
+<td align="center">中</td>
+<td align="center">女</td>
+<td align="center">教师</td>
+<td align="center">否</td>
+</tr>
+</tbody></table>
+<p>给出上表所对应的版本空间，用符号 * 表示取任何值都可以。</p>
+<details class="note info no-icon"><summary><p>答案</p>
+</summary>
+<p><img data-src="https://st.blackyau.net/blog/26/1.png" alt="1"></p>
+
+</details>
+
+<h3 id="版本空间例题2"><a href="#版本空间例题2" class="headerlink" title="版本空间例题2"></a>版本空间例题2</h3><table>
+<thead>
+<tr>
+<th align="center">编号</th>
+<th align="center">色泽</th>
+<th align="center">根蒂</th>
+<th align="center">敲声</th>
+<th align="center">好瓜</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">青绿</td>
+<td align="center">蜷缩</td>
+<td align="center">浊响</td>
+<td align="center">是</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">乌黑</td>
+<td align="center">蜷缩</td>
+<td align="center">浊响</td>
+<td align="center">是</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">青绿</td>
+<td align="center">硬挺</td>
+<td align="center">清脆</td>
+<td align="center">否</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">乌黑</td>
+<td align="center">稍蜷</td>
+<td align="center">沉闷</td>
+<td align="center">否</td>
+</tr>
+</tbody></table>
+<p>该数据集的版本空间是？</p>
+<details class="note info no-icon"><summary><p>答案</p>
+</summary>
+<p><img data-src="https://st.blackyau.net/blog/26/2.svg" alt="2"></p>
+
+</details>
+
+<h1 id="归纳偏好"><a href="#归纳偏好" class="headerlink" title="归纳偏好"></a>归纳偏好</h1><p>通过上面的 版本空间例题2 可以了解到，我们通过学习获得了 3 个与训练集一致的假设（版本空间里面有 3 种不同的假设）。但是有一个问题，就是它在面临新样本的时候，可能会输出不同的结果。</p>
+<p>比如这里有个新瓜</p>
+<p>色泽 &#x3D; 青绿； 根茎 &#x3D; 蜷缩； 敲声 &#x3D; 沉闷</p>
+<p>如果使用 B 条件（点开上面的答案）判断，那么它会把这个新瓜判断为<strong>好瓜</strong>。</p>
+<p>但是如果使用 C 条件判断，那么它会把这个新瓜判断为<strong>坏瓜</strong>。</p>
+<p>如果在我们使用机器学习算法的时候，遇到这种样本它每次都随机挑选一个条件进行判断，进而导致每次预测的时候结果时而好又时而坏，这样的学习结果显然是没有意义的。</p>
+<p>所以我们需要让机器学习算法在学习的过程中，要对于某种类型的假设有偏好。我们就称其为<strong>归纳偏好</strong>，或简称为偏好。</p>
+<p>比如它的偏好如果是“尽可能特殊”的模型，那么它就会选择版本空间右上角那一个，因为这个模型确定了 3 种属性分别都是一个具体的取值。</p>
+<p>又比如它的偏好是“尽可能一般”的模型，并且由于某种原因它更相信根蒂，那么它就会选择版本空间左上角那一个。因为这个模型更多的使用了 * 来确认取值，同时它指定了根茎是蜷缩。</p>
+<h2 id="奥卡姆剃刀"><a href="#奥卡姆剃刀" class="headerlink" title="奥卡姆剃刀"></a>奥卡姆剃刀</h2><p>奥卡姆剃刀就是一种用来，评判哪一种“偏好”更好的原则。也即是<em>若有多个假设与观察一致，则选择最简单的那个</em>。</p>
+<blockquote>
+<p>可以总结为，简单的就是最好的</p>
+</blockquote>
+<p>这里的每个训练样本是图中的一个点（x，y），要学习一个与训练集一致的模型，相当于找到一条穿过所有训练样本的曲线。</p>
+<p><img data-src="https://st.blackyau.net/blog/26/3.png" alt="存在多条曲线与有限样本训练集一致"></p>
+<p>在这里我们就列举出了两条曲线，其中 A 是较为平滑的一条它的方程式是 $y&#x3D;-x^2+6x+1$ ，而 B 曲线是要复杂很多。</p>
+<p>假设我们认为“更平滑”意味着“更简单”，所以在上面的图中我们会自然的偏好于选择更平滑的曲线 A。</p>
+<p>但是奥卡姆剃刀并不是唯一可行的原则，因为在很多问题中，我们并不能找到<strong>哪一种假设更简单</strong>。同时也有一个问题，万一所有的样本都比较刁钻，他们都正好和 B 完全重合了呢？这个也正是下面这个定理要说明的。</p>
+<h2 id="没有免费的午餐"><a href="#没有免费的午餐" class="headerlink" title="没有免费的午餐"></a>没有免费的午餐</h2><p>首先你不要被这个定理的名字所迷惑，可以先把这个命名放在另一边，看看定理的内容。</p>
+<blockquote>
+<p>简单的描述这个定理就是，没有任何一个机器学习算法适合所有情况。</p>
+</blockquote>
+<p>这个定理也很符合我们的直觉，就和上面奥卡姆剃刀举例的那两个曲线一样。A 曲线所代表的的机器学习算法，比 B 曲线的机器学习算法要牛逼些吗？并不是，因为 没有免费的午餐 定理证明了他们两种及其学习算法的正确率是完全一致的。</p>
+<p>说人话就是，对于所有机器学习问题，任何一种算法的期望性能都是相等的。</p>
+<p>但是也不要因为这个定理就觉得机器学习没意思了，因为这个定理有一个前提。也就是，所有问题出现的机会相同、或所有问题同等重要。但是在实际情况中，我们的很多问题都不是这样的，你只需要关注自己需要解决的问题就行了。</p>
+<p>比如在学校里面有个电瓶车代步是一个很方便的选择，但是你如果要去外地又或是去国外，那么你可能坐飞机会更好一些。但是你就是想在学校里面找个代步工具，那么买飞机的事情你就不需要关心了。</p>
+<p>返回到这个定理上面来，其实它想说的和丢了芝麻捡西瓜一样，也就是<strong>有得必有失</strong>。某一个机器学习算法在某一个领域非常好用，但是换到另一个地方却完全不好使了。</p>
+<p>也就是说，当天上突然掉馅饼的时候你现在吃到了，但是你之后就会遇到很倒霉的事情。这么说应该就能理解没有免费的午餐是什么意思了。</p>
+<h1 id="经验误差与过拟合"><a href="#经验误差与过拟合" class="headerlink" title="经验误差与过拟合"></a>经验误差与过拟合</h1><p>如果在 m 个样本中有 α 个样本分类错误，则错误率 $E&#x3D;\frac{a}{m}$</p>
+<p><strong>精度</strong>：$1-\frac{a}{m}$，也即是<em>精度&#x3D;1-错误率</em>。</p>
+<p><strong>误差</strong>：学习器的实际预测输出与样本的真实输出之间的差异。（对单个样本的学习）</p>
+<p><strong>训练误差&#x2F;经验误差</strong>：学习器在训练集上的误差。（整个数据集）</p>
+<p><strong>泛化误差</strong>：在新样本上的误差。</p>
+<p>我们希望得到泛化误差小的学习器。然而，我们事先并不知道新样本是什么样，实际能做的是努力使经验误差最小化。</p>
+<p><strong>过拟合</strong>：当学习器把训练样本学得”太好”了的时候，很可能巳经把训练样本自身的一些特点当作了所有潜在样本都会具有的一般性质，这样就会导致泛化性能下降。这就是过拟合。</p>
+<blockquote>
+<p>过拟合是无法彻底避免的，我们所能做的只是“缓解”，或者说减小其风险。</p>
+</blockquote>
+<p><strong>欠拟合</strong>：这是指对训练样本的一般性质尚未学好。</p>
+<blockquote>
+<p>欠拟合比较容易克服，例如在决策树学习中扩展分支、在神经网络学习中增加训练轮数等。</p>
+</blockquote>
+<p><img data-src="https://st.blackyau.net/blog/26/4.png" alt="过拟合与欠拟合直观对比"></p>
+<h2 id="留出法"><a href="#留出法" class="headerlink" title="留出法"></a>留出法</h2><p>这是评估方法的一种，使用<strong>测试集</strong>来测试学习器对新样本的判别能力，在测试集上面的<strong>测试误差</strong>就可以作为泛化误差的近似。同时要使测试集应尽可能的与训练集互斥，也就是测试样本尽量不在训练集中出现、未在训练过程中使用过。</p>
+<p>假定数据集包含 1000 个样本，将其划分为一个 S 集合包含 700 个样本，另一个 T 集合包含 300 个样本。用 S 集合进行训练后，在使用 T 集合进行测试。通过统计测试结果的正确率，就能知道精度和错误率了。这个方法就是留出法。</p>
+<blockquote>
+<p>划分的时候一般都是 训练集样本数 &gt; 测试集样本数。 $\frac{2}{3} \text{~} \frac{4}{5}$ 的样本用于训练，剩下的测试。</p>
+</blockquote>
+<p>划分训练集和测试集时，要尽可能保持数据分布的一致性。</p>
+<p>比如整个数据集有 500 个正例、500 个反例，则划分时 S 应包含 350 个正例、350 个反例，而 T 则包含150 个正例和 150 个反例。这个也叫<strong>分层采样</strong>，若 S、T 中样本类别比例差别很大，则误差估计将由于训练&#x2F;测试数据分布的差异而产生偏差。</p>
+<p>还有一个问题，如果初始数据集里面样本的顺序很极端，前 500 个全是正例，后 500 个全是反例。直接划分的话就不准确，所以单次使用留出法得到的估计结果往往不够稳定可靠，在使用留出法时，一般要采用若干次随机划分、重复进行实验评估后取平均值作为留出法的评估结果。</p>
+<h2 id="交叉检验法"><a href="#交叉检验法" class="headerlink" title="交叉检验法"></a>交叉检验法</h2><p>先将数据集划分为 k 个大小相似的互斥子集，也就是每一个子集都尽可能保持数据分布的一致性（都不重复）。</p>
+<blockquote>
+<p>然后每次都只取其中的最后一个为<strong>测试集</strong>，前面几个都用来做<strong>训练集</strong>。</p>
+</blockquote>
+<p>最终返回的是这 k 个测试结果的均值。显然，交叉验证法评估结果的稳定性和保真性在很大程度上取决于 k 的取值，为强调这一点，通常把交叉验证法称 k 折交叉验证。k 最常用的取值为 10，此时称为 10 折交叉验证。</p>
+<p><img data-src="https://st.blackyau.net/blog/26/5.png" alt="10 折交叉验证示意图"></p>
+<p>假定数据集 D 中包含 m 个样本，若令 k&#x3D;m ， 则得到了交叉验证法的一个特列：留一法。也就是每一个子集只包含一个样本。测试集就取整个数据集的最后一个。</p>
+<p>留一法的评估结果往往被认为比较准确，但是他也有缺陷，留一法在数据集比较大时训练模型的计算开销可能是难以忍受的。另外，留一法的估计结果也未必永远比其他评估方法准确，“没有免费的午餐”定理对实验评估方法同样适用。</p>
+<h2 id="自助法"><a href="#自助法" class="headerlink" title="自助法"></a>自助法</h2><p>给定包含 m 个样本的数据集 D ， 我们对它进行采样产生数据集 D’:</p>
+<p>每次随机从 D 中挑选一个样本， 将其拷贝放入 D’ 然后再将该样本放回初始数据集 D 中，使得该样本在下次采样时仍有可能被采到;这个过程重复执行 m 次后，我们就得到了包含 m 个样本的数据集 D’，这就是自助采样的结果。</p>
+<p>我们还可以估计样本在 m 次采样中始终不被采到的概率</p>
+<p>$$<br>\begin{aligned}<br>P&amp;&#x3D;\lim\limits_{m→∞}(1-\frac{1}{m})^m \<br>&amp;&#x3D;\frac{1}{e} \<br>&amp;≈0.368<br>\end{aligned}<br>$$</p>
+<p>自助法在数据集较小、难以有效划分训练&#x2F;测试集时很有用;此外，自助法能从初始数据集中产生多个不同的训练集，这对集成学习等方法有很大的好处.然而，自助法产生的数据集改变了初始数据集的分布，这会引入估计偏差。因此，在初始数据量足够时，留出法和交叉验证法更常用一些。</p>
+<h1 id="性能度量"><a href="#性能度量" class="headerlink" title="性能度量"></a>性能度量</h1><p>对模型泛化能力的评价标准就是性能度量。</p>
+<p>因为对于不同的模型，使用不同的性能度量方法会导致不同的评判结果。这意味着模型的“好坏”是相对的，一个好的模型不只是它的算法好坏，还取决于它的任务需求。</p>
+<p>比如回归任务最常用的性能度量是“均方误差”（mean squared error）</p>
+<p>$$<br>E(f;D) &#x3D; \frac{1}{m}\sum_{i &#x3D; 1}^m (f(x_i) - y_i)^2<br>$$</p>
+<p>$E$：数学期望，也就是均值。是一种概率论概念，样本出现的情况结合出现的概率，是一种加权平均。（最后一步都是求平均值，这个公式其实和平均值有点类似）</p>
+<p>$f$：代指我们训练的模型。</p>
+<p>$D$：数据集。</p>
+<p>$m$：样本的总数量。</p>
+<p>$i$：当前样本的下标。</p>
+<p>$x_i$：第 i 个样本的预测结果的标签（好瓜&#x2F;坏瓜）。</p>
+<p>$y_i$：第 i 个样本的标签真实值。</p>
+<p>$\displaystyle\sum_{i&#x3D;1}^m(x_i)$：通过下标将所有 x 相加起来。和 for 循环差不多。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> list[] = &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;;</span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">1</span>; i&lt;=m; i++)&#123;</span><br><span class="line">    sum = sum + list[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>简单来说，就是把所有预测值和真实值相减，然后在求他们的平方之和。最后再求个平均值。</p>
+<h2 id="错误率与精度"><a href="#错误率与精度" class="headerlink" title="错误率与精度"></a>错误率与精度</h2><p>错误率和精度是分类任务（预测的结果是布尔值的任务）中最常用的两种性能度量。</p>
+<p>他们既适用于二分类任务，也适用于多分类任务。</p>
+<h3 id="错误率"><a href="#错误率" class="headerlink" title="错误率"></a>错误率</h3><p>对样例集 $D$，分类错误率定义为</p>
+<p>$$<br>E(f;D) &#x3D; \frac{1}{m}\sum_{i &#x3D; 1}^m \text{Ⅱ}(f(x_i) \ne y_i)<br>$$</p>
+<p>$E(f;D)$：对模型 $f$ 和数据集 $D$ 的数学期望。</p>
+<p>$m$：样本的总数量。</p>
+<p>$i$：当前样本的下标。</p>
+<p>$x_i$：第 i 个样本的预测结果的标签（好瓜&#x2F;坏瓜）。</p>
+<p>$y_i$：第 i 个样本的标签真实值。</p>
+<p>$Ⅱ$：相当于定义的一个函数，和 $f(x)$ 概念类似，只是它这个符号比较迷惑。</p>
+<p>$$<br>Ⅱ(f({x_i}) \ne {y_i}) &#x3D; \begin{cases}<br>1 ,&amp;\text{if }f(x_i) \ne y_i \<br>0 ,&amp;\text{if }f(x_i) &#x3D; y_i<br>\end{cases}<br>$$</p>
+<p>也就是：</p>
+<ul>
+<li>如果预测值和实际值<strong>相等</strong>，那么这个函数输出 0。</li>
+<li>如果预测值和实际值<strong>有偏差</strong>，那么这个函数输出 1。</li>
+</ul>
+<p>最后又把他们输出的所有值全部加起来，再求个平均值。</p>
+<h3 id="精度"><a href="#精度" class="headerlink" title="精度"></a>精度</h3><p>精度也就是正确率，上面求出来了错误率，那么直接用 1 减去它就行了。</p>
+<p>$$ acc(f;D) &#x3D; 1-E(f;D) $$</p>
+<p>$acc(f;D)$：acc 是 Accuracy 的缩写，意思是 准确&#x2F;精确 率。</p>
+<p>$E(f;D)$：就是上面的错误率。</p>
+<p>当然了你也可以通过改写上面的 $Ⅱ$ 函数，直接计算精度。</p>
+<p>$$ E(f;D) &#x3D; \frac{1}{m}\sum\limits_{i &#x3D; 1}^m Ⅱ(f({x_i}) \color{blue}&#x3D; \color{black}{y_i}) $$</p>
+<p>将 $Ⅱ$ 函数改成：</p>
+<ul>
+<li>如果预测值和实际值<strong>相等</strong>，那么这个函数输出 1。</li>
+<li>如果预测值和实际值<strong>有偏差</strong>，那么这个函数输出 0。</li>
+</ul>
+<p>$$<br>Ⅱ(f({x_i}) \color{blue}&#x3D;\color{black} {y_i}) &#x3D; \begin{cases}<br>1 ,&amp;\text{if }f(x_i) \color{blue}&#x3D;\color{black} y_i \<br>0 ,&amp;\text{if }f(x_i) \color{blue}\ne\color{black} y_i<br>\end{cases}<br>$$</p>
+<blockquote>
+<p>注意这里的 $&#x3D;$ 和 $\ne$ 与上面错误率的公式有差别。</p>
+</blockquote>
+<p>通过改写后，我们就相当于通过 $Ⅱ$ 直接求出了正确样本的总个数，再通过最外面的 $\frac{1}{m}$ 就直接可以求出正确率的百分比了。</p>
+<h2 id="查准率与查全率"><a href="#查准率与查全率" class="headerlink" title="查准率与查全率"></a>查准率与查全率</h2><p><strong>查准率</strong>（Precision）：判定是对的样例中，到底有多少真是对的。</p>
+<p><strong>查全率</strong>（Recall）：所有对的样例，你找出了多少，或者说你判断对了多少。</p>
+<table>
+   <tr  rowspan="2">
+      <th rowspan="2" align="center">真实情况</th>
+      <th colspan="2" align="center">预测结果</th>
+   </tr>
+   <tr>
+      <td  align="center">正例</td>
+      <td  align="center">反例</td>
+   </tr>
+   <tr>
+      <td  align="center">正例</td>
+      <td align="center">TP（真正例）true positive</td>
+      <td align="center">FN（假反例）false negative</td>
+   </tr>
+   <tr>
+      <td  align="center">反例</td>
+      <td align="center">FP（假正例）false positive</td>
+      <td align="center">TN（真反例）true negative</td>
+   </tr>
+</table>
+
+<blockquote>
+<p>这个就叫混淆矩阵</p>
+</blockquote>
+<p>查准率 P 与 查全率 R 分别定义为</p>
+<p>$$ p&#x3D;\frac{TP}{TP+FP} $$</p>
+<p>$$ R&#x3D;\frac{TP}{TP+FN} $$</p>
+<p>查准率和查全率是一对矛盾的变量。一般来说，其中一个高另一个就会低。</p>
+<p>比如，要尽可能将好瓜选出来，那么就增加选瓜的数量，如果把所有瓜都选上了，好瓜肯定也都选上了。但是这样的话查准率就会很低。反之亦然。</p>
+<h2 id="F1-度量"><a href="#F1-度量" class="headerlink" title="F1 度量"></a>F1 度量</h2><p>F1 度量是用于找到一个查全率和查准率的平衡点算法。</p>
+<p>$$<br>F1 &#x3D; \frac{2×P×R}{P+R} &#x3D; \frac{2×TP}{样例总数+TP-TN}<br>$$</p>
+<p>F1 度量还可以通过调整参数，让他向查全率偏重，或者是向查准率偏重。</p>
+<p>$$<br>F_β &#x3D; \frac{(1+β^2)×P×R}{(β^2×P)+R}<br>$$</p>
+<p>$$<br>F_β &#x3D; \begin{cases}<br>偏重查全率 &amp;β&gt;1\<br>标准 F1 &amp;β&#x3D;1\<br>偏重查准率 &amp;β&lt;1<br>\end{cases}<br>$$</p>
+<h2 id="宏-微F1"><a href="#宏-微F1" class="headerlink" title="宏&#x2F;微F1"></a>宏&#x2F;微F1</h2><p>很多时候我们有多个二分类混淆矩阵(忘了混淆矩阵是什么的去<a href="/26" title="机器学习西瓜书 学习笔记">这里</a>看看)，然后我们有一个方法可以在 n 个二分类混淆矩阵上综合考察查准率和查全率。</p>
+<ul>
+<li>宏：先计算查准率和查全率再求平均值。</li>
+<li>微：先计算 TP、FP、TN、FN 的平均值再求查准率和查全率。</li>
+</ul>
+<h3 id="宏"><a href="#宏" class="headerlink" title="宏"></a>宏</h3><p>你要先回想以前之前的，查准率（Precision）和查全率（Recall）。</p>
+<p>$$ P&#x3D;\frac{TP}{TP+FP} $$</p>
+<p>$$ R&#x3D;\frac{TP}{TP+FN} $$</p>
+<p>宏查准率与宏查全率就是把他们求了个平均值。</p>
+<p>宏（macro）查准率：</p>
+<p>$$<br>macro-P &#x3D; \frac{1}{n}\sum_{i&#x3D;1}^nP_i<br>$$</p>
+<p>宏查全率：</p>
+<p>$$<br>macro-R &#x3D; \frac{1}{n}\sum_{i&#x3D;1}^nR_i<br>$$</p>
+<p>可以理解为，先把每一个混淆矩阵的 P 和 R 都求出来，然后再把他们求个平均值就行了。</p>
+<p>后面的宏 F1 也就比较好理解，还是回想之前计算 F1 的公式。</p>
+<p>$$<br>F1 &#x3D; \frac{2×P×R}{P+R}<br>$$</p>
+<p>令上面式子的 $P&#x3D;macro-P$ 同时令 $R&#x3D;macro-R$ 那么就可以得到下面的式子了</p>
+<p>$$<br>macro-F1 &#x3D; \frac{2×macro-P×macro-R}{macro-P+macro-R}<br>$$</p>
+<h3 id="微"><a href="#微" class="headerlink" title="微"></a>微</h3><p>介绍完了宏，再来介绍一下微（micro）。还是放一下这个混淆矩阵.</p>
+<table>
+   <tr  rowspan="2">
+      <th rowspan="2" align="center">真实情况</th>
+      <th colspan="2" align="center">预测结果</th>
+   </tr>
+   <tr>
+      <td  align="center">正例</td>
+      <td  align="center">反例</td>
+   </tr>
+   <tr>
+      <td  align="center">正例</td>
+      <td align="center">TP（真正例）true positive</td>
+      <td align="center">FN（假反例）false negative</td>
+   </tr>
+   <tr>
+      <td  align="center">反例</td>
+      <td align="center">FP（假正例）false positive</td>
+      <td align="center">TN（真反例）true negative</td>
+   </tr>
+</table>
+
+<p>当有多个混淆矩阵的时候，你也会有很多个 TP、FN、FP、TN。那么你可以先分别计算所有混淆矩阵的 TP、FN、FP、TN 的平均值。我们将求过平均值后的数上面画一个横线，那么就有。</p>
+<p>$TP$ 的平均值为 $\overline{TP}$</p>
+<p>$FN$ 的平均值为 $\overline{FN}$</p>
+<p>$FP$ 的平均值为 $\overline{FP}$</p>
+<p>$TN$ 的平均值为 $\overline{TN}$</p>
+<p>有了这四个参数，我们再回头看看之前的查准率和查全率公式：</p>
+<p>$$ P&#x3D;\frac{TP}{TP+FP} $$</p>
+<p>$$ R&#x3D;\frac{TP}{TP+FN} $$</p>
+<p>把里面的变量都用计算平均值过后的替换一下，就可以计算微（micro）查准率：</p>
+<p>$$<br>micro-P &#x3D; \frac{\overline{TP}}{\overline{TP}+\overline{FP}}<br>$$</p>
+<p>微查全率也很简单啦：</p>
+<p>$$<br>micro-R &#x3D; \frac{\overline{TP}}{\overline{TP}+\overline{FN}}<br>$$</p>
+<p>后面的微 F1 也是把每一位的都替换一下就行了：</p>
+<p>$$<br>micro-F1 &#x3D; \frac{2×micro-P×micro-R}{micro-P×micro-R}<br>$$</p>
+<h2 id="P-R-ROC-AUC"><a href="#P-R-ROC-AUC" class="headerlink" title="P-R ROC AUC"></a>P-R ROC AUC</h2><table>
+   <tr  rowspan="2">
+      <th rowspan="2" align="center">真实情况</th>
+      <th colspan="2" align="center">预测结果</th>
+   </tr>
+   <tr>
+      <td  align="center">正例</td>
+      <td  align="center">反例</td>
+   </tr>
+   <tr>
+      <td  align="center">正例</td>
+      <td align="center">TP（真正例）true positive</td>
+      <td align="center">FN（假反例）false negative</td>
+   </tr>
+   <tr>
+      <td  align="center">反例</td>
+      <td align="center">FP（假正例）false positive</td>
+      <td align="center">TN（真反例）true negative</td>
+   </tr>
+</table>
+
+<h3 id="P-R"><a href="#P-R" class="headerlink" title="P-R"></a>P-R</h3><p>P-R 曲线横坐标是查全率：</p>
+<p>$$ R&#x3D;\frac{TP}{TP+FN} $$</p>
+<p>纵坐标是查准率：</p>
+<p>$$ P&#x3D;\frac{TP}{TP+FP} $$</p>
+<p><img data-src="https://st.blackyau.net/blog/26/6.png" alt="P-R曲线"></p>
+<h3 id="ROC"><a href="#ROC" class="headerlink" title="ROC"></a>ROC</h3><p>横坐标的两个参数，都是混淆矩阵的第二行，这个分子的 FP 是我们不想要的。</p>
+<p>ROC 曲线的横坐标是假正例率（Flase Positive Rate）：</p>
+<p>$$ FPR&#x3D;\frac{FP}{FP+TN} $$</p>
+<p>纵坐标的两个参数，都是混淆矩阵的第一行，这个分子的 TP 是我们想要的。</p>
+<p>纵坐标是真正例率（True Positive Rate），这个公式和 $R$ 是一摸一样的。</p>
+<p>$$ TPR&#x3D;\frac{TP}{TP+FN} $$</p>
+<blockquote>
+<p>我们最想要的就是横坐标很小，但是纵坐标很大的模型。</p>
+</blockquote>
+<p>左边这个图在绘制的时候，是人工美化让他变光滑了的。</p>
+<p>但是右边这个图才是实际情况下的图，因为样本数量是有限的，两个点之间的距离也都是直线，所以就会有很多锯齿。</p>
+<p>左边那个图，中间的虚线不用去理解它。同时你也要注意，左图的 AUC 指的是阴影部分，和那个虚线没有任何关系。</p>
+<p><img data-src="https://st.blackyau.net/blog/26/7.png" alt="ROC"></p>
+<h3 id="AUC"><a href="#AUC" class="headerlink" title="AUC"></a>AUC</h3><p>AUC（Area Under ROC Curve）指的 ROC 曲线下面的面积，而这个面积越大，这个模型就越好。</p>
+<p>虽然 AUC 这个概念只是说的 ROC 但是 P-R 曲线也是曲线下面的面积越大越好。</p>
+<h1 id="术语中英对照"><a href="#术语中英对照" class="headerlink" title="术语中英对照"></a>术语中英对照</h1><table>
+<thead>
+<tr>
+<th align="center">中文</th>
+<th align="center">英文</th>
+<th align="center">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">数据集</td>
+<td align="center">data set</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">实例</td>
+<td align="center">instance</td>
+<td align="center">每一条记录</td>
+</tr>
+<tr>
+<td align="center">样本</td>
+<td align="center">sample</td>
+<td align="center">又名实例</td>
+</tr>
+<tr>
+<td align="center">属性</td>
+<td align="center">attribute</td>
+<td align="center">描述样本的什么方面</td>
+</tr>
+<tr>
+<td align="center">特征</td>
+<td align="center">feature</td>
+<td align="center">又名属性</td>
+</tr>
+<tr>
+<td align="center">属性样本</td>
+<td align="center">attribute space</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">特征向量</td>
+<td align="center">feature vector</td>
+<td align="center">在空间中确认一个点</td>
+</tr>
+<tr>
+<td align="center">维数</td>
+<td align="center">dimensionality</td>
+<td align="center">样本有多少属性</td>
+</tr>
+<tr>
+<td align="center">学习</td>
+<td align="center">learning</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">训练数据</td>
+<td align="center">training data</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">训练样本</td>
+<td align="center">training sample</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">训练集</td>
+<td align="center">training set</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">假设</td>
+<td align="center">hypothesis</td>
+<td align="center">关于数据的某种规律</td>
+</tr>
+<tr>
+<td align="center">标记</td>
+<td align="center">label</td>
+<td align="center">真假</td>
+</tr>
+<tr>
+<td align="center">样例</td>
+<td align="center">example</td>
+<td align="center">有标记的样本</td>
+</tr>
+<tr>
+<td align="center">标记空间</td>
+<td align="center">label space</td>
+<td align="center">所有标记的集合</td>
+</tr>
+<tr>
+<td align="center">分类</td>
+<td align="center">classification</td>
+<td align="center">预测的布尔值</td>
+</tr>
+<tr>
+<td align="center">回归</td>
+<td align="center">regression</td>
+<td align="center">预测的连续值</td>
+</tr>
+<tr>
+<td align="center">二分类</td>
+<td align="center">binary classification</td>
+<td align="center">预测类别只有两个</td>
+</tr>
+<tr>
+<td align="center">多分类</td>
+<td align="center">multi-class classification</td>
+<td align="center">预测类别有两个以上</td>
+</tr>
+<tr>
+<td align="center">测试</td>
+<td align="center">testing</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">测试样本</td>
+<td align="center">testing sample</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">聚类</td>
+<td align="center">clustering</td>
+<td align="center">给训练集分组</td>
+</tr>
+<tr>
+<td align="center">簇</td>
+<td align="center">cluster</td>
+<td align="center">每个组就是一个簇</td>
+</tr>
+<tr>
+<td align="center">监督学习</td>
+<td align="center">supervised learning</td>
+<td align="center">有标记</td>
+</tr>
+<tr>
+<td align="center">无监督学习</td>
+<td align="center">unsupervised learning</td>
+<td align="center">无标记</td>
+</tr>
+<tr>
+<td align="center">泛化</td>
+<td align="center">generalization</td>
+<td align="center">学习样本的能力</td>
+</tr>
+<tr>
+<td align="center">归纳</td>
+<td align="center">induction</td>
+<td align="center">从具体事实归纳出规律</td>
+</tr>
+<tr>
+<td align="center">演绎</td>
+<td align="center">deduction</td>
+<td align="center">从基础原理推导出具体情况</td>
+</tr>
+<tr>
+<td align="center">特化</td>
+<td align="center">specialization</td>
+<td align="center">描述演绎的过程</td>
+</tr>
+<tr>
+<td align="center">归纳学习</td>
+<td align="center">inductive learning</td>
+<td align="center">从具体事实归结出一般性规律</td>
+</tr>
+<tr>
+<td align="center">概念</td>
+<td align="center">concept</td>
+<td align="center">对样本的描述</td>
+</tr>
+</tbody></table>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://imlogm.github.io/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/occam-razor-NFL/">奥卡姆剃刀和没有免费的午餐定理@LogM’s Blog</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>蠢黑通行
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blackyau.cc/26" title="机器学习西瓜书 学习笔记">https://blackyau.cc/26</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag"># 笔记</a>
+              <a href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag"># 学习</a>
+              <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag"># 学习笔记</a>
+              <a href="/tags/%E8%A5%BF%E7%93%9C%E4%B9%A6/" rel="tag"># 西瓜书</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/%E5%91%A8%E5%BF%97%E5%8D%8E/" rel="tag"># 周志华</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/25" rel="prev" title="算法复杂度分析(下)">
+                  <i class="fa fa-angle-left"></i> 算法复杂度分析(下)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/27" rel="next" title="主机互 ping 交互过程">
+                  主机互 ping 交互过程 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments disqusjs-container">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2016 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蠢黑通行</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div><div class="powered-by">本网站由 <a style="border-bottom: none;"href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" class="theme-link" rel="noopener" target="_blank" title="upyun"><img style="display: inline; vertical-align: middle;" src="https://st.blackyau.net/blog/file/upyun_dark.svg" alt="upyun">提供CDN加速/云储存服务</a> </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/sidebar.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/disqusjs@3.0.2/dist/browser/styles/disqusjs.css" integrity="sha256-71XarXwNr1Td27HmZI9zjY+rMzRdush6/glo6VFXp7o=" crossorigin="anonymous">
+
+<script class="next-config" data-name="disqusjs" type="application/json">{"enable":true,"api":"https://disqusjs-proxy-rose.vercel.app/","apikey":"40wkCy0ewvq5nL9eGvjiJHkBCc35Rk4DIQmje6UJ3vnO1mDt0C1b5yxqlbUeoo6P","shortname":"blackyau","js":{"url":"https://unpkg.com/disqusjs@3.0.2/dist/browser/disqusjs.es2015.umd.min.js","integrity":"sha256-okP99ZQKVpIy7+NogAMpGlIQzJa9XKXhIJcFgdju5bU="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/comments/disqusjs.js"></script>
+
+</body>
+</html>

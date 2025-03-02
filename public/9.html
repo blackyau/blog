@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://st.blackyau.net/blog/file/favicon-180x180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://st.blackyau.net/blog/file/favicon-64x64.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://st.blackyau.net/blog/file/favicon-32x32.png">
+  <link rel="mask-icon" href="https://st.blackyau.net/blog/file/favicon-512x512.svg" color="#222">
+  <meta name="google-site-verification" content="nXthYmLKSXqupL96tIOSCBi3yiBjEEkTqK9vEYv808U">
+  <meta name="msvalidate.01" content="56ABC0C6006554B668AA5972B359B773">
+  <meta name="baidu-site-verification" content="VQvGuCkX3O">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blackyau.cc","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/config.js"></script>
+
+    <meta name="description" content="PGP 是用于信息加密，应用程序来源验证的加密协议，这里会介绍 PGP 在 Windows 平台下的使用方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 PGP&#x2F;GPG 进行数字签名加密解密">
+<meta property="og:url" content="https://blackyau.cc/9">
+<meta property="og:site_name" content="蠢黑通行">
+<meta property="og:description" content="PGP 是用于信息加密，应用程序来源验证的加密协议，这里会介绍 PGP 在 Windows 平台下的使用方法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://st.blackyau.net/blog/9/1.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/9/2.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/9/3.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/9/4.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/9/5.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/9/6.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/9/7.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/9/8.png">
+<meta property="og:image" content="https://licensebuttons.net/p/zero/1.0/88x15.png">
+<meta property="article:published_time" content="2018-06-09T15:27:00.000Z">
+<meta property="article:modified_time" content="2019-04-06T03:36:24.000Z">
+<meta property="article:author" content="蠢黑通行">
+<meta property="article:tag" content="PGP">
+<meta property="article:tag" content="GPG">
+<meta property="article:tag" content="数字签名">
+<meta property="article:tag" content="加密">
+<meta property="article:tag" content="解密">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://st.blackyau.net/blog/9/1.png">
+
+
+<link rel="canonical" href="https://blackyau.cc/9">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blackyau.cc/9","path":"9.html","title":"使用 PGP/GPG 进行数字签名加密解密"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用 PGP/GPG 进行数字签名加密解密 | 蠢黑通行</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKREM40HY8"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TKREM40HY8","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="蠢黑通行" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">蠢黑通行</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个人的全世界</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#PGP-GPG-GnuPG-OpenPGP-%E5%85%B3%E7%B3%BB%E5%92%8C%E5%8C%BA%E5%88%AB"><span class="nav-number">1.</span> <span class="nav-text">PGP&#x2F;GPG&#x2F;GnuPG&#x2F;OpenPGP 关系和区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PGP-%E5%8A%A0%E8%A7%A3%E5%AF%86%E5%92%8C%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.</span> <span class="nav-text">PGP 加解密和数字签名简单介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Windows-%E4%B8%8B%E4%BD%BF%E7%94%A8-GnuPG-%E5%8A%A0%E5%AF%86-%E8%A7%A3%E5%AF%86-%E7%AD%BE%E5%90%8D-%E6%A0%A1%E9%AA%8C"><span class="nav-number">3.</span> <span class="nav-text">Windows 下使用 GnuPG 加密&#x2F;解密&#x2F;签名&#x2F;校验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85-Gpg4win"><span class="nav-number">3.1.</span> <span class="nav-text">下载安装 Gpg4win</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Gpg4win-%E5%8A%A0%E8%A7%A3%E5%AF%86-%E7%AD%BE%E5%90%8D%E6%A3%80%E9%AA%8C%E6%96%87%E4%BB%B6"><span class="nav-number">3.2.</span> <span class="nav-text">使用 Gpg4win 加解密&#x2F;签名检验文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Gpg4win-%E5%8A%A0%E8%A7%A3%E5%AF%86-%E7%AD%BE%E5%90%8D%E6%A3%80%E9%AA%8C%E6%96%87%E6%9C%AC"><span class="nav-number">3.3.</span> <span class="nav-text">使用 Gpg4win 加解密&#x2F;签名检验文本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%87%BA%E5%AF%86%E9%92%A5%E5%AF%B9"><span class="nav-number">3.4.</span> <span class="nav-text">导出密钥对</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E8%AF%95%E8%AF%95%E4%BD%BF%E7%94%A8PGP%E8%A7%A3%E5%AF%86%E4%BB%A5%E4%B8%8B%E7%BA%AF%E6%96%87%E6%9C%AC%E5%90%A7"><span class="nav-number">4.</span> <span class="nav-text">来试试使用PGP解密以下纯文本吧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%B9%B3%E5%8F%B0"><span class="nav-number">5.</span> <span class="nav-text">其他平台</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E9%93%BE%E6%8E%A5"><span class="nav-number">6.</span> <span class="nav-text">外部链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9D%83%E5%A3%B0%E6%98%8E"><span class="nav-number">7.</span> <span class="nav-text">版权声明</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蠢黑通行"
+      src="https://st.blackyau.net/head.jpg">
+  <p class="site-author-name" itemprop="name">蠢黑通行</p>
+  <div class="site-description" itemprop="description">BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。</div>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/blackyau" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;blackyau" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:blackyau426@gmail.com" title="E-Mail → mailto:blackyau426@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/black_yau" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;black_yau" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://bbs.letitfly.me/" title="https:&#x2F;&#x2F;bbs.letitfly.me" rel="noopener" target="_blank">LIF BBS</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.ixk.me/" title="https:&#x2F;&#x2F;www.ixk.me" rel="noopener" target="_blank">青空之蓝</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blackyau.cc/9">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://st.blackyau.net/head.jpg">
+      <meta itemprop="name" content="蠢黑通行">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蠢黑通行">
+      <meta itemprop="description" content="BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用 PGP/GPG 进行数字签名加密解密 | 蠢黑通行">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 PGP/GPG 进行数字签名加密解密
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-06-09 23:27:00" itemprop="dateCreated datePublished" datetime="2018-06-09T23:27:00+08:00">2018-06-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-04-06 11:36:24" itemprop="dateModified" datetime="2019-04-06T11:36:24+08:00">2019-04-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>PGP 是用于信息加密，应用程序来源验证的加密协议，这里会介绍 PGP 在 Windows 平台下的使用方法</p>
+<span id="more"></span>
+
+<h2 id="PGP-GPG-GnuPG-OpenPGP-关系和区别"><a href="#PGP-GPG-GnuPG-OpenPGP-关系和区别" class="headerlink" title="PGP&#x2F;GPG&#x2F;GnuPG&#x2F;OpenPGP 关系和区别"></a>PGP&#x2F;GPG&#x2F;GnuPG&#x2F;OpenPGP 关系和区别</h2><p>PGP 是 Phil Zimmermann 于1991年开发的商业应用程序，1997年7月，PGP Inc.与齐默尔曼同意 IETF 制定一项公开的互联网标准，称作 OpenPGP，任何支持这一标准的程序也被允许称作 OpenPGP。GnuPG 则是支持了这一标准的开源应用程序。提个小故事：</p>
+<blockquote>
+<p>当年的 PGP 之父（Phil Zimmermann）因为发明了 PGP 这款文件&#x2F;邮件加密工具，差点被美国政府抓去坐牢。当时（上世纪90年代初）的美国法律规定，“高强度加密技术”属于军用技术，不允许出口到海外。Phil Zimmermann 后来想了个妙计——通过 MIT 出版社出了一本书，把 PGP 的全部源代码放到书中，然后援引“美国宪法第一修正案”（出版物受“言论自由”的保护），才推翻了对他的指控。<a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2014/06/truecrypt-dead.html"><sup>来源</sup></a></p>
+</blockquote>
+<h2 id="PGP-加解密和数字签名简单介绍"><a href="#PGP-加解密和数字签名简单介绍" class="headerlink" title="PGP 加解密和数字签名简单介绍"></a>PGP 加解密和数字签名简单介绍</h2><p>我们可以生成世界上唯一的一组公钥和密钥，公钥用于加密，密钥用于解密。我们一般只公开公钥，他人使用公钥加密后在通过任何方式发送给我。但是因为密钥只能解密<em>使用与自己配对的公钥加密后的数据</em>，这样就保证了使用了我公钥加密后的数据只能由我解密查看。这就是PGP加解密的基本原理。</p>
+<p>数字签名则是用来校验文件完整性的它不具备加密功能，它在发送的信息末尾都会加上一个用于检验的字段（签名）。这个签名是基于发布者的信息和文件计算出来的，接收者使用发送者的公钥就可以核对信息是否遭到篡改。大部分支持OpenPGP协议的应用，都会在加密的同时默认开启这个特性。</p>
+<h2 id="Windows-下使用-GnuPG-加密-解密-签名-校验"><a href="#Windows-下使用-GnuPG-加密-解密-签名-校验" class="headerlink" title="Windows 下使用 GnuPG 加密&#x2F;解密&#x2F;签名&#x2F;校验"></a>Windows 下使用 GnuPG 加密&#x2F;解密&#x2F;签名&#x2F;校验</h2><p>Windows 环境下我选择 <a target="_blank" rel="noopener" href="https://gpg4win.org/">Gpg4win</a> 作为本次教程的对象，它使用 GnuPG 作为加解密后端、使用 Kleopatra 作为证书管理器和通用加密对话框。更多可查看<a target="_blank" rel="noopener" href="https://gpg4win.org/about.html">关于</a>，并且它拥有可视化图形界面，最重要的是它以及它包含的工具都是<a target="_blank" rel="noopener" href="https://gpg4win.org/about.html">开源应用</a>。</p>
+<h3 id="下载安装-Gpg4win"><a href="#下载安装-Gpg4win" class="headerlink" title="下载安装 Gpg4win"></a>下载安装 Gpg4win</h3><p>直接在 Gpg4win 主页 <a target="_blank" rel="noopener" href="https://gpg4win.org/">https://gpg4win.org</a> 下载并安装到你认为合适的路径即可</p>
+<h3 id="使用-Gpg4win-加解密-签名检验文件"><a href="#使用-Gpg4win-加解密-签名检验文件" class="headerlink" title="使用 Gpg4win 加解密&#x2F;签名检验文件"></a>使用 Gpg4win 加解密&#x2F;签名检验文件</h3><p>打开桌面或开始中的 Kleopatra ，并点击「新建密钥对」</p>
+<p><img data-src="https://st.blackyau.net/blog/9/1.png" alt="1"></p>
+<p>在对话框中输入你所期望的信息(对任何人都是可见的)</p>
+<p><img data-src="https://st.blackyau.net/blog/9/2.png" alt="2"></p>
+<p>会让你输入一个密码，用来加密密钥</p>
+<p><img data-src="https://st.blackyau.net/blog/9/3.png" alt="3"></p>
+<p>「生成你的密钥对的副本」可以让你保存密钥和公钥到其他地方，「将公钥上传到目录服务」可以将你的公钥上传到服务器，这样的话别人就可以通过昵称&#x2F;邮箱或指纹搜索到你的公钥(只有指纹具有唯一性)。注：将公钥上传到服务器是一种不可逆的行为，就算密钥到期了也不会被删除而是会被标记上「已过期」。</p>
+<p>Kleopatra默认密钥服务器地址:<a target="_blank" rel="noopener" href="http://pool.sks-keyservers.net/">http://pool.sks-keyservers.net/</a></p>
+<p><img data-src="https://st.blackyau.net/blog/9/4.png" alt="4"></p>
+<p>新建密钥对后就可以选择加密文件了，点击左上角的「签名&#x2F;加密」。选择一个文件加密后，别人在没有你的私钥的情况下就无法解密你的文件了。当你需要使用别人的公钥加密文件时，要先导入他人的公钥。并在加密文件时勾选「为他人加密」，在输入他人的名字并选中即可。</p>
+<p><img data-src="https://st.blackyau.net/blog/9/5.png" alt="5"></p>
+<p>解密时你必须要先导入对应的密钥对，同时还需要提供密码，并点击「Save All」</p>
+<p><img data-src="https://st.blackyau.net/blog/9/6.png" alt="6"></p>
+<h3 id="使用-Gpg4win-加解密-签名检验文本"><a href="#使用-Gpg4win-加解密-签名检验文本" class="headerlink" title="使用 Gpg4win 加解密&#x2F;签名检验文本"></a>使用 Gpg4win 加解密&#x2F;签名检验文本</h3><p>点击工具栏最后一项「记事本」，可以对纯文本进行加解密和签名校验。</p>
+<p><img data-src="https://st.blackyau.net/blog/9/7.png" alt="7"></p>
+<p>在文本框中填入内容在「收件人」选项中选择加解密或签名检验密钥，点击上方的「签名&#x2F;加密 Notepa」或「Decryep &#x2F;Verify Notepa」可进行相应的操作。</p>
+<p><img data-src="https://st.blackyau.net/blog/9/8.png" alt="8"></p>
+<h3 id="导出密钥对"><a href="#导出密钥对" class="headerlink" title="导出密钥对"></a>导出密钥对</h3><p>选中你的密钥，右键「导出绝密密钥」即可</p>
+<h2 id="来试试使用PGP解密以下纯文本吧"><a href="#来试试使用PGP解密以下纯文本吧" class="headerlink" title="来试试使用PGP解密以下纯文本吧"></a>来试试使用PGP解密以下纯文本吧</h2><p>密文:<a target="_blank" rel="noopener" href="https://st.blackyau.net/blog/file/Ciphertext.txt">https://st.blackyau.net/blog/file/Ciphertext.txt</a> (你需要将里面的内容复制出来)</p>
+<p>密钥对:<a target="_blank" rel="noopener" href="https://st.blackyau.net/blog/file/LetPGPFly.gpg">https://st.blackyau.net/blog/file/LetPGPFly.gpg</a> (可加密&#x2F;解密)</p>
+<p>公钥:<a target="_blank" rel="noopener" href="https://st.blackyau.net/blog/file/LetPGPFly.asc">https://st.blackyau.net/blog/file/LetPGPFly.asc</a> (仅可加密)</p>
+<h2 id="其他平台"><a href="#其他平台" class="headerlink" title="其他平台"></a>其他平台</h2><p>Android: OpenKeychain: Easy PGP(加密时第一项「加密到」需要你手动输入加密密钥的昵称)</p>
+<blockquote>
+<p>Google Play:<a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=org.sufficientlysecure.keychain">https://play.google.com/store/apps/details?id=org.sufficientlysecure.keychain</a><br>F-Droid:<a target="_blank" rel="noopener" href="https://f-droid.org/packages/org.sufficientlysecure.keychain/">https://f-droid.org/packages/org.sufficientlysecure.keychain/</a><br><a target="_blank" rel="noopener" href="https://bbs.letitfly.me/d/985">LetITFly BBS@Yongmeng使用 OpenKeychain 管理 OpenPGP 密钥</a></p>
+</blockquote>
+<p>Mac: GPG Suite</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://gpgtools.org/">https://gpgtools.org/</a></p>
+</blockquote>
+<p>Linux: GnuPG</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.gnupg.org/download/index.html">https://www.gnupg.org/download/index.html</a></p>
+</blockquote>
+<h2 id="外部链接"><a href="#外部链接" class="headerlink" title="外部链接"></a>外部链接</h2><p><a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2014/06/truecrypt-dead.html#head-2">分析一下 TrueCrypt 之死（自杀 or 他杀？），介绍一下应对措施 - 编程随想</a></p>
+<p><a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2013/02/file-integrity-check.html#head-9">扫盲文件完整性校验——关于散列值和数字签名 - 编程随想</a></p>
+<p><a target="_blank" rel="noopener" href="https://program-think.blogspot.com/2017/03/Why-Linux-Is-More-Secure-Than-Windows-and-macOS.html#head-7">为什么桌面系统装 Linux 可以做到更好的安全性（相比 Windows &amp; macOS 而言） - 编程随想</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/60520344/answer/218561457">上传到公钥服务器的gpg公钥过期了会被删除吗？ 知乎@胡涵铭</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.williamlong.info/archives/3439.html">使用GnuPG(PGP)加密信息及数字签名教程 - 月光博客</a></p>
+<h2 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h2><p>本文中除引用自互联网内容外，其他内容均以<a target="_blank" rel="noopener" href="https://creativecommons.org/publicdomain/zero/1.0/deed.zh">CC0 1.0 通用 (CC0 1.0) 公共领域贡献</a>方式授权。我已经将作品 贡献 至公共领域，在法律允许的范围，放弃所有我在全世界范围内基于著作权法对作品享有的权利，包括所有相关权利和邻接权利。 您可以复制、修改、发行和表演本作品，甚至可用于商业性目的，都无需同意和标出署名。</p>
+<p><img data-src="https://licensebuttons.net/p/zero/1.0/88x15.png" alt="license"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>蠢黑通行
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blackyau.cc/9" title="使用 PGP&#x2F;GPG 进行数字签名加密解密">https://blackyau.cc/9</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/PGP/" rel="tag"># PGP</a>
+              <a href="/tags/GPG/" rel="tag"># GPG</a>
+              <a href="/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" rel="tag"># 数字签名</a>
+              <a href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag"># 加密</a>
+              <a href="/tags/%E8%A7%A3%E5%AF%86/" rel="tag"># 解密</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/8" rel="prev" title="使用UltraEdit一键转换MAT方案为IFW">
+                  <i class="fa fa-angle-left"></i> 使用UltraEdit一键转换MAT方案为IFW
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/10" rel="next" title="真机安装 CentOS 7">
+                  真机安装 CentOS 7 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments disqusjs-container">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2016 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蠢黑通行</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div><div class="powered-by">本网站由 <a style="border-bottom: none;"href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" class="theme-link" rel="noopener" target="_blank" title="upyun"><img style="display: inline; vertical-align: middle;" src="https://st.blackyau.net/blog/file/upyun_dark.svg" alt="upyun">提供CDN加速/云储存服务</a> </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/sidebar.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/disqusjs@3.0.2/dist/browser/styles/disqusjs.css" integrity="sha256-71XarXwNr1Td27HmZI9zjY+rMzRdush6/glo6VFXp7o=" crossorigin="anonymous">
+
+<script class="next-config" data-name="disqusjs" type="application/json">{"enable":true,"api":"https://disqusjs-proxy-rose.vercel.app/","apikey":"40wkCy0ewvq5nL9eGvjiJHkBCc35Rk4DIQmje6UJ3vnO1mDt0C1b5yxqlbUeoo6P","shortname":"blackyau","js":{"url":"https://unpkg.com/disqusjs@3.0.2/dist/browser/disqusjs.es2015.umd.min.js","integrity":"sha256-okP99ZQKVpIy7+NogAMpGlIQzJa9XKXhIJcFgdju5bU="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/comments/disqusjs.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://st.blackyau.net/blog/file/favicon-180x180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://st.blackyau.net/blog/file/favicon-64x64.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://st.blackyau.net/blog/file/favicon-32x32.png">
+  <link rel="mask-icon" href="https://st.blackyau.net/blog/file/favicon-512x512.svg" color="#222">
+  <meta name="google-site-verification" content="nXthYmLKSXqupL96tIOSCBi3yiBjEEkTqK9vEYv808U">
+  <meta name="msvalidate.01" content="56ABC0C6006554B668AA5972B359B773">
+  <meta name="baidu-site-verification" content="VQvGuCkX3O">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blackyau.cc","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/config.js"></script>
+
+    <meta name="description" content="因为家里弱电箱到客厅电视只有一条线，在原有情况下无法做到 IPTV 和互联网在同一线路上通过。本教程不仅可以解决单线路同时播放互联网软件节目，还可以让任意设备播放 IPTV 节目。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IPTV 与互联网融合">
+<meta property="og:url" content="https://blackyau.cc/23">
+<meta property="og:site_name" content="蠢黑通行">
+<meta property="og:description" content="因为家里弱电箱到客厅电视只有一条线，在原有情况下无法做到 IPTV 和互联网在同一线路上通过。本教程不仅可以解决单线路同时播放互联网软件节目，还可以让任意设备播放 IPTV 节目。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/1.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/2.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/3.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/4.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/5.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/6.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/7.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/8.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/9.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/10.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/11.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/12.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/13.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/14.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/15.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/16.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/17.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/18.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/19.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/20.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/21.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/22.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/23.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/24.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/25.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/26.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/27.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/28.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/29.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/30.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/31.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/32.jpg">
+<meta property="og:image" content="https://st.blackyau.net/blog/23/33.jpg">
+<meta property="article:published_time" content="2020-01-15T09:10:00.000Z">
+<meta property="article:modified_time" content="2021-10-04T08:09:01.000Z">
+<meta property="article:author" content="蠢黑通行">
+<meta property="article:tag" content="IPTV">
+<meta property="article:tag" content="OpenWrt">
+<meta property="article:tag" content="Lean">
+<meta property="article:tag" content="udpxy">
+<meta property="article:tag" content="IGMP">
+<meta property="article:tag" content="RTSP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://st.blackyau.net/blog/23/1.png">
+
+
+<link rel="canonical" href="https://blackyau.cc/23">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blackyau.cc/23","path":"23.html","title":"IPTV 与互联网融合"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>IPTV 与互联网融合 | 蠢黑通行</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKREM40HY8"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TKREM40HY8","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="蠢黑通行" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">蠢黑通行</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个人的全世界</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96"><span class="nav-number">1.1.</span> <span class="nav-text">依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="nav-number">1.2.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iGMP-%E4%B8%8E-RTSP"><span class="nav-number">1.3.</span> <span class="nav-text">iGMP 与 RTSP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IGMP"><span class="nav-number">1.3.1.</span> <span class="nav-text">IGMP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RTSP"><span class="nav-number">1.3.2.</span> <span class="nav-text">RTSP</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87"><span class="nav-number">2.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">硬件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E5%99%A8"><span class="nav-number">3.1.</span> <span class="nav-text">路由器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%93%E5%8C%85%E5%B7%A5%E5%85%B7"><span class="nav-number">3.2.</span> <span class="nav-text">抓包工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">软件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%93%E5%8C%85"><span class="nav-number">5.</span> <span class="nav-text">抓包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E6%8A%93%E5%8C%85%E6%95%B0%E6%8D%AE"><span class="nav-number">6.</span> <span class="nav-text">分析抓包数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%9C%B0%E5%9D%80"><span class="nav-number">6.1.</span> <span class="nav-text">获取地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E6%B3%95%E8%8E%B7%E5%8F%96%E5%88%B0%E5%9C%B0%E5%9D%80"><span class="nav-number">6.2.</span> <span class="nav-text">无法获取到地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%95%B0%E6%8D%AE"><span class="nav-number">6.3.</span> <span class="nav-text">格式化数据</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#M3U8"><span class="nav-number">6.3.1.</span> <span class="nav-text">M3U8</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B6%85%E7%BA%A7%E7%9B%B4%E6%92%AD"><span class="nav-number">6.3.2.</span> <span class="nav-text">超级直播</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96-IPTV-%E5%86%85%E7%BD%91%E5%9C%B0%E5%9D%80"><span class="nav-number">7.</span> <span class="nav-text">获取 IPTV 内网地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-igmpproxy-%E5%92%8C-udpxy"><span class="nav-number">8.</span> <span class="nav-text">配置 igmpproxy 和 udpxy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-SSH-%E8%BF%9E%E6%8E%A5%E5%88%B0%E8%B7%AF%E7%94%B1%E5%99%A8"><span class="nav-number">8.1.</span> <span class="nav-text">使用 SSH 连接到路由器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-igmpproxy-%E5%92%8C-udpxy"><span class="nav-number">8.2.</span> <span class="nav-text">安装 igmpproxy 和 udpxy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-igmpproxy"><span class="nav-number">8.3.</span> <span class="nav-text">配置 igmpproxy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-udpxy"><span class="nav-number">8.4.</span> <span class="nav-text">配置 udpxy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8%E5%A4%96%E6%92%AD%E6%94%BE%E5%AE%B6%E4%B8%AD-IPTV-%E6%BA%90"><span class="nav-number">9.</span> <span class="nav-text">如何在外播放家中 IPTV 源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-number">10.</span> <span class="nav-text">结语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">11.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蠢黑通行"
+      src="https://st.blackyau.net/head.jpg">
+  <p class="site-author-name" itemprop="name">蠢黑通行</p>
+  <div class="site-description" itemprop="description">BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。</div>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/blackyau" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;blackyau" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:blackyau426@gmail.com" title="E-Mail → mailto:blackyau426@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/black_yau" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;black_yau" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://bbs.letitfly.me/" title="https:&#x2F;&#x2F;bbs.letitfly.me" rel="noopener" target="_blank">LIF BBS</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.ixk.me/" title="https:&#x2F;&#x2F;www.ixk.me" rel="noopener" target="_blank">青空之蓝</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blackyau.cc/23">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://st.blackyau.net/head.jpg">
+      <meta itemprop="name" content="蠢黑通行">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蠢黑通行">
+      <meta itemprop="description" content="BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="IPTV 与互联网融合 | 蠢黑通行">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          IPTV 与互联网融合
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-01-15 17:10:00" itemprop="dateCreated datePublished" datetime="2020-01-15T17:10:00+08:00">2020-01-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2021-10-04 16:09:01" itemprop="dateModified" datetime="2021-10-04T16:09:01+08:00">2021-10-04</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>因为家里弱电箱到客厅电视只有一条线，在原有情况下无法做到 IPTV 和互联网在同一线路上通过。本教程不仅可以解决单线路同时播放互联网软件节目，还可以让任意设备播放 IPTV 节目。</p>
+<span id="more"></span>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><h3 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h3><ul>
+<li>需要一个能够刷 OpenWrt 的路由器(需具有<code>数据包镜像</code>和 <code>udpxy</code> 功能&#x2F;插件)用于抓包和后续的使用，因为其功耗较低且价格比较便宜 Newifi D2 拼多多 100 以下就可以拿下</li>
+<li>能够正常播放节目的 IPTV 机顶盒，如果自己家里都没有能用的那就没有融合一说了</li>
+</ul>
+<h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><blockquote>
+<p>因为不同地区网络环境不同，我这里是四川电信，但是可能在同一个省环境都会不一样，所以并不一定在其他地区可用。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>设备</th>
+<th>型号</th>
+<th>软件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>光猫</td>
+<td>TEWA-500E</td>
+<td>-</td>
+</tr>
+<tr>
+<td>主路由</td>
+<td>Newifi-D2</td>
+<td>Lean OpenWrt R9.6.1</td>
+</tr>
+<tr>
+<td>AP</td>
+<td>腾达 AC6</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<p><img data-src="https://st.blackyau.net/blog/23/1.png" alt="网络结构拓扑图"></p>
+<p>无需电信 IPTV 机顶盒，也可在任何设备上通过 http 链接直接播放直播节目。下图分别为 PotPlayer(PC) 和 超级直播(Android) 播放节目效果图。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/2.jpg" alt="PC PotPlayer"></p>
+<p><img data-src="https://st.blackyau.net/blog/23/3.jpg" alt="Android 超级直播"></p>
+<h3 id="iGMP-与-RTSP"><a href="#iGMP-与-RTSP" class="headerlink" title="iGMP 与 RTSP"></a>iGMP 与 RTSP</h3><p>在 IPTV 中常见的两种用于播放直播节目的协议分别为 IGMP 和 RTSP，他们之间的差异如下。</p>
+<table>
+<thead>
+<tr>
+<th align="center">协议</th>
+<th align="center">节目类型</th>
+<th align="center">可用时间</th>
+<th align="center">鉴权</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">IGMP</td>
+<td align="center">直播</td>
+<td align="center">长期</td>
+<td align="center">强制</td>
+</tr>
+<tr>
+<td align="center">RTSP</td>
+<td align="center">直播&#x2F;回放&#x2F;点播</td>
+<td align="center">短期</td>
+<td align="center">非强制</td>
+</tr>
+</tbody></table>
+<h4 id="IGMP"><a href="#IGMP" class="headerlink" title="IGMP"></a>IGMP</h4><p><strong>网路群组管理协议</strong>（英语：Internet Group Management Protocol，缩写：IGMP）是用于管理网路协议多播组成员的一种通信协议，有时候我也会将其称为<strong>组播</strong>。</p>
+<p>在电信这边，组播地址通常很少变化，但是很重要的是它只能看直播不能看回放。又因为它的地址是内网地址，所以你必须要获取到电信的内网IP才能正常播放。我比较倾向于使用组播地址，因为电视节目回放有啥可看的，一般都是爱奇艺什么的了，而且最重要的是它的地址很少变化，这样就给不会倒腾的家人减少了很多麻烦。</p>
+<p>原理上组播和广播(给网络里的所有人都发送一个消息)有点相似，但是组播会划分一个更小的范围，并且这个范围里面设备的名单会同时由客户端和主机端进行维护，路由器会根据不同的组别来转发不同的数据。</p>
+<p>下面假装这个网络里面，有 3组 人正在分别在看 3个 节目。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/4.png" alt="IGMP1"></p>
+<p>正在收看 CCTV-251 的朋友说，这太假了。我想看点正能量的、让人血脉喷张的。然后请求换到 正在播放 CCTV-1 的 <code>igmp://239.93.22.133:9260</code></p>
+<p><img data-src="https://st.blackyau.net/blog/23/5.png" alt="IGMP2"></p>
+<p>路由器随后听到了这位朋友的呼唤，然后就将它放进了 CCTV-1 的组里。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/6.png" alt="IGMP3"></p>
+<p>通过上面的例子你大致能了解到 IGMP 协议的工作原理，可以简单的总结为 IGMP 就是 <code>一对多</code>，下面的一个例子则是和 IGMP 相反。</p>
+<h4 id="RTSP"><a href="#RTSP" class="headerlink" title="RTSP"></a>RTSP</h4><p><strong>实时流协议</strong>（Real Time Streaming Protocol，RTSP）是一种网络应用协议，专为娱乐和通信系统的使用，以控制流媒体服务器。该协议用于创建和控制终端之间的媒体会话。媒体服务器的客户端发布VCR命令，例如播放，录制和暂停，以便于实时控制从服务器到客户端（视频点播）或从客户端到服务器（语音录音）的媒体流，有时候我也会将其称为<strong>时移</strong>。</p>
+<p>原理上 RTSP 和常见的 HTTP 协议比较相似，也就是 <code>一对一</code>，下面这个图可以帮助你理解。</p>
+<p>你在观看节目的时候，可以随意的后退暂停，也可以自己想看什么就看什么，不用加入别人的组，整个资源都被你一个人享用。就和你平时看爱奇艺，B站什么的没区别。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/7.png" alt="RTSP"></p>
+<p>正如上面的介绍一样，RTSP 的主要特点就是可以时移，也就是可以拖动进度条。而且大部分地区的 RTSP 地址都是公网 IP，甚至还可以在获取到地址后，不需要任何授权都可以直接正常播放。</p>
+<p>所以网络上流传的 IPTV 直播源基本都是 RTSP 地址。不过四川电信这边 RTSP 有鉴权，必须要以电信的内网 IP 访问才行。</p>
+<p>同时又因为有部分套餐的 IPTV 是没有回放权限的，所以电信应该还需要验证是谁在播放，这就让观看它成为了比较麻烦的事情(不同地区情况不同，这里只针对我所在的地区)。</p>
+<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>通过了我上面对 IGMP 和 RTSP 协议的介绍，相信你对他俩都有了一定的了解。接下来我将为你详细介绍本次教程的内容。</p>
+<ul>
+<li>适合本项目的硬件设备</li>
+<li>软件安装及环境配置</li>
+<li>抓包获取 IPTV 的 IGMP 和 RTSP 播放地址</li>
+<li>使用 igmpproxy 将所有 IGMP 数据转发到 IPTV 口</li>
+<li>使用 udpxy 将 IGMP 地址转换为 HTTP</li>
+<li>在电视盒子、手机和 PC 上正常播放</li>
+<li>在外欣赏自家 IPTV 直播源</li>
+</ul>
+<p>你可以通过点击右侧边栏，来快速跳跃到你需要的章节或查阅你当前的浏览进度。</p>
+<h2 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h2><p>本章节会介绍你所需要的硬件设备，在抓包和使用融合网络时不可避免的会使用到，生活中平时少见的设备。</p>
+<h3 id="路由器"><a href="#路由器" class="headerlink" title="路由器"></a>路由器</h3><p>IPTV与互联网融合，的主要设备也就是路由器了。一款合适的路由器，可以和电脑一起直接走通整个教程。对于本教程而言，一个能够刷 <code>OpenWrt</code> 或 <code>Lede</code> 同时还能安装 <code>igmpproxy</code> 和 <code>udpxy</code> 最好还支持 <code>交换机端口镜像</code> 就完美了。当然也有一些教程是通过 <code>Padavan</code> 来实现的，但是我个人没有尝试过，这里就不做评价了。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/8.jpg" alt="igmpproxy和udpxy 截图"></p>
+<p><img data-src="https://st.blackyau.net/blog/23/9.jpg" alt="交换机端口镜像 截图"></p>
+<p>如果你目前没有具有此功能的路由器，我推荐你购买 新三 它还有其他的名字 新路由3、Newifi D2、Newifi 3、Newifi 3 D2。也都是同一款，得益于所谓的矿难，这款路由器目前淘宝、拼多多和转转之类的，100元以内都可以拿下，同时购买的时候推荐你加钱让卖家刷好 <code>Breed</code> 和我使用一样的硬件设备，这也能让你配置的时候少走一些弯路。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/10.jpg" alt="新三 照片"></p>
+<blockquote>
+<p>Breed 相当于 Android 里面的 Recovery，Windows 里面的 PE。可以让你在刷机的时候不会轻易翻车。</p>
+</blockquote>
+<h3 id="抓包工具"><a href="#抓包工具" class="headerlink" title="抓包工具"></a>抓包工具</h3><p>通过抓包获取 IPTV 的<a href="https://blackyau.cc/23#iGMP-%E4%B8%8E-RTSP">组播地址</a>也是必不可少的一步。如果你的路由器没有 <code>交换机端口镜像</code> 的功能，你就需要淘宝单独购买一个 网络抓包工具，下图为 Amazon 搜索 <code>Throwing Star LAN Tap</code> 的外观图。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/11.jpg" alt="Throwing Star LAN Tap"></p>
+<p>动手能力比较强的朋友，也可以参考恩山无线论坛的这个帖子<a target="_blank" rel="noopener" href="https://www.right.com.cn/FORUM/thread-328186-1-1.html">小白的IPTV折腾教程（1）—0元DIY抓包神器</a>，利用两根网线和4个水晶头就可以做出一个具有同样功能的抓包工具。</p>
+<p>不过我还是比较推荐刷一个具有 <code>交换机端口镜像</code> 功能的固件，毕竟直接就可以上手用。如果你是比较热门的机型，比如斐讯又或是我之前说到的 Newifi D2 或是其他搭载了 MT7621 芯片的路由器，应该都不难在恩山找到具有该功能的固件。</p>
+<h2 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h2><p>下面列出了本次教程中所有需要的软件，我使用软件的版本，以及和下载链接。</p>
+<table>
+<thead>
+<tr>
+<th>设备</th>
+<th>软件名</th>
+<th>版本</th>
+<th>下载地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PC</td>
+<td>Wireshark</td>
+<td>Portable 3.2.0</td>
+<td><a target="_blank" rel="noopener" href="https://www.wireshark.org/index.html#download">Wireshark 官网</a></td>
+</tr>
+<tr>
+<td>PC</td>
+<td>Notepad++</td>
+<td>7.8.2</td>
+<td><a target="_blank" rel="noopener" href="https://notepad-plus-plus.org/downloads/">Notepad++ 官网</a></td>
+</tr>
+<tr>
+<td>PC</td>
+<td>Xshell</td>
+<td>6.0.0032</td>
+<td><a target="_blank" rel="noopener" href="https://www.netsarang.com/zh/free-for-home-school/">Netsarang 家庭&#x2F;学校版</a></td>
+</tr>
+<tr>
+<td>路由器</td>
+<td>OpenWRT</td>
+<td>R20.2.15</td>
+<td><a target="_blank" rel="noopener" href="https://st.blackyau.net/blog/23/newifi-d2.zip">newifi-d2.zip</a></td>
+</tr>
+<tr>
+<td>路由器</td>
+<td>igmpproxy</td>
+<td>0.2.1-4</td>
+<td>固件自带</td>
+</tr>
+<tr>
+<td>路由器</td>
+<td>udpxy</td>
+<td>2016-09-18-53e4672a75..4-1</td>
+<td>固件自带</td>
+</tr>
+<tr>
+<td>路由器</td>
+<td>luci-app-udpxy</td>
+<td>git-19.146.62144-fd6fdb2-1</td>
+<td>固件自带</td>
+</tr>
+</tbody></table>
+<p>下面介绍了每个软件的用途。</p>
+<table>
+<thead>
+<tr>
+<th>软件名</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Wireshark</td>
+<td>抓包获取 IPTV 播放地址</td>
+</tr>
+<tr>
+<td>Notepad++</td>
+<td>抓包后数据整理</td>
+</tr>
+<tr>
+<td>Xshell</td>
+<td>SSH连接路由器</td>
+</tr>
+<tr>
+<td>OpenWRT</td>
+<td>路由器固件</td>
+</tr>
+<tr>
+<td>igmpproxy</td>
+<td>转发IGMP流量到指定端口</td>
+</tr>
+<tr>
+<td>udpxy</td>
+<td>IGMP流量转HTTP</td>
+</tr>
+</tbody></table>
+<p>这里还有个友华 WR1200JS 可用的固件：<a target="_blank" rel="noopener" href="https://st.blackyau.net/blog/23/youhua_wr1200js.zip">youhua_wr1200js.zip</a></p>
+<h2 id="抓包"><a href="#抓包" class="headerlink" title="抓包"></a>抓包</h2><p>首先将来自光猫的互联网和往常一样连接到路由器的 WAN 口，将 ITV 口连接到路由器的 LAN 4 口，将 IPTV 盒子连接到路由器的 LAN 3 口，最后将 LAN 1 口连接至电脑。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/12.png" alt="抓包连线"></p>
+<p>随后配置路由器的流量镜像功能（我提供的固件中路由器 IP 为 192.168.1.1），将接有 IPTV 盒子的 LAN 3 口（如果抓出来的包只有请求没有回复，那么就改抓 LAN 4）设置为 数据包镜像源端口，将接有电脑的 LAN 1 口设置为 数据包镜像监听端口。其他 VLAN 设置无需改动。</p>
+<p><strong>要把光猫上网模式设置为桥接模式，并使用路由器进行拨号。否则当启动数据镜像后，IPTV 盒子会无法正常工作</strong></p>
+<p><img data-src="https://st.blackyau.net/blog/23/13.jpg" alt="数据镜像设置"></p>
+<p>保存并应用设置后，请严格按照以下步骤进行抓包：</p>
+<ul>
+<li>确认已经关闭电脑中所有程序，也包括 Wireshark</li>
+<li>切断 IPTV 盒子电源</li>
+<li>启动 Wireshark 并监听以太网接口</li>
+<li>接通 IPTV 盒子电源</li>
+<li>使用 IPTV 盒子遥控器，选择直播，并播放一个节目</li>
+<li>让节目保持正常播放 2~3 秒</li>
+<li>停止 Wireshark 抓包并保存抓包数据</li>
+<li>切断 IPTV 盒子电源</li>
+</ul>
+<p>要关闭电脑中的其他联网程序，不然它也会被抓进来，干扰分析。</p>
+<p>关闭 Wireshark 并重开，是方便定位 IPTV 盒子的初始化信息。让 IPTV 盒子初始化的信息，就在最初的几个数据包里面。</p>
+<p>切断 IPTV 盒子电源并重开，是为了能够抓到有关初始化的信息，比如获取 IP 的方法，是 DHCP 获取 IP，还是 PPPOE 之类的。</p>
+<p>启动 IPTV 盒子后，应不停的有数据显示在窗口中。</p>
+<blockquote>
+<p>如果你没有看到任何数据跳动，或者是特别少，应注意是否端口插错，或者是在设置流量镜像的地方有错。</p>
+</blockquote>
+<p>播放节目是为了让 IPTV 盒子去拉取直播节目列表，我们最需要的也就是直播节目列表信息。</p>
+<h2 id="分析抓包数据"><a href="#分析抓包数据" class="headerlink" title="分析抓包数据"></a>分析抓包数据</h2><p><strong>因为不同地区的数据样式差异较大，我这里是四川电信，其他地区可供参考</strong></p>
+<h3 id="获取地址"><a href="#获取地址" class="headerlink" title="获取地址"></a>获取地址</h3><p>在过滤器栏输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http.request.uri contains &quot;frameset_builder.jsp&quot;</span><br></pre></td></tr></table></figure>
+
+<p>四川成都电信可以尝试</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http.request.uri contains &quot;AuthenticationURL&quot;</span><br></pre></td></tr></table></figure>
+
+<p>右键第一个请求，追踪流 - HTTP 流</p>
+<p><img data-src="https://st.blackyau.net/blog/23/14.jpg" alt="Wireshark 1"></p>
+<p>再弹出的新窗口中查找</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">igmp://</span><br></pre></td></tr></table></figure>
+
+<p>如果你找到了类似下图 <code>igmp://239.93.22.133:9260</code> 的连接，那么恭喜你，你的数据抓包已经完成了最重要的定位了！（不难发现旁边也获取到了 <code>rtsp://</code> 开头的时移地址）</p>
+<p><img data-src="https://st.blackyau.net/blog/23/15.jpg" alt="Wireshark 2"></p>
+<p>单击链接，主窗口就会自动定位到该请求。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/16.jpg" alt="Wireshark 3"></p>
+<p>单击展开该请求的完整内容，查看里面的内容是不是含有 <code>igmp://</code> 之类的重要数据。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/17.jpg" alt="Wireshark 4"></p>
+<p>右键 Line-based text data 导出分组字节流，随便取个名字保存到你能找到的地方。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/18.jpg" alt="Wireshark 5"></p>
+<p>用 notepad++ 打开，查看是否显示正常(前几行都是回车，会一片空白，往后滑一点就能看到了)。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/19.jpg" alt="Wireshark 6"></p>
+<h3 id="无法获取到地址"><a href="#无法获取到地址" class="headerlink" title="无法获取到地址"></a>无法获取到地址</h3><p>如果你在窗口中一个数据都未获取到，那么请检查数据镜像设置或网线位置是否有错。</p>
+<p>如果你是四川省，请仔细检查是不是，在过滤的时候复制错了或漏了内容。</p>
+<p>如果你非四川省，可以在过滤器中输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http</span><br></pre></td></tr></table></figure>
+
+<p>进行检索，一条一条的看，里面总会有 <code>igmp://</code> 之类获取节目单的数据（我也是这样找出来的），如果找不到你也可以向我求助 <a href="mailto:&#98;&#x6c;&#97;&#x63;&#x6b;&#121;&#x61;&#117;&#x34;&#x32;&#x36;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">blackyau426@gmail.com</a></p>
+<h3 id="格式化数据"><a href="#格式化数据" class="headerlink" title="格式化数据"></a>格式化数据</h3><p>开始格式化之前，建议保存好原始文件。</p>
+<p>替换完毕后可以将名字带有 PIP 的删除，这是用于机顶盒画中画功能的，说白了就是降低了分辨率的，我们就留下正常的和高清的就行了。</p>
+<h4 id="M3U8"><a href="#M3U8" class="headerlink" title="M3U8"></a>M3U8</h4><p>此格式文件可以在 PC 中直接使用 VLC media player 和 PotPlayer 打开并播放</p>
+<p>查找目标</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.*ChannelName=&quot;(.*)&quot;,UserChannelID=&quot;(.*)&quot;,ChannelURL=&quot;igmp://(.*)&quot;,TimeShift=.*</span><br></pre></td></tr></table></figure>
+
+<p>替换为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#EXTINF:-1, \1\r\nhttp://192.168.10.1:8888/udp/\3</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://st.blackyau.net/blog/23/20.jpg" alt="M3U8 替换中"></p>
+<p>将文档中被格式化了的数据，复制到新文档，并在文档首行写入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#EXTM3U</span><br></pre></td></tr></table></figure>
+
+<p>处理完毕后效果如图，最后将文件另存为 .m3u8 即可。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/21.jpg" alt="M3U8 替换完毕"></p>
+<h4 id="超级直播"><a href="#超级直播" class="headerlink" title="超级直播"></a>超级直播</h4><p>此文件可以在 Android 端的超级直播使用，电脑打开 在软件里面按返回时提示的网址，可以将自定义源上传至该软件。</p>
+<p>查找目标</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.*ChannelName=&quot;(.*)&quot;,UserChannelID=&quot;(.*)&quot;,ChannelURL=&quot;igmp://(.*)&quot;,TimeShift=.*</span><br></pre></td></tr></table></figure>
+
+<p>替换为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\1,http://192.168.10.1:8888/udp/\3</span><br></pre></td></tr></table></figure>
+
+<p>再次查找目标，删除空白行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\n\s*\r</span><br></pre></td></tr></table></figure>
+
+<p>替换为空白</p>
+<p>全选该文本所有内容后复制，在顶部 编码 - 编码字符集 - 中文 - GB2312，确认切换到该字符集。然后删除文本所有内容，并粘贴。最后将文件保存为 txt 即可。</p>
+<blockquote>
+<p>超级直播中文本编码格式必须为 GB2312 否则中文会乱码</p>
+</blockquote>
+<p><img data-src="https://st.blackyau.net/blog/23/22.jpg" alt="修改编码字符集"></p>
+<p>处理完毕后效果如图</p>
+<p><img data-src="https://st.blackyau.net/blog/23/23.jpg" alt="超级直播效果图"></p>
+<h2 id="获取-IPTV-内网地址"><a href="#获取-IPTV-内网地址" class="headerlink" title="获取 IPTV 内网地址"></a>获取 IPTV 内网地址</h2><p>四川电信是 DHCP 获取，我在网上看很多地方都是 PPPOE 所以用户名和密码你们就需要自己翻翻 IPTV 盒子的设置拉~</p>
+<p>这边也会使用到抓包的数据，应该就是前几个了，找到 <code>Dynamic Host Configuration Protocol (Request)</code> 请求，展开 <code>Option: (60) Vendor class identifier</code> 和<code>Option: (12) Host Name</code> 以及 <code>Client MAC address</code> 。都需要右键 - 复制 - 值 。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/24.jpg" alt="DHCP"></p>
+<p>如果你没有找到 DHCP 的数据包，可以通过 IPTV 盒子底部的贴纸查看。我这款盒子，最后一个就是 <code>Option: (12) Host Name</code> 当然了 MAC 地址上面也有，而 <code>Option: (60) Vendor class identifier</code> 我已经在上图给你了，就是 <code>SCITV</code> 。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/25.jpg" alt="IPTV盒子"></p>
+<p>接下来就开始路由器的设置了。</p>
+<p>首先进入路由器设置 - 网络 - 交换机，将之前用于抓包的 数据包镜像 功能关掉。随后将插有 ITV 口的 LAN 4 在 VLAN 1 中设置为 <code>关</code> 。添加一个 VLAN 3 ，将 CPU (eth0) 设置为 <code>tagged</code> ，然后将 VLAN 3 的 LAN 4 设置为 <code>untagged</code> 。设置完毕后，效果如下图。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/26.jpg" alt="VLAN"></p>
+<p>进入路由器设置 - 网络 - 接口 - 添加新接口。命名为 <code>IPTV</code> 注意全部大写，接口协议为 <code>DHCP 客户端</code> 包括接口 <code>VLAN:eth0.3</code> 。设置如下图。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/27.jpg" alt="添加新接口"></p>
+<p>然后设置端口的 请求 DHCP 时发送的主机名 对应的就是之前获取的 <code>Option: (12) Host Name</code>，以及高级设置里面的 请求 DHCP 时发送的 Vendor Class 选项 也就是之前获取的 <code>Option: (60) Vendor class identifier</code> 即 <code>SCITV</code>，最后是 重设 MAC 地址 填入 <code>Client MAC address</code> 也就是你 IPTV 盒子的 MAC 地址。</p>
+<p>还有不要勾选 使用内置的 IPv6 管理，使用网关跃点为 20 。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/28.jpg" alt="IPTV 接口设置"></p>
+<p>保存并应用设置后，再进入你的 WAN 接口设置，将它的 网络跃点设置为 10，<strong>否则你会无法正常使用互联网</strong>。</p>
+<p>进行到这里，你的 IPTV 接口应该就可以正常的获取到 <code>10</code> 开头的内网 IP 了。如果你不是四川的朋友，那么你地区的运营商可能是 PPPOE 验证或验证逻辑与我这里不同，如果你是四川的朋友，那么请你检查 之前抓包或者是在机顶盒上面看到的 <code>Option: (12) Host Name</code> 以及 <code>Option: (60) Vendor class identifier</code> 和 MAC 地址是否填写正确。如果你是通过抓包获取的数据，那应该不会有错，如果你是抄的机顶盒上面的，那么可能是因为你所在的地区与我的验证逻辑不同。</p>
+<p>所以我强烈建议，还是通过抓包来分析 IPTV 盒子获得内网 IP 的全过程，因为不管你是 PPPOE 还是 DHCP 它都可以分析出来。</p>
+<h2 id="配置-igmpproxy-和-udpxy"><a href="#配置-igmpproxy-和-udpxy" class="headerlink" title="配置 igmpproxy 和 udpxy"></a>配置 igmpproxy 和 udpxy</h2><h3 id="使用-SSH-连接到路由器"><a href="#使用-SSH-连接到路由器" class="headerlink" title="使用 SSH 连接到路由器"></a>使用 SSH 连接到路由器</h3><p>修改配置文件时需要使用 SSH 连接到路由器进行修改，进入路由器设置 - 系统 - 管理权，在接口 lan 下设置端口为 22，同时打开 密码验证和允许 root 用户凭密码登录。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/29.jpg" alt="路由器SSH设置"></p>
+<p>下载 Xshell <a target="_blank" rel="noopener" href="https://www.netsarang.com/zh/free-for-home-school/">https://www.netsarang.com/zh/free-for-home-school/</a> ，官网提供了免费的供家庭和学校使用的版本，足够本次教程所用。</p>
+<p>新建连接，名称随意，主机填上路由器的 IP。点击左侧连接中的用户身份验证，将方法设置为 Password 用户名为 root 密码则为登录 Web 端后台时的密码，我提供的固件默认是 <code>password</code>。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/30.jpg" alt="Xshell"></p>
+<h3 id="安装-igmpproxy-和-udpxy"><a href="#安装-igmpproxy-和-udpxy" class="headerlink" title="安装 igmpproxy 和 udpxy"></a>安装 igmpproxy 和 udpxy</h3><blockquote>
+<p>如果你的路由器使用的我提供的固件则无需安装，因为固件是自带该软件包的。</p>
+</blockquote>
+<p>我建议在安装之前，在 Web 端后台的系统 - 备份&#x2F;升级 中备份当前配置文件。因为我尝试了多个固件，在安装了 udpxy 后 Web 端就会无法正常使用，有很多报错。只有恢复到出厂设置才恢复正常。最后找到了一个自带 udpxy 的固件才解决我的问题。</p>
+<p>使用 Xshell 连接到路由器后执行以下命令。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">opkg update &amp;&amp; opkg install igmpproxy udpxy luci-app-udpxy</span><br></pre></td></tr></table></figure>
+
+<p><code>opkg update</code> 是用来更新软件列表的，因为大陆对 OpenWrt 软件源地址连通性不佳，所以可能需要等很久或者是多次尝试。</p>
+<p>查看命令返回的结果或查看系统 - 软件包中的已安装软件包中是否存在 <code>igmpproxy</code> <code>udpxy</code> <code>luci-app-udpxy</code> 来判断是否安装成功。</p>
+<h3 id="配置-igmpproxy"><a href="#配置-igmpproxy" class="headerlink" title="配置 igmpproxy"></a>配置 igmpproxy</h3><p>关于 igmpproxy 它主要是将所有来自 lan 的 IGMP 数据都传到 IPTV 接口去，为了防止组播的 udp 数据在 lan 里面乱串，影响网络效率。但是我这里在 lan 里面是无法播放 <code>igmp://</code> 地址的数据的，我也不清楚是什么情况。而且从 <a target="_blank" rel="noopener" href="https://github.com/coolsnowwolf/lede/issues/2841">lede issues</a> 可知 lede 的 igmpproxy 是失效的，如果有人在 lan 里面观看组播地址视频或者是使用 IPTV 盒子，都会导致局域网内的组播风暴，会导致网络堵塞。所以主要是后面的 udpxy 在起作用，<strong>你完全可以不配置 igmpproxy 使用 http 地址播放依然是可行的</strong>。</p>
+<p>执行以下命令，一定要复制全一起粘贴进去然后再回车执行。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;config igmpproxy</span><br><span class="line">	option quickleave 1</span><br><span class="line"></span><br><span class="line">config phyint</span><br><span class="line">	option network IPTV</span><br><span class="line">	option direction upstream</span><br><span class="line">	list altnet 0.0.0.0/0</span><br><span class="line"></span><br><span class="line">config phyint</span><br><span class="line">	option network lan</span><br><span class="line">	option zone lan</span><br><span class="line">	option direction downstream&quot; &gt; /etc/config/igmpproxy</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置-udpxy"><a href="#配置-udpxy" class="headerlink" title="配置 udpxy"></a>配置 udpxy</h3><p>在路由器 Web 端设置 - 服务 - udpxy 中，勾选启动、Respawn、状态。将端口设置为 <code>8888</code>，将 Source IP&#x2F;Interface 设置为 IPTV 接口的 ifname，也就是在路由器 Web 端设置 - 网络 - 接口 中 IPTV 接口图标下方的小字。在我这里为 <code>eth0.3</code> 。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/31.jpg" alt="udpxy"></p>
+<p>如果你有多设备同时播放的需求，那么请根据情况设置 <code>Max clients</code> 选项的值，它可以控制同时播放的终端数，该值默认为 3 ，最大可为 5000 。</p>
+<blockquote>
+<p>感谢 <a target="_blank" rel="noopener" href="https://www.right.com.cn/forum/thread-2921260-2-1.html">@xujuntc</a> 的提醒。</p>
+</blockquote>
+<p>udpxy 配置项介绍</p>
+<table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>配置文件</th>
+<th>中文</th>
+<th>说明</th>
+<th>默认</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>disabled</td>
+<td>无</td>
+<td>启动</td>
+<td>启动 udpxy</td>
+<td>关闭</td>
+</tr>
+<tr>
+<td>Respawn</td>
+<td>respawn</td>
+<td>重启</td>
+<td>允许在 status 中重启 udpxy</td>
+<td>关闭</td>
+</tr>
+<tr>
+<td>verbose</td>
+<td>verbose</td>
+<td>详细</td>
+<td>启用详细日志输出</td>
+<td>关闭</td>
+</tr>
+<tr>
+<td>status</td>
+<td>status</td>
+<td>状态</td>
+<td>启用 Web 端统计信息</td>
+<td>关闭</td>
+</tr>
+<tr>
+<td>Bind IP&#x2F;Interface</td>
+<td>source</td>
+<td>监听地址&#x2F;接口</td>
+<td>要监听的地址或接口</td>
+<td>0.0.0.0</td>
+</tr>
+<tr>
+<td>Port</td>
+<td>port</td>
+<td>端口</td>
+<td>监听端口</td>
+<td>必填</td>
+</tr>
+<tr>
+<td>Source IP&#x2F;Interface</td>
+<td>source</td>
+<td>源 IP&#x2F;端口</td>
+<td>组播数据源的 IP 或端口</td>
+<td>0.0.0.0</td>
+</tr>
+<tr>
+<td>Max clients</td>
+<td>max_clients</td>
+<td>最大客户端数</td>
+<td>同时播放的终端数</td>
+<td>3(最大可设为5000)</td>
+</tr>
+<tr>
+<td>Log file</td>
+<td>log_file</td>
+<td>日志目录</td>
+<td>日志输出的目录</td>
+<td>stderr(即打印在终端)</td>
+</tr>
+<tr>
+<td>Buffer size</td>
+<td>buffer_size</td>
+<td>缓冲大小</td>
+<td>组播数据入站的缓冲区大小</td>
+<td>2048 bytes(可选 <code>65536</code>, <code>32Kb</code>, <code>1Mb</code>)</td>
+</tr>
+<tr>
+<td>Buffer messages</td>
+<td>buffer_messages</td>
+<td>缓冲信息</td>
+<td>向组播组请求多少数据并储存起来(单位:秒)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Buffer time</td>
+<td>buffer_time</td>
+<td>缓存保存时间</td>
+<td>数据可在缓冲区内保存的最长时间</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Nice increment</td>
+<td>nice_increment</td>
+<td>未知</td>
+<td>未知</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Multicast subscription renew</td>
+<td>mcsub_renew</td>
+<td>定期重新加入组播组</td>
+<td>每隔一段时间重新加入组播组,防止网络波动导致丢失组播连接(单位:秒)</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>在路由器设置的 Web 端不知为什么后面 4 个选项，保存时都说值有误。如果有需要修改的朋友，只有手动修改 <code>/etc/config/udpxy</code> 配置文件了。下面是我的配置，可供参考。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">config udpxy</span><br><span class="line">        option respawn &#x27;1&#x27;</span><br><span class="line">        option verbose &#x27;0&#x27;</span><br><span class="line">        option status &#x27;1&#x27;</span><br><span class="line">        option disabled &#x27;0&#x27;</span><br><span class="line">        option port &#x27;8888&#x27;</span><br><span class="line">        option source &#x27;eth0.3&#x27;</span><br><span class="line">        option buffer_size &#x27;2097152&#x27;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>保存并应用后，打开 http:&#x2F;&#x2F;路由器IP:8888&#x2F;status 查看 udpxy 运行是否正常。当你在播放视频的时候，这个页面也会显示正在播放客户端的 IP 与它的实时流量。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/32.jpg" alt="udpxy status"></p>
+<p>然后你就可以在 PotPlayer 和 VLC media player 播放之前处理好的连接了，可以直接打开 M3U8 播放列表，也可以播放一个单独的地址。</p>
+<p>例如你获取的地址为 <code>igmp://239.93.22.6:6666</code></p>
+<p>那么使用 udpxy 转换后的地址为 <code>http://192.168.10.1:8888/udp/239.93.22.6:6666</code></p>
+<p>如果你仍然无法播放，请将下面的防火墙规则添加进 <code>/etc/config/firewall</code></p>
+<p>如果你会使用 vim 那么直接在 Xshell 里面修改即可，如果你不会可以在 Xshell 窗口中点击  新建文本传输（Ctrl+Alt+F），将该文本下载到本地使用 notepad++ 进行修改，再上传上去。请注意你的防火墙配置可能已经存在，请你仔细的排查每一个设置项。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">config rule</span><br><span class="line">        option name &#x27;Allow-IGMP&#x27;</span><br><span class="line">        option target &#x27;ACCEPT&#x27;</span><br><span class="line">        option family &#x27;ipv4&#x27;</span><br><span class="line">        option src &#x27;iptv&#x27;</span><br><span class="line">        option proto &#x27;IGMP&#x27;</span><br><span class="line"></span><br><span class="line">config rule</span><br><span class="line">        option name &#x27;Allow-UDP-udpxy&#x27;</span><br><span class="line">        option target &#x27;ACCEPT&#x27;</span><br><span class="line">        option src &#x27;iptv&#x27;</span><br><span class="line">        option proto &#x27;udp&#x27;</span><br><span class="line">        option dest_ip &#x27;224.0.0.0/4&#x27;</span><br><span class="line"></span><br><span class="line">config rule</span><br><span class="line">        option name &#x27;Allow-UDP-igmpproxy&#x27;</span><br><span class="line">        option target &#x27;ACCEPT&#x27;</span><br><span class="line">        option family &#x27;ipv4&#x27;</span><br><span class="line">        option src &#x27;iptv&#x27;</span><br><span class="line">        option proto &#x27;udp&#x27;</span><br><span class="line">        option dest &#x27;lan&#x27;</span><br><span class="line">        option dest_ip &#x27;224.0.0.0/4&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>最后，为了防止路由器断电后 udpxy 没有自动启动，还需要使用 hotplug 功能，在 IPTV 接口拨号成功后都检测 udpxy 是否正常工作，如果没有就启动一下 udpxy</p>
+<p>在 Xshell 中使用 SSH 连接到路由器，新建脚本文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/hotplug.d/iface/100-udpxy</span><br></pre></td></tr></table></figure>
+
+<p>将以下内容全文粘贴进去</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line">if [ &quot;$&#123;INTERFACE&#125;&quot; = &quot;IPTV&quot; ]; then # IPTV status change</span><br><span class="line">        if [ &quot;$&#123;ACTION&#125;&quot; = &quot;ifup&quot; ]; then # Interface up</span><br><span class="line">                flag=$(ps | grep udpxy | grep -v &quot;grep&quot; | wc -l)</span><br><span class="line">                if [ $flag = &quot;1&quot;]; then</span><br><span class="line">                        logger -t udpxy -s &quot;udpxy Running&quot;</span><br><span class="line">                else</span><br><span class="line">                        /etc/init.d/udpxy start</span><br><span class="line">                fi</span><br><span class="line">        fi</span><br><span class="line">fi</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>然后使用 <code>:wq</code> 保存文件即可</p>
+<h2 id="如何在外播放家中-IPTV-源"><a href="#如何在外播放家中-IPTV-源" class="headerlink" title="如何在外播放家中 IPTV 源"></a>如何在外播放家中 IPTV 源</h2><p>首先需要公网 IP，你可以在 在路由器 Web 端设置 - 网络 - 接口中，查看 WAN 获得的 IP 是否与你在 <a target="_blank" rel="noopener" href="https://ip.sb/">https://ip.sb/</a> 看到的 IP 一致。如果不一致的话，可以向电信人工客服反映「我需要公网 IP」即可。</p>
+<p>首先你需要在 udpxy 配置中将 <code>Bind IP/Interface</code> 配置为 <code>0.0.0.0</code> 。</p>
+<p>在路由器 Web 端设置 - 网络 - 防火墙 - 端口转发 中，添加协议为 tcp，外部区域为 wan，外部端口为 8888，内部 IP 地址为 192.168.10.1，内部端口为 8888 的规则即可。</p>
+<p><img data-src="https://st.blackyau.net/blog/23/33.jpg" alt="端口转发"></p>
+<p>那么你在外要播放的话，只需要把路由器的 IP 地址换为你的公网 IP 即可。</p>
+<p>例如你的本地播放地址为 <code>http://192.168.10.1:8888/udp/239.93.22.6:6666</code></p>
+<p>那么当你的公网 IP 为 <code>125.60.90.40</code> 时</p>
+<p>你的互联网播放地址则为 <code>http://125.60.90.40:8888/udp/239.93.22.6:6666</code></p>
+<p>因为公网 IP 都在变，你可以使用 DDNS 也就是 动态 DNS 使用域名来访问，你可以使用路由器内自带的服务商。如果你和我一样将域名放置于 DNSPod 管理，也可以使用我制作的 <a target="_blank" rel="noopener" href="https://github.com/blackyau/DdnsWithDnspod">DdnsWithDnspod</a> 使用一个子域名来专供 IPTV 的播放。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>首先非常感谢各位前辈，我也是通过阅读现有的教程总结出来的。本文用了接近 5000 字，详细的介绍了有关 IPTV 与互联网的融合，希望能够对需要的朋友有帮助。因为本人能力有限，文中难免有一些问题也希望有发现的朋友能够及时的指出，我将感激不尽。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://github.com/coolsnowwolf/lede">GitHub@coolsnowwolf - Lean’s OpenWrt source</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.right.com.cn/forum/thread-248400-1-1.html">恩山无线论坛@鲲翔 - IPTV融合进普通网络一般步骤</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.right.com.cn/forum/thread-341748-1-1.html">恩山无线论坛@footlog - K2P&#x2F;K2 padavan双线接入，宽带+IPTV，udpxy+xupnpd详细设置</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.right.com.cn/FORUM/thread-332086-1-1.html">恩山无线论坛@lcsuper - 小白的IPTV折腾教程(3)—双网融合、IPTV共享</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.right.com.cn/forum/thread-508076-1-1.html">恩山无线论坛@kangtao022 - 最新四川南充电信IPTV组播地址，及整理出地址列表的方法！</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.right.com.cn/forum/thread-596583-1-1.html">恩山无线论坛@橙子_MAX - 【附固件】全网首发，新三OpenWRT路由器IPTV内网融合视频教程</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.maxlicheng.com/openwrt/113.html">橙子的个人博客 - IPTV内网融合，实现任意设备观看IPTV</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.right.com.cn/FORUM/thread-421870-1-1.html">恩山无线论坛@angelkyo - 四川电信DHCP抓包能获取到IP，但是抓不到option60信息</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.right.com.cn/FORUM/thread-329888-1-1.html">恩山无线论坛@wengmingao - 简单的的IPTV 0成本抓包！</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.right.com.cn/forum/thread-2304980-1-1.html">恩山无线论坛@莫问归期 - 在openwrt里安装udpxy后主题界面就会乱</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.right.com.cn/forum/thread-344825-1-1.html">恩山无线论坛@xtwz - OpenWrt 编译 LuCI -&gt; Applications 添加插件应用说明-L大</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.right.com.cn/forum/thread-1237348-1-1.html">恩山无线论坛@happyzhang - OpenWrt入门编译 make menuconfig配置参考说明与自动生成脚本</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/MitchellJo/DdnsWithDnspod">Github@MitchellJo - DdnsWithDnspod</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.right.com.cn/forum/thread-52052-1-1.html">恩山无线论坛@hayate - ppp拨号后自动运行脚本的问题</a></p>
+<p><a target="_blank" rel="noopener" href="http://demon.tw/hardware/openwrt-hotplug.html">Demon’s Blog@Demon - OpenWrt中的Hotplug脚本</a></p>
+<p><a target="_blank" rel="noopener" href="https://kevin0304.pixnet.net/blog/post/227990189">痞客邦@Kai-Cho - [OpenWRT] hotplug</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.right.com.cn/forum/thread-107357-1-1.html">恩山无线论坛@ghostry - hotplug的iface脚本不执行怎么办?</a></p>
+<p><a target="_blank" rel="noopener" href="https://openwrt.org/docs/guide-user/base-system/hotplug">OpenWrt Documentation - Hotplug</a></p>
+<p><a target="_blank" rel="noopener" href="https://openwrt.org/docs/guide-user/services/proxy/udpxy">OpenWrt Documentation - udpxy</a></p>
+<p><a target="_blank" rel="noopener" href="https://3mile.github.io/archives/2019/1106111732/">3mile博客 - 编译UDPXY新版本</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/coolsnowwolf/lede/issues/1075">Github@xingsiyue - udpxy无法保存缓存大小等参数</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/openwrt/luci/issues/1494">Github@jow- - luci-app-udpxy bug</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>蠢黑通行
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blackyau.cc/23" title="IPTV 与互联网融合">https://blackyau.cc/23</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/IPTV/" rel="tag"># IPTV</a>
+              <a href="/tags/OpenWrt/" rel="tag"># OpenWrt</a>
+              <a href="/tags/Lean/" rel="tag"># Lean</a>
+              <a href="/tags/udpxy/" rel="tag"># udpxy</a>
+              <a href="/tags/IGMP/" rel="tag"># IGMP</a>
+              <a href="/tags/RTSP/" rel="tag"># RTSP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/22" rel="prev" title="Linux LVM 逻辑卷扩容">
+                  <i class="fa fa-angle-left"></i> Linux LVM 逻辑卷扩容
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/24" rel="next" title="算法复杂度分析(上)">
+                  算法复杂度分析(上) <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments disqusjs-container">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2016 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蠢黑通行</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div><div class="powered-by">本网站由 <a style="border-bottom: none;"href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" class="theme-link" rel="noopener" target="_blank" title="upyun"><img style="display: inline; vertical-align: middle;" src="https://st.blackyau.net/blog/file/upyun_dark.svg" alt="upyun">提供CDN加速/云储存服务</a> </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/sidebar.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/disqusjs@3.0.2/dist/browser/styles/disqusjs.css" integrity="sha256-71XarXwNr1Td27HmZI9zjY+rMzRdush6/glo6VFXp7o=" crossorigin="anonymous">
+
+<script class="next-config" data-name="disqusjs" type="application/json">{"enable":true,"api":"https://disqusjs-proxy-rose.vercel.app/","apikey":"40wkCy0ewvq5nL9eGvjiJHkBCc35Rk4DIQmje6UJ3vnO1mDt0C1b5yxqlbUeoo6P","shortname":"blackyau","js":{"url":"https://unpkg.com/disqusjs@3.0.2/dist/browser/disqusjs.es2015.umd.min.js","integrity":"sha256-okP99ZQKVpIy7+NogAMpGlIQzJa9XKXhIJcFgdju5bU="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/comments/disqusjs.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://st.blackyau.net/blog/file/favicon-180x180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://st.blackyau.net/blog/file/favicon-64x64.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://st.blackyau.net/blog/file/favicon-32x32.png">
+  <link rel="mask-icon" href="https://st.blackyau.net/blog/file/favicon-512x512.svg" color="#222">
+  <meta name="google-site-verification" content="nXthYmLKSXqupL96tIOSCBi3yiBjEEkTqK9vEYv808U">
+  <meta name="msvalidate.01" content="56ABC0C6006554B668AA5972B359B773">
+  <meta name="baidu-site-verification" content="VQvGuCkX3O">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blackyau.cc","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/config.js"></script>
+
+    <meta name="description" content="使用 Intent Firewall 可以让你优雅的做到类似 My Android Tools 禁用组件的效果">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用UltraEdit一键转换MAT方案为IFW">
+<meta property="og:url" content="https://blackyau.cc/8">
+<meta property="og:site_name" content="蠢黑通行">
+<meta property="og:description" content="使用 Intent Firewall 可以让你优雅的做到类似 My Android Tools 禁用组件的效果">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://st.blackyau.net/blog/8/1.png">
+<meta property="article:published_time" content="2017-09-17T15:09:00.000Z">
+<meta property="article:modified_time" content="2017-09-18T07:26:00.000Z">
+<meta property="article:author" content="蠢黑通行">
+<meta property="article:tag" content="MAT">
+<meta property="article:tag" content="IFW">
+<meta property="article:tag" content="My Android Tools">
+<meta property="article:tag" content="Intent Firewall">
+<meta property="article:tag" content="UltraEdit">
+<meta property="article:tag" content="宏">
+<meta property="article:tag" content="一键">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://st.blackyau.net/blog/8/1.png">
+
+
+<link rel="canonical" href="https://blackyau.cc/8">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blackyau.cc/8","path":"8.html","title":"使用UltraEdit一键转换MAT方案为IFW"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用UltraEdit一键转换MAT方案为IFW | 蠢黑通行</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKREM40HY8"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TKREM40HY8","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="蠢黑通行" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">蠢黑通行</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个人的全世界</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Intent%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">Intent是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Intent-Firewall%E7%9A%84%E5%8E%9F%E7%90%86%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">Intent Firewall的原理？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Intent-Firewall%E7%9A%84%E7%BC%96%E5%86%99%E8%A7%84%E5%88%99%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">Intent Firewall的编写规则？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%B0%86MAT%E5%A4%87%E4%BB%BD%E8%BD%AC%E4%B8%BAIFW%E6%96%B9%E6%A1%88%EF%BC%9F"><span class="nav-number">4.</span> <span class="nav-text">如何将MAT备份转为IFW方案？</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蠢黑通行"
+      src="https://st.blackyau.net/head.jpg">
+  <p class="site-author-name" itemprop="name">蠢黑通行</p>
+  <div class="site-description" itemprop="description">BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。</div>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/blackyau" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;blackyau" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:blackyau426@gmail.com" title="E-Mail → mailto:blackyau426@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/black_yau" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;black_yau" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://bbs.letitfly.me/" title="https:&#x2F;&#x2F;bbs.letitfly.me" rel="noopener" target="_blank">LIF BBS</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.ixk.me/" title="https:&#x2F;&#x2F;www.ixk.me" rel="noopener" target="_blank">青空之蓝</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blackyau.cc/8">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://st.blackyau.net/head.jpg">
+      <meta itemprop="name" content="蠢黑通行">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蠢黑通行">
+      <meta itemprop="description" content="BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用UltraEdit一键转换MAT方案为IFW | 蠢黑通行">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用UltraEdit一键转换MAT方案为IFW
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-09-17 23:09:00" itemprop="dateCreated datePublished" datetime="2017-09-17T23:09:00+08:00">2017-09-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2017-09-18 15:26:00" itemprop="dateModified" datetime="2017-09-18T15:26:00+08:00">2017-09-18</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>使用 Intent Firewall 可以让你优雅的做到类似 My Android Tools 禁用组件的效果</p>
+<span id="more"></span>
+
+<p>My Android Tools作为一位Android优化软件新秀，使用与其他优化软件单纯的杀后台抑制后台唤醒完全不同的方法，深受Android倒腾党的喜爱。但任何应用App都可以使用公开的接口<a target="_blank" rel="noopener" href="https://developer.android.com/reference/android/content/pm/PackageManager.html?hl=zh-cn#setComponentEnabledSetting">Android Developer</a>来重新激活自己的组件。My Android Tools作者也考虑到了这个问题，同时也推出了一个<a target="_blank" rel="noopener" href="https://www.coolapk.com/apk/cn.wq.myandroidtoolsxposed">Xposed模块</a>阻止这个api的调用。</p>
+<p>Xposed模块的滥用又会导致系统执行效率，详细原因可以查看该文<a target="_blank" rel="noopener" href="https://blog.nfz.moe/archives/why-xposed-cause-unsmooth-exprience.html">为什么安装 Xposed 以后会导致卡顿</a>。所以又有人挖掘除了新的方法，能够在仅ROOT的情况下阻止禁用后的Service&#x2F;Receiver&#x2F;Activity调用api重新激活自己的组件。绿色守护在V3.0时也在新推出的“处方”功能时，使用了该特性。<strong>Intent Firewall</strong></p>
+<h2 id="Intent是什么？"><a href="#Intent是什么？" class="headerlink" title="Intent是什么？"></a>Intent是什么？</h2><p>Activity、服务和广播接收器，是通过名为 Intent 的消息进行启动的。可以将 Intent 视为从其他组件请求操作的信使，无论组件属于这个应用还是其他应用。<br>对于 Activity 和服务， Intent 传达要执行的操作。例如， Intent 传达的请求可以是打开应用设置界面的Activity，或是启动下载某文件的服务<br>对于广播接收器， Intent 只会定义要广播的通知，可以响应这个广播的接收器会被启动以执行下一步操作</p>
+<h2 id="Intent-Firewall的原理？"><a href="#Intent-Firewall的原理？" class="headerlink" title="Intent Firewall的原理？"></a>Intent Firewall的原理？</h2><p>写轮眼是通过关闭组件来达到效果，而处方则是拦截了启动组件的途径。Intent防火墙是Android框架的一个组件，允许根据XML文件中定义的规则强制阻止intent。Intent防火墙不是Android框架的官方支持的功能，没有官方文档，只能通过阅读源代码了解。<br>每一个在Android框架中启动的Intent，包括由操作系统创建的Intent，都会通过Intent防火墙。这意味着Intent防火墙有权允许或拒绝任何Intent。Intent防火墙在决定如何处理传入Intent时不考虑发送方，只考虑Intent的细节和其预期的接收者。XML文件被写入到<code>/data/system/ifw</code>目录并可以删除，这使得Intent防火墙可以动态更新其规则集。<br>绿色守护在此基础上进行开发，使处方成为一个非常强大的功能，但严重依赖网友贡献的意图筛选规则，比My Android Tools更甚。</p>
+<h2 id="Intent-Firewall的编写规则？"><a href="#Intent-Firewall的编写规则？" class="headerlink" title="Intent Firewall的编写规则？"></a>Intent Firewall的编写规则？</h2><p>你可以参考<a target="_blank" rel="noopener" href="http://www.cis.syr.edu/~wedu/android/IntentFirewall/">http://www.cis.syr.edu/~wedu&#x2F;android&#x2F;IntentFirewall&#x2F;</a>。下面是一个实例</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rules</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">broadcast</span> <span class="attr">block</span>=<span class="string">&quot;true&quot;</span> <span class="attr">log</span>=<span class="string">&quot;false&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">component-filter</span> <span class="attr">name</span>=<span class="string">&quot;com.tencent.mobileqq/cooperation.dingdong.DingdongPluginProxyBroadcastReceiver&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">component-filter</span> <span class="attr">name</span>=<span class="string">&quot;com.tencent.mobileqq/cooperation.qzone.QzoneProxyReceiver&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">component-filter</span> <span class="attr">name</span>=<span class="string">&quot;com.tencent.mobileqq/com.tencent.open.downloadnew.common.DownloadReceiver&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">component-filter</span> <span class="attr">name</span>=<span class="string">&quot;com.tencent.mobileqq/com.tencent.open.downloadnew.common.DownloadReceiverWebProcess&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">component-filter</span> <span class="attr">name</span>=<span class="string">&quot;com.tencent.mobileqq/com.tencent.open.business.base.appreport.AppReportReceiver&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">component-filter</span> <span class="attr">name</span>=<span class="string">&quot;com.tencent.mobileqq/cooperation.weiyun.WeiyunProxyBroadcastReceiver&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">component-filter</span> <span class="attr">name</span>=<span class="string">&quot;com.tencent.mobileqq/cooperation.weiyun.WeiyunBroadcastReceiver&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">component-filter</span> <span class="attr">name</span>=<span class="string">&quot;com.tencent.mobileqq/com.tencent.mobileqq.msf.core.NetConnInfoCenter&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">broadcast</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">service</span> <span class="attr">block</span>=<span class="string">&quot;true&quot;</span> <span class="attr">log</span>=<span class="string">&quot;false&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">component-filter</span> <span class="attr">name</span>=<span class="string">&quot;com.tencent.mobileqq/com.tencent.mobileqq.app.CoreService&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">component-filter</span> <span class="attr">name</span>=<span class="string">&quot;com.tencent.mobileqq/com.tencent.mobileqq.app.CoreService$KernelService&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">component-filter</span> <span class="attr">name</span>=<span class="string">&quot;com.tencent.mobileqq/cooperation.qzone.remote.logic.QzoneWebPluginProxyService&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">component-filter</span> <span class="attr">name</span>=<span class="string">&quot;com.tencent.mobileqq/com.tencent.tmdownloader.TMAssistantDownloadService&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">service</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">activity</span> <span class="attr">block</span>=<span class="string">&quot;true&quot;</span> <span class="attr">log</span>=<span class="string">&quot;false&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">component-filter</span> <span class="attr">name</span>=<span class="string">&quot;com.tencent.mobileqq/com.tencent.mobileqq.activity.UpgradeActivity&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">component-filter</span> <span class="attr">name</span>=<span class="string">&quot;com.tencent.mobileqq/com.tencent.mobileqq.activity.UpgradeDetailActivity&quot;</span> /&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">activity</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rules</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>broadcast</code>为广播，<code>service</code>为服务，<code>activity</code>为活动。其他的你应该很容易的看出规律。</p>
+<h2 id="如何将MAT备份转为IFW方案？"><a href="#如何将MAT备份转为IFW方案？" class="headerlink" title="如何将MAT备份转为IFW方案？"></a>如何将MAT备份转为IFW方案？</h2><p>首先下载安装UltraEdit个人推荐zd426破解版，因主站易主不建议使用最新版，这里提供可信的历史版直链下载(基于又拍云的个人CDN)和蓝奏云<br><a target="_blank" rel="noopener" href="https://st.blackyau.net/dl/UltraEdit/UltraEdit_v25.0.0.82_x64_zh_CN.7z">UltraEdit_v25.0.0.82_x64_zh_CN</a><br><a target="_blank" rel="noopener" href="https://st.blackyau.net/dl/UltraEdit/UltraEdit_v25.0.0.82_x32_zh_CN.7z">UltraEdit_v25.0.0.82_x32_zh_CN</a><br><a target="_blank" rel="noopener" href="https://st.blackyau.net/dl/UltraEdit/UltraEdit.exe">UltraEditv 8.20 简体中文汉化经典版单文件</a><br><a target="_blank" rel="noopener" href="https://www.lanzous.com/b275916">https://www.lanzous.com/b275916</a> 密码:hg3y</p>
+<p>然后下载<a target="_blank" rel="noopener" href="https://st.blackyau.net/blog/8/MAT%E8%BD%ACIFW-V2.0.mac">MAT转IFW.mac</a><br><img data-src="https://st.blackyau.net/blog/8/1.png" alt="1"></p>
+<p><strong>在转换时不建议使用键盘或鼠标进行任何操作，在转换量较大时应用会未响应属正常现象。等待即可。</strong><br>目前在<code>MAT转IFW-new</code>中使用了新的思路，来自<a target="_blank" rel="noopener" href="https://bbs.letitfly.me/d/100/11">cubesky</a>，转换速度快到令人发指。实现方法为，先在两边加上前缀和后缀，后将整个MAT方案复制两遍然后在将IFW用于判定broadcast、service、activity属性的语句，重复三遍。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rules</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">broadcast</span> <span class="attr">block</span>=<span class="string">&quot;true&quot;</span> <span class="attr">log</span>=<span class="string">&quot;false&quot;</span>&gt;</span></span><br><span class="line">    我是毒瘤服务1</span><br><span class="line">    我是毒瘤服务2</span><br><span class="line">    我是毒瘤广播1</span><br><span class="line">    我是毒瘤广播2</span><br><span class="line">    我是毒瘤活动1</span><br><span class="line"><span class="tag">&lt;/<span class="name">broadcast</span>&gt;</span></span><br><span class="line"></span><br><span class="line"> <span class="tag">&lt;<span class="name">service</span> <span class="attr">block</span>=<span class="string">&quot;true&quot;</span> <span class="attr">log</span>=<span class="string">&quot;false&quot;</span>&gt;</span></span><br><span class="line">    我是毒瘤服务1</span><br><span class="line">    我是毒瘤服务2</span><br><span class="line">    我是毒瘤广播1</span><br><span class="line">    我是毒瘤广播2</span><br><span class="line">    我是毒瘤活动1</span><br><span class="line"><span class="tag">&lt;/<span class="name">service</span>&gt;</span></span><br><span class="line"></span><br><span class="line"> <span class="tag">&lt;<span class="name">activity</span> <span class="attr">block</span>=<span class="string">&quot;true&quot;</span> <span class="attr">log</span>=<span class="string">&quot;false&quot;</span>&gt;</span></span><br><span class="line">    我是毒瘤服务1</span><br><span class="line">    我是毒瘤服务2</span><br><span class="line">    我是毒瘤广播1</span><br><span class="line">    我是毒瘤广播2</span><br><span class="line">    我是毒瘤活动1</span><br><span class="line"> <span class="tag">&lt;/<span class="name">activity</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rules</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>经测试，方案中的所有服务&#x2F;广播&#x2F;活动都被IFW正常干掉。具体会导致什么负面效果有待进一步的查证，现在看来除了会让IFW配置文件变得大一点还没发现什么问题。</p>
+<p><code>MAT转IFW-old</code>使用了broadcast、service、activity关键字来判断组件属性，生成IFW方案比较干净没有多余的内容。不过如果有不按标准命名的组件，将会在宏运行结束后在最底部需要你手动操作一下。你可以将光标停留在任意一行，通过快捷键ALT+F1|ALT+F2|ALT+F3分别将该行组件插入服务|广播|活动分组。</p>
+<p>我正在寻找能够高效率&#x2F;跨平台完成MAT到IFW的转换方法，如果你有建议欢迎给我提出。这会对我有极大的帮助。</p>
+<p>如果您由于各种原因，无法自己转换。可以将MAT方案发送到 <a href="mailto:&#98;&#108;&#97;&#99;&#x6b;&#x79;&#x61;&#117;&#52;&#x32;&#x36;&#64;&#x67;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#111;&#109;">blackyau426@gmail.com</a> 、Telegram:@Black_Yau或是直接在博客评论区留言。我会尽力为你解答。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>蠢黑通行
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blackyau.cc/8" title="使用UltraEdit一键转换MAT方案为IFW">https://blackyau.cc/8</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/MAT/" rel="tag"># MAT</a>
+              <a href="/tags/IFW/" rel="tag"># IFW</a>
+              <a href="/tags/My-Android-Tools/" rel="tag"># My Android Tools</a>
+              <a href="/tags/Intent-Firewall/" rel="tag"># Intent Firewall</a>
+              <a href="/tags/UltraEdit/" rel="tag"># UltraEdit</a>
+              <a href="/tags/%E5%AE%8F/" rel="tag"># 宏</a>
+              <a href="/tags/%E4%B8%80%E9%94%AE/" rel="tag"># 一键</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/6" rel="prev" title="绿色守护使用教程">
+                  <i class="fa fa-angle-left"></i> 绿色守护使用教程
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/9" rel="next" title="使用 PGP/GPG 进行数字签名加密解密">
+                  使用 PGP/GPG 进行数字签名加密解密 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments disqusjs-container">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2016 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蠢黑通行</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div><div class="powered-by">本网站由 <a style="border-bottom: none;"href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" class="theme-link" rel="noopener" target="_blank" title="upyun"><img style="display: inline; vertical-align: middle;" src="https://st.blackyau.net/blog/file/upyun_dark.svg" alt="upyun">提供CDN加速/云储存服务</a> </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/sidebar.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/disqusjs@3.0.2/dist/browser/styles/disqusjs.css" integrity="sha256-71XarXwNr1Td27HmZI9zjY+rMzRdush6/glo6VFXp7o=" crossorigin="anonymous">
+
+<script class="next-config" data-name="disqusjs" type="application/json">{"enable":true,"api":"https://disqusjs-proxy-rose.vercel.app/","apikey":"40wkCy0ewvq5nL9eGvjiJHkBCc35Rk4DIQmje6UJ3vnO1mDt0C1b5yxqlbUeoo6P","shortname":"blackyau","js":{"url":"https://unpkg.com/disqusjs@3.0.2/dist/browser/disqusjs.es2015.umd.min.js","integrity":"sha256-okP99ZQKVpIy7+NogAMpGlIQzJa9XKXhIJcFgdju5bU="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/comments/disqusjs.js"></script>
+
+</body>
+</html>

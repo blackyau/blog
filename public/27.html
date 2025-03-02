@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://st.blackyau.net/blog/file/favicon-180x180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://st.blackyau.net/blog/file/favicon-64x64.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://st.blackyau.net/blog/file/favicon-32x32.png">
+  <link rel="mask-icon" href="https://st.blackyau.net/blog/file/favicon-512x512.svg" color="#222">
+  <meta name="google-site-verification" content="nXthYmLKSXqupL96tIOSCBi3yiBjEEkTqK9vEYv808U">
+  <meta name="msvalidate.01" content="56ABC0C6006554B668AA5972B359B773">
+  <meta name="baidu-site-verification" content="VQvGuCkX3O">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blackyau.cc","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/config.js"></script>
+
+    <meta name="description" content="本文从一个 ping 命令作为一个起点，详细描述了数据在路由器之间流通的路径，以及 ARP 请求和回复的详细过程，还有数据在网络层、链路层之间封装和传递的过程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="主机互 ping 交互过程">
+<meta property="og:url" content="https://blackyau.cc/27">
+<meta property="og:site_name" content="蠢黑通行">
+<meta property="og:description" content="本文从一个 ping 命令作为一个起点，详细描述了数据在路由器之间流通的路径，以及 ARP 请求和回复的详细过程，还有数据在网络层、链路层之间封装和传递的过程。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://st.blackyau.net/blog/27/1.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/27/2.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/27/3.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/27/4.png">
+<meta property="og:image" content="https://st.blackyau.net/blog/27/5.png">
+<meta property="article:published_time" content="2021-09-09T15:38:48.000Z">
+<meta property="article:modified_time" content="2021-09-09T15:26:31.000Z">
+<meta property="article:author" content="蠢黑通行">
+<meta property="article:tag" content="计算机网络">
+<meta property="article:tag" content="路由器">
+<meta property="article:tag" content="ARP">
+<meta property="article:tag" content="ICMP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://st.blackyau.net/blog/27/1.png">
+
+
+<link rel="canonical" href="https://blackyau.cc/27">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blackyau.cc/27","path":"27.html","title":"主机互 ping 交互过程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>主机互 ping 交互过程 | 蠢黑通行</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TKREM40HY8"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TKREM40HY8","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="蠢黑通行" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">蠢黑通行</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个人的全世界</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#R2-%E6%A8%A1%E6%8B%9FPC1-%E5%8F%91%E9%80%81ping"><span class="nav-number">1.</span> <span class="nav-text">R2(模拟PC1) 发送ping</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82"><span class="nav-number">1.1.</span> <span class="nav-text">应用层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="nav-number">1.2.</span> <span class="nav-text">网络层</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9"><span class="nav-number">1.2.1.</span> <span class="nav-text">路由选择</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ARP"><span class="nav-number">1.3.</span> <span class="nav-text">ARP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%91%E9%80%81-ARP-%E8%AF%B7%E6%B1%82"><span class="nav-number">1.3.1.</span> <span class="nav-text">发送 ARP 请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%B6%E5%88%B0-ARP-%E8%AF%B7%E6%B1%82"><span class="nav-number">1.3.2.</span> <span class="nav-text">收到 ARP 请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E5%A4%8D-ARP-%E8%AF%B7%E6%B1%82"><span class="nav-number">1.3.3.</span> <span class="nav-text">回复 ARP 请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%B6%E5%88%B0-ARP-%E5%9B%9E%E5%A4%8D"><span class="nav-number">1.3.4.</span> <span class="nav-text">收到 ARP 回复</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="nav-number">1.4.</span> <span class="nav-text">链路层</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#R1-%E8%BD%AC%E5%8F%91%E6%95%B0%E6%8D%AE%E5%8C%85"><span class="nav-number">2.</span> <span class="nav-text">R1 转发数据包</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82-1"><span class="nav-number">2.1.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ARP-1"><span class="nav-number">2.2.</span> <span class="nav-text">ARP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82-1"><span class="nav-number">2.3.</span> <span class="nav-text">链路层</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PC2-%E5%9B%9E%E5%A4%8Dping"><span class="nav-number">3.</span> <span class="nav-text">PC2 回复ping</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82-2"><span class="nav-number">3.1.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ARP-2"><span class="nav-number">3.2.</span> <span class="nav-text">ARP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82-2"><span class="nav-number">3.3.</span> <span class="nav-text">链路层</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#R1-%E8%BD%AC%E5%8F%91%E6%95%B0%E6%8D%AE%E5%8C%85-1"><span class="nav-number">4.</span> <span class="nav-text">R1 转发数据包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#R2-%E6%94%B6%E5%88%B0%E5%BA%94%E7%AD%94"><span class="nav-number">5.</span> <span class="nav-text">R2 收到应答</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E7%BB%AD"><span class="nav-number">6.</span> <span class="nav-text">后续</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蠢黑通行"
+      src="https://st.blackyau.net/head.jpg">
+  <p class="site-author-name" itemprop="name">蠢黑通行</p>
+  <div class="site-description" itemprop="description">BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。</div>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/blackyau" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;blackyau" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:blackyau426@gmail.com" title="E-Mail → mailto:blackyau426@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/black_yau" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;black_yau" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://bbs.letitfly.me/" title="https:&#x2F;&#x2F;bbs.letitfly.me" rel="noopener" target="_blank">LIF BBS</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.ixk.me/" title="https:&#x2F;&#x2F;www.ixk.me" rel="noopener" target="_blank">青空之蓝</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blackyau.cc/27">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://st.blackyau.net/head.jpg">
+      <meta itemprop="name" content="蠢黑通行">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蠢黑通行">
+      <meta itemprop="description" content="BlackYau's Blog 蠢黑通行个人博客 想写什么就写什么的地方，主要用于记录学习以及发布各类教程。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="主机互 ping 交互过程 | 蠢黑通行">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          主机互 ping 交互过程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-09-09 23:38:48 / 修改时间：23:26:31" itemprop="dateCreated datePublished" datetime="2021-09-09T23:38:48+08:00">2021-09-09</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本文从一个 ping 命令作为一个起点，详细描述了数据在路由器之间流通的路径，以及 ARP 请求和回复的详细过程，还有数据在网络层、链路层之间封装和传递的过程。</p>
+<span id="more"></span>
+
+<p>拓扑结构如下</p>
+<p><img data-src="https://st.blackyau.net/blog/27/1.png" alt="image.png"></p>
+<h1 id="R2-模拟PC1-发送ping"><a href="#R2-模拟PC1-发送ping" class="headerlink" title="R2(模拟PC1) 发送ping"></a>R2(模拟PC1) 发送ping</h1><h2 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h2><p>应用程序要求使用 ICMP 协议发送一个给 192.168.1.2 类型为 8 的回显请求</p>
+<h2 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h2><p>通过向 192.168.1.2 发送一个 ICMPv4 数据报，网络层尝试向远程主机发送一个请求，源 IP 为 192.168.3.2，目标 IP 为 192.168.1.2。其中 ICMP 数据中的类型字段为 8 代表这是一个 ICMPv4 的回显请求。IP 首部的协议为 1 即 ICMP。</p>
+<h3 id="路由选择"><a href="#路由选择" class="headerlink" title="路由选择"></a>路由选择</h3><p>Pre: 优先级，优先级越高取值越小</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;R2&gt;dis ip rou	</span><br><span class="line">Route Flags: R - relay, D - download to fib</span><br><span class="line">------------------------------------------------------------------------------</span><br><span class="line">Routing Tables: Public</span><br><span class="line">         Destinations : 5        Routes : 5        </span><br><span class="line"></span><br><span class="line">Destination/Mask    Proto   Pre  Cost      Flags NextHop         Interface</span><br><span class="line"></span><br><span class="line">        0.0.0.0/0   Static  60   0          RD   192.168.3.1     GigabitEthernet0/0/0</span><br><span class="line">      127.0.0.0/8   Direct  0    0           D   127.0.0.1       InLoopBack0</span><br><span class="line">      127.0.0.1/32  Direct  0    0           D   127.0.0.1       InLoopBack0</span><br><span class="line">    192.168.3.0/24  Direct  0    0           D   192.168.3.2     GigabitEthernet0/0/0</span><br><span class="line">    192.168.3.2/32  Direct  0    0           D   127.0.0.1       GigabitEthernet0/0/0</span><br></pre></td></tr></table></figure>
+<p>当 TCP&#x2F;IP 需要向某个 IP 地址发起通信时，它会对路由表进行评估，以确定如何发送数据包。</p>
+<p>TCP&#x2F;IP 使用需要通信的目的 IP 地址和路由表中每一个路由项的掩码进行按位与运算，如果与运算后的结果，匹配对应路由项的网络地址，则记录下次路由项。当计算完路由表中所有的路由项后。</p>
+<ul>
+<li>会使用最长匹配路由（掩码中具有最多 1 的路由项）来和此目的 IP 地址进行通信</li>
+<li>如果存在多个最长匹配路由，那么选择具有最高优先级（值最小）的路由表</li>
+<li>如果存在多个具有最高优先级的最长匹配路由，那么选择最开始找到的最长匹配路由（如果是其它设备的话，一般会看接入方式，有线&gt;无线&gt;移动信号4G）</li>
+</ul>
+<p>在这里它就选择了 <code>0.0.0.0/0</code> 的默认路由，决定了会把该数据包交给 <code>192.168.3.1</code> 帮忙传下去。</p>
+<h2 id="ARP"><a href="#ARP" class="headerlink" title="ARP"></a>ARP</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;R2&gt;dis arp</span><br><span class="line">IP ADDRESS      MAC ADDRESS     EXPIRE(M) TYPE        INTERFACE   VPN-INSTANCE VLAN/CEVLAN PVC                      </span><br><span class="line">------------------------------------------------------------------------------</span><br><span class="line">192.168.3.2     5489-98da-3e52            I -         GE0/0/0</span><br><span class="line">------------------------------------------------------------------------------</span><br><span class="line">Total:1         Dynamic:0       Static:0     Interface:1</span><br></pre></td></tr></table></figure>
+
+<p>通过上面的路由选择过程后，确认了该数据包的下一跳为 <code>192.168.3.1</code> 但是在交给链路层包装以太帧之前，会先使用 ARP 用于确定目标 IP 对应的 MAC 地址。</p>
+<p>查询 ARP 表后，发现 ARP 表中没有与之相对应的项目，所以就需要发起 ARP 请求。寻找 <code>192.168.3.1</code> 的 MAC 地址。</p>
+<h3 id="发送-ARP-请求"><a href="#发送-ARP-请求" class="headerlink" title="发送 ARP 请求"></a>发送 ARP 请求</h3><p><img data-src="https://st.blackyau.net/blog/27/2.png" alt="image.png"></p>
+<p>ARP 向 192.168.3.0&#x2F;24 广播 ARP 请求，其中源 MAC 地址和源 IP 地址都是自己对应接口的，目标 IP 就分别是 192.168.3.2，同时目标 MAC 为全 0。</p>
+<p>链路层封装该 ARP 数据包时，使用源地址为端口的 MAC 地址，目标地址使用全 1，并将其中的类型字段设置为 0x0806 也就是 ARP 对应的值。</p>
+<h3 id="收到-ARP-请求"><a href="#收到-ARP-请求" class="headerlink" title="收到 ARP 请求"></a>收到 ARP 请求</h3><p>R1 收到该 ARP 请求后，发现该请求的目标 IP 是自己。它首先会更新自己的 ARP 表，将该请求的源 IP 和源 MAC 地址写入 ARP 表中。这样可以减少一次 ARP 请求，提升效率。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;R1&gt;dis arp</span><br><span class="line">IP ADDRESS      MAC ADDRESS     EXPIRE(M) TYPE        INTERFACE   VPN-INSTANCE VLAN/CEVLAN PVC                      </span><br><span class="line">------------------------------------------------------------------------------</span><br><span class="line">192.168.0.1     5489-989b-51f2            I -         Eth0/0/0</span><br><span class="line">192.168.1.1     5489-989b-51f3            I -         Eth0/0/1</span><br><span class="line">192.168.1.2     5489-982b-3b01  20        D-0         Eth0/0/1</span><br><span class="line">192.168.3.1     5489-989b-51f4            I -         GE0/0/0</span><br><span class="line">192.168.3.2     5489-98da-3e52  20        D-0         GE0/0/0  // 新写入的条目</span><br><span class="line">------------------------------------------------------------------------------</span><br><span class="line">Total:5         Dynamic:2       Static:0     Interface:3    </span><br></pre></td></tr></table></figure>
+
+<h3 id="回复-ARP-请求"><a href="#回复-ARP-请求" class="headerlink" title="回复 ARP 请求"></a>回复 ARP 请求</h3><p><img data-src="https://st.blackyau.net/blog/27/3.png" alt="image.png"></p>
+<p>R1 收到该 ARP 请求后，发现该请求的目标 IP 是自己，然后就会调换源地址和目标地址，并且将自己的 MAC 地址写入源地址的字段中，发送该 ARP 回复。</p>
+<p>链路层封装该 ARP 数据包时，使用源地址为自己的 MAC 地址，目标地址为发送该请求的 MAC 地址。</p>
+<h3 id="收到-ARP-回复"><a href="#收到-ARP-回复" class="headerlink" title="收到 ARP 回复"></a>收到 ARP 回复</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;R2&gt;dis arp</span><br><span class="line">IP ADDRESS      MAC ADDRESS     EXPIRE(M) TYPE        INTERFACE   VPN-INSTANCE VLAN/CEVLAN PVC                      </span><br><span class="line">------------------------------------------------------------------------------</span><br><span class="line">192.168.3.2     5489-98da-3e52            I -         GE0/0/0</span><br><span class="line">192.168.3.1     5489-989b-51f4  20        D-0         GE0/0/0</span><br><span class="line">------------------------------------------------------------------------------</span><br><span class="line">Total:2         Dynamic:1       Static:0     Interface:1    </span><br></pre></td></tr></table></figure>
+
+<p>R2 将回复的 MAC 地址写入自己的 ARP 缓存中。</p>
+<p>然后 R2 就继续发送引起这次 ARP 请求&#x2F;应答交换过程的数据报。把数据转发出去的时候，还会将 TTL - 1。</p>
+<h2 id="链路层"><a href="#链路层" class="headerlink" title="链路层"></a>链路层</h2><p><img data-src="https://st.blackyau.net/blog/27/4.png" alt="image.png"></p>
+<p>收到网络层的 ICMP 数据包，将其包装为以太网帧，其中源地址为 R2 的 MAC 地址，目标地址为刚刚通过 ARP 请求得到的 MAC 地址。</p>
+<h1 id="R1-转发数据包"><a href="#R1-转发数据包" class="headerlink" title="R1 转发数据包"></a>R1 转发数据包</h1><p>路由器收到了由 192.168.3.2 发来 ICMP 数据帧，对其进行解析。</p>
+<h2 id="网络层-1"><a href="#网络层-1" class="headerlink" title="网络层"></a>网络层</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[Huawei]dis ip rou</span><br><span class="line">Route Flags: R - relay, D - download to fib</span><br><span class="line">------------------------------------------------------------------------------</span><br><span class="line">Routing Tables: Public</span><br><span class="line">         Destinations : 8        Routes : 8        </span><br><span class="line"></span><br><span class="line">Destination/Mask    Proto   Pre  Cost      Flags NextHop         Interface</span><br><span class="line"></span><br><span class="line">      127.0.0.0/8   Direct  0    0           D   127.0.0.1       InLoopBack0</span><br><span class="line">      127.0.0.1/32  Direct  0    0           D   127.0.0.1       InLoopBack0</span><br><span class="line">    192.168.0.0/24  Direct  0    0           D   192.168.0.1     Ethernet0/0/0</span><br><span class="line">    192.168.0.1/32  Direct  0    0           D   127.0.0.1       Ethernet0/0/0</span><br><span class="line">    192.168.1.0/24  Direct  0    0           D   192.168.1.1     Ethernet0/0/1</span><br><span class="line">    192.168.1.1/32  Direct  0    0           D   127.0.0.1       Ethernet0/0/1</span><br><span class="line">    192.168.3.0/24  Direct  0    0           D   192.168.3.1     GigabitEthernet0/0/0</span><br><span class="line">    192.168.3.1/32  Direct  0    0           D   127.0.0.1       GigabitEthernet0/0/0</span><br></pre></td></tr></table></figure>
+
+<p>R1 查询自己的路由表，发现目的 IP 192.168.1.2 有匹配的项目，所以该数据包会向 Ethernet0&#x2F;0&#x2F;1 发送。</p>
+<h2 id="ARP-1"><a href="#ARP-1" class="headerlink" title="ARP"></a>ARP</h2><p>路由器查询自己的 ARP 表，源 IP 的 MAC 地址已存在与 ARP 表中，因为之前回复它的 ARP 请求的时候，也在自己的 ARP 表中存了一份。</p>
+<p>目的 IP 192.168.3.2 的 MAC 不在 ARP 表中，所以和上一次一样也需要经过 ARP 请求&#x2F;回复获取其 MAC 写入 ARP 表，再继续执行后面操作。</p>
+<h2 id="链路层-1"><a href="#链路层-1" class="headerlink" title="链路层"></a>链路层</h2><p>收到网络层的 ICMP 数据包，将其包装为以太网帧，其中源地址为 R1 的 MAC 地址，目标地址为刚刚通过 ARP 请求得到的 MAC 地址。</p>
+<h1 id="PC2-回复ping"><a href="#PC2-回复ping" class="headerlink" title="PC2 回复ping"></a>PC2 回复ping</h1><p><img data-src="https://st.blackyau.net/blog/27/5.png" alt="image.png"></p>
+<p>收到来自 192.168.3.2 发送的 ICMPv4 请求，而且目标 IP 是自己，所以回复该 ICMP 请求。</p>
+<h2 id="网络层-2"><a href="#网络层-2" class="headerlink" title="网络层"></a>网络层</h2><p>将接收到的数据返回给发送者，调换源 IP 和目的 IP，IGMP 数据中的类型为 0 代表这是一个回复。</p>
+<p>发送回复的时候，还是和之前一样，要先查自己的路由表。然后因为路由表中的默认路由匹配了，所以就会将该数据包交给默认网关处理。</p>
+<h2 id="ARP-2"><a href="#ARP-2" class="headerlink" title="ARP"></a>ARP</h2><p>再次通过 ARP 表，找到默认网关 192.168.1.1 的 MAC 地址。</p>
+<h2 id="链路层-2"><a href="#链路层-2" class="headerlink" title="链路层"></a>链路层</h2><p>封装以太网帧的时候，使用目的地址为默认网关的 MAC 地址。</p>
+<h1 id="R1-转发数据包-1"><a href="#R1-转发数据包-1" class="headerlink" title="R1 转发数据包"></a>R1 转发数据包</h1><ul>
+<li>查询路由表，发现目的 IP 在路由表中</li>
+<li>查询 ARP 表，找到目的 IP 的 MAC 地址</li>
+<li>链路层封装数据帧，发送给 R2</li>
+</ul>
+<h1 id="R2-收到应答"><a href="#R2-收到应答" class="headerlink" title="R2 收到应答"></a>R2 收到应答</h1><p>收到回复后，将当前时间与应答中的时间相减，也就获得了到达被 ping 主机的 RTT 估计值。</p>
+<p>对于 ICMPv4 来说，类型为 0&#x2F;8 的应答与请求，时间戳为可选的字段。而类型为 14&#x2F;13 的应答和请求就需要带时间戳，但是现在已经作废不用。</p>
+<h1 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h1><p>当 PC1 继续发送 ICMP 包的话，他会将序列号 +1，然后继续发送。此时因为 ARP 缓存都已存在，所以不会需要 ARP 请求&#x2F;回复，链路层会直接调用 ARP 缓存中的 MAC 地址进行发送。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://support.huawei.com/enterprise/zh/doc/EDOC1100087024">华为文档中心 路由协议基础</a></li>
+<li><a target="_blank" rel="noopener" href="https://item.jd.com/11966296.html">TCP&#x2F;IP详解 卷1：协议（原书第2版）</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/q1007729991/article/details/72600130">CSDN@–Allen– 96-ICMP 协议（时间戳请求与应答）</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>蠢黑通行
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blackyau.cc/27" title="主机互 ping 交互过程">https://blackyau.cc/27</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"># 计算机网络</a>
+              <a href="/tags/%E8%B7%AF%E7%94%B1%E5%99%A8/" rel="tag"># 路由器</a>
+              <a href="/tags/ARP/" rel="tag"># ARP</a>
+              <a href="/tags/ICMP/" rel="tag"># ICMP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/26" rel="prev" title="机器学习西瓜书 学习笔记">
+                  <i class="fa fa-angle-left"></i> 机器学习西瓜书 学习笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments disqusjs-container">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2016 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蠢黑通行</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div><div class="powered-by">本网站由 <a style="border-bottom: none;"href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" class="theme-link" rel="noopener" target="_blank" title="upyun"><img style="display: inline; vertical-align: middle;" src="https://st.blackyau.net/blog/file/upyun_dark.svg" alt="upyun">提供CDN加速/云储存服务</a> </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/comments.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/utils.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/sidebar.js"></script><script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://unpkg.com/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/disqusjs@3.0.2/dist/browser/styles/disqusjs.css" integrity="sha256-71XarXwNr1Td27HmZI9zjY+rMzRdush6/glo6VFXp7o=" crossorigin="anonymous">
+
+<script class="next-config" data-name="disqusjs" type="application/json">{"enable":true,"api":"https://disqusjs-proxy-rose.vercel.app/","apikey":"40wkCy0ewvq5nL9eGvjiJHkBCc35Rk4DIQmje6UJ3vnO1mDt0C1b5yxqlbUeoo6P","shortname":"blackyau","js":{"url":"https://unpkg.com/disqusjs@3.0.2/dist/browser/disqusjs.es2015.umd.min.js","integrity":"sha256-okP99ZQKVpIy7+NogAMpGlIQzJa9XKXhIJcFgdju5bU="}}</script>
+<script src="https://unpkg.com/hexo-theme-next@8.22.0/source/js/third-party/comments/disqusjs.js"></script>
+
+</body>
+</html>
