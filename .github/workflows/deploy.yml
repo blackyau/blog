@@ -43,6 +43,15 @@ jobs:
 
       - name: Bulid Blog
         run: npm run build
+      
+      - name: Fix post canonical
+        run: |
+          find public -type f -name "*.html" | while read -r file; do
+            sed -i 's|<link rel="canonical" href="\([^"]*\)\.html">|<link rel="canonical" href="\1">|g' "$file"
+            echo "处理文件: $file"
+          done
+          echo "所有 HTML 文件处理完成"
+        shell: bash
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
